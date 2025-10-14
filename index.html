@@ -1,232 +1,281 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>N&E Innovations - Environmental Reports</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+import React, { useState } from 'react';
+import { FileText, Award, BarChart3, Leaf, CheckCircle, Download } from 'lucide-react';
+
+export default function NEInnovationsLanding() {
+  const [activeSection, setActiveSection] = useState('lca-reports');
+
+  const navigationItems = [
+    { id: 'lca-reports', label: 'LCA Reports', icon: BarChart3 },
+    { id: 'certifications', label: 'Certifications', icon: Award },
+    { id: 'impact-studies', label: 'Impact Studies', icon: Leaf },
+    { id: 'technical-docs', label: 'Technical Documentation', icon: FileText },
+    { id: 'compliance', label: 'Compliance & Standards', icon: CheckCircle },
+  ];
+
+  const content = {
+    'lca-reports': {
+      title: 'Life Cycle Assessment Reports',
+      description: 'Comprehensive environmental impact analyses of our PVC cling wrap products, comparing carbon footprints and sustainability metrics.',
+      items: [
+        {
+          title: 'PVC + Vikang Assessment (Based on PHA)',
+          description: 'Comprehensive environmental impact analysis comparing PVC + Vikang cling wrap against conventional PVC products.',
+          metrics: [
+            { label: 'CO2e Savings', value: '59%' },
+            { label: 'Date', value: 'Oct 2025' },
+            { label: 'Status', value: 'Published' }
+          ],
+          link: 'environmental-impact-report.html'
+        },
+        {
+          title: 'Carbon Footprint Reduction Report - Vikang PVC',
+          description: 'Carbon footprint reduction analysis of Vikang PVC clingfilms based on cashew shell numbers.',
+          metrics: [
+            { label: 'Status', value: 'Under Review' },
+            { label: 'Date', value: '10 Oct 2025' },
+            { label: 'Version', value: '1.0' }
+          ],
+          link: 'report-2.html'
         }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            padding: 20px;
+        {
+            title: 'VIKANG LCA Report for disinfections',
+            description: 'Carbon footprint reduction analysis of Vikang disinfection solutions.',
+            metrics: [
+              { label: 'Status', value: 'Published },
+              { label: 'Date', value: 'To be entered' },
+              { label: 'Version', value: '1.0' }
+            ],
+            link: ''
+          }
+      ]
+    },
+    'certifications': {
+      title: 'Third-party Certifications',
+      description: 'Our products undergo rigorous third-party testing to ensure quality, safety, and environmental compliance.',
+      items: [
+        {
+          title: 'ISO 14001 Environmental Management',
+          description: 'Certification for environmental management systems and sustainable practices.',
+          metrics: [
+            { label: 'Issued', value: '2024' },
+            { label: 'Valid Until', value: '2027' },
+            { label: 'Certifying Body', value: 'ISO' }
+          ]
+        },
+        {
+          title: 'Food Contact Safety Certification (FDA)',
+          description: 'Approved for direct food contact applications with compliance to international standards.',
+          metrics: [
+            { label: 'Standard', value: 'FDA & EU' },
+            { label: 'Status', value: 'Active' },
+            { label: 'Renewal', value: 'Annual' }
+          ]
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+      ]
+    },
+    'impact-studies': {
+      title: 'Environmental Impact Studies',
+      description: 'Detailed analyses of the environmental benefits and sustainability advantages of our innovative materials.',
+      items: [
+        {
+          title: 'PHA-Based Plasticizer Impact Study',
+          description: 'Analysis of environmental benefits from using bio-based PHA plasticizers versus traditional additives.',
+          metrics: [
+            { label: 'Reduction', value: '59% CO2e' },
+            { label: 'Scope', value: 'Full LCA' },
+            { label: 'Date', value: 'Q4 2025' }
+          ]
+        },
+        {
+          title: 'Cashew Shell Utilization Study',
+          description: 'Environmental and economic analysis of utilizing cashew shell waste in PVC production.',
+          metrics: [
+            { label: 'Waste Reduction', value: '45%' },
+            { label: 'Status', value: 'Completed' },
+            { label: 'Impact', value: 'High' }
+          ]
         }
-
-        header {
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-bottom: 50px;
+      ]
+    },
+    'technical-docs': {
+      title: 'Technical Documentation',
+      description: 'Detailed technical specifications, testing protocols, and product performance data.',
+      items: [
+        {
+          title: 'Product Specifications - Vikang PVC',
+          description: 'Complete technical specifications including material composition, performance characteristics, and application guidelines.',
+          metrics: [
+            { label: 'Version', value: '3.2' },
+            { label: 'Last Updated', value: 'Oct 2025' },
+            { label: 'Pages', value: '48' }
+          ]
+        },
+        {
+          title: 'Testing Protocols & Methods',
+          description: 'Standardized testing procedures for quality control and environmental impact assessment.',
+          metrics: [
+            { label: 'Standards', value: 'ISO/ASTM' },
+            { label: 'Tests', value: '12' },
+            { label: 'Frequency', value: 'Quarterly' }
+          ]
         }
-
-        .logo {
-            width: 200px;
-            height: 80px;
-            background: linear-gradient(135deg, #339933 0%, #66CC66 100%);
-            margin: 0 auto 30px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.5em;
+      ]
+    },
+    'compliance': {
+      title: 'Compliance & Standards',
+      description: 'Regulatory compliance documentation and adherence to international environmental and safety standards.',
+      items: [
+        {
+          title: 'Regulatory Compliance Report',
+          description: 'Comprehensive report on compliance with FDA, EU, and regional food contact regulations.',
+          metrics: [
+            { label: 'Regions', value: 'Global' },
+            { label: 'Status', value: 'Compliant' },
+            { label: 'Audit Date', value: 'Sep 2025' }
+          ]
+        },
+        {
+          title: 'REACH Compliance Documentation',
+          description: 'European REACH regulation compliance for chemical substances and materials used in production.',
+          metrics: [
+            { label: 'Registration', value: 'Complete' },
+            { label: 'Status', value: 'Approved' },
+            { label: 'Valid Until', value: '2028' }
+          ]
         }
+      ]
+    }
+  };
 
-        h1 {
-            color: #339933;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
+  const currentContent = content[activeSection];
 
-        .subtitle {
-            color: #666;
-            font-size: 1.2em;
-        }
-
-        .reports-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        .report-card {
-            background: white;
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .report-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(51, 153, 51, 0.2);
-        }
-
-        .report-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #339933 0%, #66CC66 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 25px;
-            font-size: 2.5em;
-        }
-
-        .report-card h2 {
-            color: #339933;
-            font-size: 1.8em;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .report-card p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .report-meta {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 2px solid #CCFF99;
-        }
-
-        .meta-item {
-            text-align: center;
-        }
-
-        .meta-label {
-            font-size: 0.9em;
-            color: #999;
-            margin-bottom: 5px;
-        }
-
-        .meta-value {
-            font-weight: bold;
-            color: #339933;
-            font-size: 1.1em;
-        }
-
-        .cta-button {
-            background: linear-gradient(135deg, #339933 0%, #66CC66 100%);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
-            border: none;
-            font-size: 1em;
-            font-weight: bold;
-            margin-top: 20px;
-            display: inline-block;
-            transition: transform 0.2s;
-        }
-
-        .cta-button:hover {
-            transform: scale(1.05);
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            color: #666;
-        }
-
-        footer a {
-            color: #339933;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2em;
-            }
-
-            .reports-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .report-card {
-                padding: 30px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <div class="logo">N&E</div>
-            <h1>Environmental Impact Reports</h1>
-            <p class="subtitle">Sustainability Assessment & Analysis</p>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      {/* Header */}
+      <header className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-green-400 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                N&E
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">N&E Innovations</h1>
+                <p className="text-sm text-gray-600">Environmental Documentation Portal</p>
+              </div>
+            </div>
+            <button className="bg-gradient-to-r from-green-600 to-green-500 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transition-shadow">
+              Contact Us
+            </button>
+          </div>
+        </div>
         </header>
 
-        <div class="reports-grid">
-            <a href="environmental-impact-report.html" class="report-card">
-                <div class="report-icon">🌱</div>
-                <h2>PVC + Vikang Assessment (Based on PHA)</h2>
-                <p>Comprehensive environmental impact analysis comparing PVC + Vikang cling wrap against conventional PVC products.</p>
-                <div class="report-meta">
-                    <div class="meta-item">
-                        <div class="meta-label">CO2e Savings</div>
-                        <div class="meta-value">59%</div>
-                    </div>
-                    <div class="meta-item">
-                        <div class="meta-label">Date</div>
-                        <div class="meta-value">Oct 2025</div>
-                    </div>
-                </div>
-                <center><span class="cta-button">View Report →</span></center>
-            </a>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex gap-8">
+          {/* Sidebar Navigation */}
+          <aside className="w-80 flex-shrink-0">
+            <nav className="bg-white rounded-2xl shadow-sm p-2 sticky top-8">
+              {navigationItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveSection(item.id)}
+                    className={`w-full flex items-center space-x-3 px-6 py-4 rounded-xl text-left transition-all ${
+                      activeSection === item.id
+                        ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-md'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span className="font-medium">{item.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </aside>
 
-            <a href="report-2.html" class="report-card">
-                <div class="report-icon">🌱</div>
-                <h2>Carbon Footprint Reduction Report - Vikang PVC</h2>
-                <p>This is the report for the carbon footprint reduction of Vikang PVC clingfilms based on cashew shell numbers.</p>
-                <div class="report-meta">
-                    <div class="meta-item">
-                        <div class="meta-label">Status</div>
-                        <div class="meta-value">Finsihed need to be reviewed</div>
+          {/* Main Content */}
+          <main className="flex-1">
+            {/* Section Header */}
+            <div className="bg-white rounded-2xl shadow-sm p-8 mb-6">
+              <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                {currentContent.title}
+              </h2>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                {currentContent.description}
+              </p>
+            </div>
+
+            {/* Content Items */}
+            <div className="space-y-6">
+              {currentContent.items.map((item, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl shadow-sm p-8 hover:shadow-lg transition-shadow"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        {item.description}
+                      </p>
                     </div>
-                    <div class="meta-item">
-                        <div class="meta-label">Date</div>
-                        <div class="meta-value">10 October 2025</div>
+                    {item.link && (
+                      <a
+                        href={item.link}
+                        className="ml-4 p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                      >
+                        <Download className="w-5 h-5" />
+                      </a>
+                    )}
+                  </div>
+
+                  {/* Metrics */}
+                  <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-100">
+                    {item.metrics.map((metric, idx) => (
+                      <div key={idx}>
+                        <div className="text-sm text-gray-500 mb-1">
+                          {metric.label}
+                        </div>
+                        <div className="text-lg font-bold text-green-600">
+                          {metric.value}
+                        </div>
+                      </div>
+                    ))}
                     </div>
                 </div>
-                <center><span class="cta-button">View Report →</span></center>
-            </a>
+              ))}
+                    </div>
+          </main>
+                    </div>
+                </div>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-200 mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center">
+            <p className="text-gray-900 font-semibold mb-2">
+              N&E Innovations Pte Ltd
+            </p>
+            <p className="text-gray-600 mb-3">
+              Environmental Impact Assessments of PVC Clingfilms
+            </p>
+            <p className="text-sm text-gray-500">
+              For more information, contact us at{' '}
+              <a
+                href="mailto:business@vi-kang.com"
+                className="text-green-600 font-semibold hover:underline"
+              >
+                business@vi-kang.com
+              </a>
+            </p>
+          </div>
         </div>
-
-        <footer>
-            <p><strong>N&E Innovations Pte Ltd</strong></p>
-            <p style="margin-top: 10px;">Environmental Impact Assessments of PVC Clingfilms</p>
-            <p style="margin-top: 15px; font-size: 0.9em;">For more information, contact us at <a href="mailto:business@vi-kang.com">business@vi-kang.com</a></p>
         </footer>
     </div>
-</body>
-</html>
+  );
+}
