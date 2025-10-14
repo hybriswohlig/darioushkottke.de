@@ -4,171 +4,158 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Environmental Impact Assessment Report</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: white;
-            color: black;
+            background: linear-gradient(to bottom right, #f9fafb 0%, #e5e7eb 100%);
+            color: #1f2937;
             line-height: 1.6;
+            min-height: 100vh;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
+        
+        .page-section {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 3rem 2.5rem;
+            margin-bottom: 1.5rem;
         }
-
-        header {
-            background: linear-gradient(135deg, #339933 0%, #66CC66 100%);
-            color: white;
-            padding: 60px 20px;
-            text-align: center;
-            margin-bottom: 40px;
-            border-radius: 10px;
+        
+        .page-section:hover {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s;
         }
-
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+        
+        h2 {
+            color: #16a34a;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            border-bottom: 3px solid #16a34a;
+            padding-bottom: 0.625rem;
         }
-
-        header p {
-            font-size: 1.1em;
-            opacity: 0.95;
+        
+        h3 {
+            color: #16a34a;
+            font-size: 1.375rem;
+            margin: 1.5rem 0 1rem 0;
+            font-weight: 600;
         }
-
-        .logo-section {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .metadata {
-            background: #f8f8f8;
-            border-left: 5px solid #339933;
-            padding: 20px;
-            margin-bottom: 40px;
-            border-radius: 5px;
-        }
-
-        .metadata p {
-            margin: 8px 0;
-        }
-
+        
         .highlight {
-            color: #339933;
-            font-weight: bold;
+            background: #16a34a;
+            color: white;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
         }
-
-        .section {
-            margin-bottom: 50px;
-        }
-
-        .section h2 {
-            color: #339933;
-            font-size: 2em;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #66CC66;
-        }
-
-        .section h3 {
-            color: #339933;
-            font-size: 1.5em;
-            margin: 25px 0 15px 0;
-        }
-
-        .key-findings {
+        
+        .kpi-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            gap: 1.5rem;
+            margin: 1.875rem 0;
         }
-
-        .finding-card {
-            background: linear-gradient(135deg, #339933 0%, #66CC66 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-
-        .finding-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .finding-card h3 {
-            color: white;
-            font-size: 1.3em;
-            margin-bottom: 15px;
-        }
-
-        .finding-card .number {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .chart-container {
+        
+        .kpi-card {
             background: white;
-            padding: 30px;
-            margin: 30px 0;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border: 2px solid #CCFF99;
+            border: 2px solid #e5e7eb;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
         }
-
+        
+        .kpi-card:hover {
+            border-color: #16a34a;
+            box-shadow: 0 10px 15px rgba(22, 163, 74, 0.1);
+            transform: translateY(-4px);
+        }
+        
+        .kpi-value {
+            font-size: 2.625rem;
+            font-weight: 700;
+            color: #16a34a;
+            margin: 0.625rem 0;
+        }
+        
+        .kpi-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+        
+        .kpi-context {
+            font-size: 0.8125rem;
+            color: #9ca3af;
+            margin-top: 0.5rem;
+        }
+        
+        .chart-container {
+            margin: 1.875rem 0;
+            padding: 1.5rem;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+        }
+        
         .chart-wrapper {
             position: relative;
             height: 400px;
             margin-bottom: 20px;
         }
-
-        .comparison-table {
+        
+        table {
             width: 100%;
             border-collapse: collapse;
-            margin: 30px 0;
+            margin: 1.25rem 0;
+            font-size: 0.875rem;
             background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 0.5rem;
+            overflow: hidden;
         }
-
-        .comparison-table thead {
-            background: #339933;
+        
+        th {
+            background: #16a34a;
             color: white;
-        }
-
-        .comparison-table th,
-        .comparison-table td {
-            padding: 15px;
+            padding: 0.875rem;
             text-align: left;
-            border-bottom: 1px solid #CCFF99;
+            font-weight: 600;
         }
-
-        .comparison-table tbody tr:hover {
-            background: #f8f8f8;
+        
+        td {
+            padding: 0.875rem;
+            border-bottom: 1px solid #e5e7eb;
         }
-
-        .comparison-table .savings {
-            color: #339933;
+        
+        tr:hover {
+            background: #dcfce7;
+        }
+        
+        .savings {
+            color: #16a34a;
             font-weight: bold;
         }
-
-        .info-box {
-            background: #CCFF99;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border-left: 5px solid #339933;
+        
+        .callout {
+            background: #dcfce7;
+            border-left: 4px solid #16a34a;
+            padding: 1.5rem;
+            margin: 1.25rem 0;
+            border-radius: 0.5rem;
         }
-
+        
         .process-flow {
             display: flex;
             justify-content: space-between;
@@ -176,292 +163,337 @@
             margin: 30px 0;
             flex-wrap: wrap;
         }
-
+        
         .process-step {
             background: white;
-            border: 3px solid #66CC66;
+            border: 3px solid #22c55e;
             padding: 20px;
             border-radius: 10px;
             text-align: center;
             flex: 1;
             margin: 10px;
             min-width: 200px;
+            transition: all 0.3s ease;
         }
-
+        
+        .process-step:hover {
+            border-color: #16a34a;
+            box-shadow: 0 10px 15px rgba(22, 163, 74, 0.1);
+            transform: translateY(-4px);
+        }
+        
         .process-step h4 {
-            color: #339933;
+            color: #16a34a;
             margin-bottom: 10px;
+            font-weight: 600;
         }
-
+        
         .arrow {
-            color: #339933;
+            color: #16a34a;
             font-size: 2em;
             margin: 0 10px;
         }
-
+        
         .definition-list {
-            background: #f8f8f8;
+            background: #f9fafb;
             padding: 25px;
-            border-radius: 8px;
+            border-radius: 1rem;
+            border: 1px solid #e5e7eb;
             margin: 20px 0;
         }
-
+        
         .definition-list dt {
-            color: #339933;
+            color: #16a34a;
             font-weight: bold;
             margin-top: 15px;
             margin-bottom: 5px;
         }
-
+        
         .definition-list dd {
             margin-left: 20px;
             margin-bottom: 10px;
         }
-
-        footer {
-            margin-top: 60px;
-            padding: 30px;
-            background: #f8f8f8;
-            border-top: 3px solid #339933;
-            text-align: center;
-            border-radius: 5px;
+        
+        @media print {
+            .page-section { page-break-after: always; }
+            header { display: none; }
+            body { background: white; }
         }
-
+        
         @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.8em;
-            }
-            
-            .process-flow {
-                flex-direction: column;
-            }
-            
-            .arrow {
-                transform: rotate(90deg);
-                margin: 10px 0;
-            }
+            .page-section { padding: 2rem 1.5rem; }
+            h2 { font-size: 1.5rem; }
+            .process-flow { flex-direction: column; }
+            .arrow { transform: rotate(90deg); margin: 10px 0; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo-section">
-            <img src="https://raw.githubusercontent.com/user-attachments/assets/placeholder" alt="N&E Innovations Logo" style="max-width: 300px; height: auto;" onerror="this.style.display='none'">
+
+<!-- Header Navigation -->
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <img 
+                    src="file.svg" 
+                    alt="N&E Innovations Logo" 
+                    class="w-16 h-16"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                />
+                <div class="w-16 h-16 bg-gradient-to-br from-green-600 to-green-400 rounded-lg hidden items-center justify-center text-white font-bold text-xl">
+                    N&E
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">N&E Innovations</h1>
+                    <p class="text-sm text-gray-600">Environmental Impact Assessment</p>
+                </div>
+            </div>
+            <a href="index.html" class="bg-gradient-to-r from-green-600 to-green-500 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transition-shadow">
+                ← Back to Home
+            </a>
         </div>
+    </div>
+</header>
 
-        <header>
-            <h1>Environmental Impact Assessment</h1>
-            <p>CO2e Emissions Analysis: PVC + Vikang vs. Conventional PVC Cling Wrap</p>
-        </header>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        <div class="metadata">
-            <p><strong>Report Prepared By:</strong> Darioush Kottke, N&E Innovations</p>
-            <p><strong>Date:</strong> October 08, 2025</p>
-            <p><strong>Test Report Reference:</strong> ASTM D6400 (Report ID: ZX250108-C130302-01)</p>
-            <p><strong>Purpose:</strong> LSA (Life Cycle Sustainability Assessment) Certification Analysis</p>
+<!-- COVER -->
+<div class="page-section bg-gradient-to-br from-green-600 to-green-500 text-white text-center py-20">
+    <h1 class="text-4xl md:text-5xl font-bold mb-6">Environmental Impact Assessment</h1>
+    <div class="text-2xl mb-4 opacity-95">CO2e Emissions Analysis: PVC + Vikang vs. Conventional PVC Cling Wrap</div>
+    <div class="text-base opacity-90 leading-relaxed">
+        <strong>Prepared by:</strong> Darioush Kottke, N&E Innovations<br>
+        <strong>Date:</strong> October 08, 2025<br>
+        <strong>Test Report Reference:</strong> ASTM D6400 (Report ID: ZX250108-C130302-01)<br>
+        <strong>Purpose:</strong> LSA (Life Cycle Sustainability Assessment) Certification Analysis
+    </div>
+</div>
+
+<!-- METADATA SECTION -->
+<div class="page-section">
+    <div class="callout">
+        <strong>Report Overview:</strong> This assessment analyzes the carbon footprint comparison between conventional PVC cling wrap and our innovative PVC + Vikang formulation, demonstrating significant environmental benefits through upcycling, reduced production emissions, and partial biodegradation.
+    </div>
+</div>
+
+<!-- EXECUTIVE SUMMARY -->
+<div class="page-section">
+    <h2>Executive Summary</h2>
+    
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-label">Total Savings</div>
+            <div class="kpi-value">6.00</div>
+            <div class="kpi-context">kg CO2e avoided per roll</div>
         </div>
-
-        <div class="section">
-            <h2>Executive Summary</h2>
-            
-            <div class="key-findings">
-                <div class="finding-card">
-                    <h3>Total Savings</h3>
-                    <div class="number">6.00 kg</div>
-                    <p>CO2e avoided per roll</p>
-                </div>
-                <div class="finding-card">
-                    <h3>Reduction Rate</h3>
-                    <div class="number">59%</div>
-                    <p>Emissions reduction</p>
-                </div>
-                <div class="finding-card">
-                    <h3>Annual Impact</h3>
-                    <div class="number">276 tons</div>
-                    <p>CO2e saved (46,000 rolls)</p>
-                </div>
-                <div class="finding-card">
-                    <h3>Car Equivalent</h3>
-                    <div class="number">~60</div>
-                    <p>Cars off road/year</p>
-                </div>
-            </div>
-
-            <div class="info-box">
-                <strong>Key Finding:</strong> PVC + Vikang cling wrap reduces CO2e emissions by approximately 59% compared to conventional PVC, primarily through upcycling food waste, lower production emissions, and partial biodegradation at end-of-life.
-            </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Reduction Rate</div>
+            <div class="kpi-value">59%</div>
+            <div class="kpi-context">Emissions reduction</div>
         </div>
-
-        <div class="section">
-            <h2>Emissions Comparison</h2>
-            
-            <div class="chart-container">
-                <h3 style="color: #339933; text-align: center; margin-bottom: 20px;">Total CO2e Emissions per Roll</h3>
-                <div class="chart-wrapper">
-                    <canvas id="emissionsChart"></canvas>
-                </div>
-            </div>
-
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>Product Type</th>
-                        <th>Production (kg CO2e)</th>
-                        <th>End-of-Life (kg CO2e)</th>
-                        <th>Total (kg CO2e)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Conventional PVC</strong></td>
-                        <td>6.45</td>
-                        <td>3.64</td>
-                        <td>10.09</td>
-                    </tr>
-                    <tr>
-                        <td><strong>PVC + Vikang</strong></td>
-                        <td>2.67 (net)</td>
-                        <td>1.42</td>
-                        <td>4.09</td>
-                    </tr>
-                    <tr>
-                        <td><strong class="savings">Savings</strong></td>
-                        <td class="savings">3.78</td>
-                        <td class="savings">2.22</td>
-                        <td class="savings">6.00 (59%)</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="kpi-card">
+            <div class="kpi-label">Annual Impact</div>
+            <div class="kpi-value">276</div>
+            <div class="kpi-context">tonnes CO2e saved (46,000 rolls)</div>
         </div>
-
-        <div class="section">
-            <h2>Emissions Breakdown</h2>
-            
-            <div class="chart-container">
-                <h3 style="color: #339933; text-align: center; margin-bottom: 20px;">Emissions by Life Cycle Phase</h3>
-                <div class="chart-wrapper">
-                    <canvas id="breakdownChart"></canvas>
-                </div>
-            </div>
-
-            <div class="chart-container">
-                <h3 style="color: #339933; text-align: center; margin-bottom: 20px;">Savings Contribution Analysis</h3>
-                <div class="chart-wrapper">
-                    <canvas id="savingsChart"></canvas>
-                </div>
-            </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Car Equivalent</div>
+            <div class="kpi-value">~60</div>
+            <div class="kpi-context">Cars off road/year</div>
         </div>
-
-        <div class="section">
-            <h2>Vikang Upcycling Impact</h2>
-            
-            <div class="process-flow">
-                <div class="process-step">
-                    <h4>Food Waste</h4>
-                    <p>0.737 kg upcycled</p>
-                </div>
-                <div class="arrow">→</div>
-                <div class="process-step">
-                    <h4>Vikang Production</h4>
-                    <p>0.0258 kg additive</p>
-                </div>
-                <div class="arrow">→</div>
-                <div class="process-step">
-                    <h4>Emissions Avoided</h4>
-                    <p>3.26 kg CO2e saved</p>
-                </div>
-            </div>
-
-            <div class="info-box">
-                <strong>Upcycling Benefit:</strong> By converting food waste into the Vikang additive, we avoid landfill emissions of 4.42 kg CO2e per kg of food waste (UN FAO factor), contributing 3.26 kg CO2e savings per roll.
-            </div>
-
-            <div class="chart-container">
-                <h3 style="color: #339933; text-align: center; margin-bottom: 20px;">Production Emissions Comparison</h3>
-                <div class="chart-wrapper">
-                    <canvas id="productionChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Biodegradation Performance</h2>
-            
-            <div class="chart-container">
-                <h3 style="color: #339933; text-align: center; margin-bottom: 20px;">ASTM D6400 Test Results (180 Days)</h3>
-                <div class="chart-wrapper">
-                    <canvas id="biodegradationChart"></canvas>
-                </div>
-            </div>
-
-            <div class="info-box">
-                <strong>Test Result:</strong> PVC + Vikang achieved 39.1% biodegradation in composting conditions over 180 days, compared to 91.6% for reference cellulose material. This partial biodegradation significantly reduces end-of-life emissions.
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Key Definitions</h2>
-            
-            <dl class="definition-list">
-                <dt>CO2e (Carbon Dioxide Equivalent)</dt>
-                <dd>A measure that converts all greenhouse gases into an equivalent amount of CO2 based on their warming potential.</dd>
-
-                <dt>Cradle-to-Gate</dt>
-                <dd>Life cycle stage from raw material extraction to product leaving the factory gate (excludes use and disposal).</dd>
-
-                <dt>Upcycling</dt>
-                <dd>Converting waste (e.g., food waste) into a valuable product (e.g., Vikang additive), avoiding emissions from waste disposal.</dd>
-
-                <dt>Biodegradation Rate</dt>
-                <dd>The percentage of material broken down by microbes in compost, measured by CO2 release from ASTM D6400 test.</dd>
-
-                <dt>Theoretical CO2 (ThCO2)</dt>
-                <dd>Maximum CO2 that could be released if 100% of the material's carbon is oxidized. For PVC: ~1.41 kg CO2 per kg.</dd>
-
-                <dt>Landfill Emissions Factor</dt>
-                <dd>Emissions from waste decomposing in landfills (mostly methane). For general food waste: ~4.42 kg CO2e/kg (UN FAO).</dd>
-            </dl>
-        </div>
-
-        <div class="section">
-            <h2>Calculation Summary</h2>
-            
-            <h3>📊 Step-by-Step Analysis</h3>
-            
-            <div style="background: #f8f8f8; padding: 25px; border-radius: 8px; margin: 20px 0;">
-                <p><strong class="highlight">Step 1: Roll Weight</strong></p>
-                <p style="margin-left: 20px;">Total: 2.58 kg per roll</p>
-                
-                <p style="margin-top: 15px;"><strong class="highlight">Step 2: Upcycling Credit</strong></p>
-                <p style="margin-left: 20px;">Vikang content: 0.0258 kg (1% of roll)</p>
-                <p style="margin-left: 20px;">Food waste upcycled: 0.737 kg</p>
-                <p style="margin-left: 20px;">Emissions avoided: 3.26 kg CO2e</p>
-                
-                <p style="margin-top: 15px;"><strong class="highlight">Step 3: Production Emissions</strong></p>
-                <p style="margin-left: 20px;">Conventional PVC: 6.45 kg CO2e</p>
-                <p style="margin-left: 20px;">PVC + Vikang (net): 2.67 kg CO2e</p>
-                
-                <p style="margin-top: 15px;"><strong class="highlight">Step 4: End-of-Life Emissions</strong></p>
-                <p style="margin-left: 20px;">Conventional PVC (incinerated): 3.64 kg CO2</p>
-                <p style="margin-left: 20px;">PVC + Vikang (composted): 1.42 kg CO2</p>
-                
-                <p style="margin-top: 15px;"><strong class="highlight">Step 5: Total Savings</strong></p>
-                <p style="margin-left: 20px; color: #339933; font-weight: bold; font-size: 1.2em;">6.00 kg CO2e avoided per roll (~59% reduction)</p>
-            </div>
-        </div>
-
-        <footer>
-            <p><strong>References:</strong> ASTM D6400 Test Report (ZX250108-C130302-01) | UN FAO Food Wastage Footprint (2013) | PlasticEurope Eco-profile for PVC (2023) | PHA Yield Studies</p>
-            <p style="margin-top: 10px; color: #339933;"><strong>N&E Innovations Pte Ltd</strong> | Environmental Impact Assessments</p>
-        </footer>
     </div>
 
+    <div class="callout">
+        <strong>Key Finding:</strong> PVC + Vikang cling wrap reduces CO2e emissions by approximately 59% compared to conventional PVC, primarily through upcycling food waste, lower production emissions, and partial biodegradation at end-of-life.
+    </div>
+</div>
+
+<!-- EMISSIONS COMPARISON -->
+<div class="page-section">
+    <h2>Emissions Comparison</h2>
+    
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Total CO2e Emissions per Roll</h3>
+        <div class="chart-wrapper">
+            <canvas id="emissionsChart"></canvas>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Product Type</th>
+                <th>Production (kg CO2e)</th>
+                <th>End-of-Life (kg CO2e)</th>
+                <th>Total (kg CO2e)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Conventional PVC</strong></td>
+                <td>6.45</td>
+                <td>3.64</td>
+                <td>10.09</td>
+            </tr>
+            <tr>
+                <td><strong>PVC + Vikang</strong></td>
+                <td>2.67 (net)</td>
+                <td>1.42</td>
+                <td>4.09</td>
+            </tr>
+            <tr>
+                <td><strong class="savings">Savings</strong></td>
+                <td class="savings">3.78</td>
+                <td class="savings">2.22</td>
+                <td class="savings">6.00 (59%)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- EMISSIONS BREAKDOWN -->
+<div class="page-section">
+    <h2>Emissions Breakdown</h2>
+    
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Emissions by Life Cycle Phase</h3>
+        <div class="chart-wrapper">
+            <canvas id="breakdownChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Savings Contribution Analysis</h3>
+        <div class="chart-wrapper">
+            <canvas id="savingsChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- VIKANG UPCYCLING IMPACT -->
+<div class="page-section">
+    <h2>Vikang Upcycling Impact</h2>
+    
+    <div class="process-flow">
+        <div class="process-step">
+            <h4>Food Waste</h4>
+            <p>0.737 kg upcycled</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="process-step">
+            <h4>Vikang Production</h4>
+            <p>0.0258 kg additive</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="process-step">
+            <h4>Emissions Avoided</h4>
+            <p>3.26 kg CO2e saved</p>
+        </div>
+    </div>
+
+    <div class="callout">
+        <strong>Upcycling Benefit:</strong> By converting food waste into the Vikang additive, we avoid landfill emissions of 4.42 kg CO2e per kg of food waste (UN FAO factor), contributing 3.26 kg CO2e savings per roll.
+    </div>
+
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Production Emissions Comparison</h3>
+        <div class="chart-wrapper">
+            <canvas id="productionChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- BIODEGRADATION PERFORMANCE -->
+<div class="page-section">
+    <h2>Biodegradation Performance</h2>
+    
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">ASTM D6400 Test Results (180 Days)</h3>
+        <div class="chart-wrapper">
+            <canvas id="biodegradationChart"></canvas>
+        </div>
+    </div>
+
+    <div class="callout">
+        <strong>Test Result:</strong> PVC + Vikang achieved 39.1% biodegradation in composting conditions over 180 days, compared to 91.6% for reference cellulose material. This partial biodegradation significantly reduces end-of-life emissions.
+    </div>
+</div>
+
+<!-- KEY DEFINITIONS -->
+<div class="page-section">
+    <h2>Key Definitions</h2>
+    
+    <dl class="definition-list">
+        <dt>CO2e (Carbon Dioxide Equivalent)</dt>
+        <dd>A measure that converts all greenhouse gases into an equivalent amount of CO2 based on their warming potential.</dd>
+
+        <dt>Cradle-to-Gate</dt>
+        <dd>Life cycle stage from raw material extraction to product leaving the factory gate (excludes use and disposal).</dd>
+
+        <dt>Upcycling</dt>
+        <dd>Converting waste (e.g., food waste) into a valuable product (e.g., Vikang additive), avoiding emissions from waste disposal.</dd>
+
+        <dt>Biodegradation Rate</dt>
+        <dd>The percentage of material broken down by microbes in compost, measured by CO2 release from ASTM D6400 test.</dd>
+
+        <dt>Theoretical CO2 (ThCO2)</dt>
+        <dd>Maximum CO2 that could be released if 100% of the material's carbon is oxidized. For PVC: ~1.41 kg CO2 per kg.</dd>
+
+        <dt>Landfill Emissions Factor</dt>
+        <dd>Emissions from waste decomposing in landfills (mostly methane). For general food waste: ~4.42 kg CO2e/kg (UN FAO).</dd>
+    </dl>
+</div>
+
+<!-- CALCULATION SUMMARY -->
+<div class="page-section">
+    <h2>Calculation Summary</h2>
+    
+    <h3>📊 Step-by-Step Analysis</h3>
+    
+    <div style="background: #f9fafb; padding: 25px; border-radius: 1rem; border: 1px solid #e5e7eb; margin: 20px 0;">
+        <p><strong class="highlight">Step 1: Roll Weight</strong></p>
+        <p style="margin-left: 20px;">Total: 2.58 kg per roll</p>
+        
+        <p style="margin-top: 15px;"><strong class="highlight">Step 2: Upcycling Credit</strong></p>
+        <p style="margin-left: 20px;">Vikang content: 0.0258 kg (1% of roll)</p>
+        <p style="margin-left: 20px;">Food waste upcycled: 0.737 kg</p>
+        <p style="margin-left: 20px;">Emissions avoided: 3.26 kg CO2e</p>
+        
+        <p style="margin-top: 15px;"><strong class="highlight">Step 3: Production Emissions</strong></p>
+        <p style="margin-left: 20px;">Conventional PVC: 6.45 kg CO2e</p>
+        <p style="margin-left: 20px;">PVC + Vikang (net): 2.67 kg CO2e</p>
+        
+        <p style="margin-top: 15px;"><strong class="highlight">Step 4: End-of-Life Emissions</strong></p>
+        <p style="margin-left: 20px;">Conventional PVC (incinerated): 3.64 kg CO2</p>
+        <p style="margin-left: 20px;">PVC + Vikang (composted): 1.42 kg CO2</p>
+        
+        <p style="margin-top: 15px;"><strong class="highlight">Step 5: Total Savings</strong></p>
+        <p style="margin-left: 20px; color: #16a34a; font-weight: bold; font-size: 1.2em;">6.00 kg CO2e avoided per roll (~59% reduction)</p>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="page-section bg-gradient-to-br from-green-600 to-green-500 text-white text-center mt-8">
+    <p class="text-sm opacity-90">
+        <strong>References:</strong> ASTM D6400 Test Report (ZX250108-C130302-01) | UN FAO Food Wastage Footprint (2013) | PlasticEurope Eco-profile for PVC (2023) | PHA Yield Studies
+    </p>
+    <p class="mt-4 text-base font-semibold">
+        N&E Innovations Pte Ltd | Environmental Impact Assessments
+    </p>
+    <p class="text-sm opacity-90 mt-2">
+        © 2025 N&E Innovations | For inquiries: contact@neinnovations.com
+    </p>
+</footer>
+
+</div>
+
     <script>
-        // Chart colors
+        // Chart colors - updated to match new design
         const colors = {
-            primary: '#339933',
-            secondary: '#66CC66',
-            tertiary: '#CCFF99',
+            primary: '#16a34a',
+            secondary: '#22c55e',
+            tertiary: '#86efac',
             conventional: '#999999'
         };
 
@@ -664,6 +696,65 @@
                     }
                 }
             }
+        });
+        
+        // Add interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Make KPI cards interactive with pulse animation on hover
+            document.querySelectorAll('.kpi-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.querySelector('.kpi-value').style.transform = 'scale(1.1)';
+                    this.querySelector('.kpi-value').style.transition = 'transform 0.3s ease';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.querySelector('.kpi-value').style.transform = 'scale(1)';
+                });
+            });
+            
+            // Add chart animations on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '0';
+                        entry.target.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            entry.target.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, 100);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.chart-container').forEach(chart => {
+                observer.observe(chart);
+            });
+            
+            // Add smooth scroll behavior
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            console.log('✅ Interactive features loaded successfully!');
+            console.log('Features active:');
+            console.log('- ✓ KPI card hover animations');
+            console.log('- ✓ Scroll animations (IntersectionObserver)');
+            console.log('- ✓ Smooth scroll navigation');
         });
     </script>
 </body>
