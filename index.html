@@ -230,7 +230,7 @@
                 description: 'Detailed analyses of the environmental benefits and sustainability advantages of our innovative materials.',
                 items: [
                     {
-                        title: 'PHA-Based Plasticizer Impact Study',
+                        title: 'VIKANG-Based Plasticizer Impact Study',
                         description: 'Analysis of environmental benefits from using vikang additives versus traditional additives.',
                         metrics: [
                             { label: 'Reduction', value: 'xxx% CO2e' },
@@ -245,6 +245,15 @@
                             { label: 'Waste Reduction', value: 'TBD' },
                             { label: 'Status', value: 'TBD' },
                             { label: 'Impact', value: 'High' }
+                        ]
+                    },
+                    {
+                        title: 'Foodwaste reduction study',
+                        description: 'Environmental and economic analysis of the reduction of foodwaste with the use of Vikang additives',
+                        metrics: [
+                            { label: 'Status', value: 'To be done' },
+                            { label: 'Date', value: 'Not yet confirmed' },
+                            { label: 'Version', value: 'N/a' }
                         ]
                     }
                 ]
@@ -279,7 +288,8 @@
                 items: [
                     {
                         title: 'Regulatory Compliance Report',
-                        description: 'Comprehensive report on compliance with FDA, EU, and regional food contact regulations.',
+                        description: 'Comprehensive report on compliance with FDA food contact regulations.',
+                        link: 'https://drive.google.com/file/d/1iHbGGEtKS03mCoG2xCoaafwXFk6sMaAv/view?usp=drive_link',
                         metrics: [
                             { label: 'Regions', value: 'Global' },
                             { label: 'Status', value: 'Compliant' },
@@ -293,6 +303,16 @@
                             { label: 'Registration', value: 'Complete' },
                             { label: 'Status', value: 'Approved' },
                             { label: 'Valid Until', value: '2028' }
+                        ],
+                        subdocuments: [
+                            {
+                                name: 'VIKANG99 REACH Certification',
+                                link: 'https://drive.google.com/file/d/1kjdERBEbOLR9Ss3k49KKoFTlFWb8UmL7/view?usp=drive_link'
+                            },
+                            {
+                                name: 'C2+ Disinfectant REACH Certification',
+                                link: 'https://drive.google.com/file/d/1-LALQSuJ7wt_ak6iIEqp27lWGUR8Xik0/view?usp=sharing'
+                            }
                         ]
                     }
                 ]
@@ -350,6 +370,37 @@
 
                 html += `
                         </div>
+                `;
+
+                // Add subdocuments if they exist
+                if (item.subdocuments && item.subdocuments.length > 0) {
+                    html += `
+                        <div class="mt-6 pt-6 border-t border-gray-100">
+                            <div class="text-sm font-semibold text-gray-700 mb-3">Related Documents</div>
+                            <div class="flex flex-wrap gap-3">
+                    `;
+                    
+                    item.subdocuments.forEach(doc => {
+                        html += `
+                            <a href="${doc.link}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border border-green-200 rounded-lg transition-all duration-200 group">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                <span class="text-sm font-medium text-gray-700 group-hover:text-green-700">${doc.name}</span>
+                                <svg class="w-4 h-4 text-green-500 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                            </a>
+                        `;
+                    });
+                    
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += `
                     </div>
                 `;
             });
