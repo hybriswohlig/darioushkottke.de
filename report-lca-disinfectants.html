@@ -397,32 +397,62 @@
     
     <div class="chart-container">
         <div class="chart-title">Lifecycle Stages (Cradle-to-Gate Approach)</div>
-        <svg viewBox="0 0 800 400" style="width: 100%;">
-            <rect width="800" height="400" fill="#f9fafb"/>
-            <!-- Extraction -->
-            <circle cx="150" cy="200" r="50" fill="#16a34a"/>
-            <text x="150" y="205" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Extraction of raw materials</text>
+        <svg viewBox="0 0 900 500" style="width: 100%;">
+            <rect width="900" height="500" fill="#f9fafb"/>
             
             <defs>
                 <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
                     <polygon points="0 0, 10 3, 0 6" fill="#16a34a"/>
                 </marker>
             </defs>
-            <path d="M 200 200 L 350 200" stroke="#16a34a" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
             
-            <!-- Manufacturing -->
-            <circle cx="400" cy="200" r="50" fill="#22c55e"/>
-            <text x="400" y="205" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Manufacturing</text>
+            <!-- Central circle path -->
+            <circle cx="350" cy="250" r="120" fill="none" stroke="#d1d5db" stroke-width="2" stroke-dasharray="5,5"/>
             
-            <!-- Excluded stages -->
-            <text x="600" y="150" text-anchor="middle" fill="#cc0000" font-size="16">Excluded Stages</text>
-            <line x1="550" y1="170" x2="650" y2="170" stroke="#cc0000" stroke-width="2"/>
-            <text x="600" y="200" text-anchor="middle" fill="#666" font-size="12">Distribution</text>
-            <text x="600" y="230" text-anchor="middle" fill="#666" font-size="12">Use</text>
-            <text x="600" y="260" text-anchor="middle" fill="#666" font-size="12">End of life</text>
-            <line x1="580" y1="210" x2="620" y2="210" stroke="#cc0000" stroke-width="4"/>
-            <line x1="580" y1="240" x2="620" y2="240" stroke="#cc0000" stroke-width="4"/>
-            <line x1="580" y1="270" x2="620" y2="270" stroke="#cc0000" stroke-width="4"/>
+            <!-- Stage 1: Extraction of raw materials (top, included) -->
+            <circle cx="350" cy="110" r="45" fill="#16a34a" stroke="#15803d" stroke-width="2"/>
+            <text x="350" y="105" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Extraction of</text>
+            <text x="350" y="120" text-anchor="middle" fill="white" font-size="13" font-weight="bold">raw materials</text>
+            
+            <!-- Arrow from Extraction to Manufacturing -->
+            <path d="M 385 140 Q 420 180 410 220" stroke="#16a34a" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+            
+            <!-- Stage 2: Manufacturing (right, included) -->
+            <circle cx="470" cy="250" r="45" fill="#22c55e" stroke="#16a34a" stroke-width="2"/>
+            <text x="470" y="255" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Manufacturing</text>
+            
+            <!-- Stage 3: Distribution (bottom-right, excluded) -->
+            <circle cx="410" cy="370" r="45" fill="#e5e7eb" stroke="#9ca3af" stroke-width="2"/>
+            <text x="410" y="375" text-anchor="middle" fill="#6b7280" font-size="13" font-weight="bold">Distribution</text>
+            <!-- Red X cross -->
+            <line x1="380" y1="345" x2="440" y2="395" stroke="#dc2626" stroke-width="4" stroke-linecap="round"/>
+            <line x1="440" y1="345" x2="380" y2="395" stroke="#dc2626" stroke-width="4" stroke-linecap="round"/>
+            
+            <!-- Stage 4: Use (bottom-left, excluded) -->
+            <circle cx="290" cy="370" r="45" fill="#e5e7eb" stroke="#9ca3af" stroke-width="2"/>
+            <text x="290" y="375" text-anchor="middle" fill="#6b7280" font-size="13" font-weight="bold">Use</text>
+            <!-- Red X cross -->
+            <line x1="260" y1="345" x2="320" y2="395" stroke="#dc2626" stroke-width="4" stroke-linecap="round"/>
+            <line x1="320" y1="345" x2="260" y2="395" stroke="#dc2626" stroke-width="4" stroke-linecap="round"/>
+            
+            <!-- Stage 5: End-of-life (left, excluded) -->
+            <circle cx="230" cy="250" r="45" fill="#e5e7eb" stroke="#9ca3af" stroke-width="2"/>
+            <text x="230" y="255" text-anchor="middle" fill="#6b7280" font-size="13" font-weight="bold">End-of-life</text>
+            <!-- Red X cross -->
+            <line x1="200" y1="225" x2="260" y2="275" stroke="#dc2626" stroke-width="4" stroke-linecap="round"/>
+            <line x1="260" y1="225" x2="200" y2="275" stroke="#dc2626" stroke-width="4" stroke-linecap="round"/>
+            
+            <!-- Callout box -->
+            <rect x="550" y="150" width="320" height="180" fill="white" stroke="#16a34a" stroke-width="2" rx="8"/>
+            <text x="710" y="180" text-anchor="middle" fill="#16a34a" font-size="14" font-weight="bold">Cradle-to-Gate Approach</text>
+            <text x="710" y="210" text-anchor="middle" fill="#374151" font-size="12">For this Life-Cycle Assessment</text>
+            <text x="710" y="228" text-anchor="middle" fill="#374151" font-size="12">(LCA), we considered a cradle-to-</text>
+            <text x="710" y="246" text-anchor="middle" fill="#374151" font-size="12">gate approach divided into 2 main</text>
+            <text x="710" y="264" text-anchor="middle" fill="#374151" font-size="12">stages - the extraction of raw</text>
+            <text x="710" y="282" text-anchor="middle" fill="#374151" font-size="12">materials and the manufacturing.</text>
+            
+            <!-- Pointer line from callout to circle -->
+            <path d="M 550 240 L 480 240" stroke="#16a34a" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
         </svg>
     </div>
     
