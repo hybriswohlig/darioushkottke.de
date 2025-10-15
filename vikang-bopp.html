@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vi-Kang BOPP - Technical Specifications</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom right, #f9fafb 0%, #e5e7eb 100%);
+            color: #1f2937;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .page-section {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 3rem 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .page-section:hover {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s;
+        }
+        
+        h2 {
+            color: #16a34a;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            border-bottom: 3px solid #16a34a;
+            padding-bottom: 0.625rem;
+        }
+        
+        h3 {
+            color: #16a34a;
+            font-size: 1.375rem;
+            margin: 1.5rem 0 1rem 0;
+            font-weight: 600;
+        }
+        
+        .callout {
+            background: #dcfce7;
+            border-left: 4px solid #16a34a;
+            padding: 1.5rem;
+            margin: 1.25rem 0;
+            border-radius: 0.5rem;
+            line-height: 1.8;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.25rem 0;
+            font-size: 0.875rem;
+            background: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        th {
+            background: #16a34a;
+            color: white;
+            padding: 1rem 0.875rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        td {
+            padding: 0.875rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        tbody tr:hover {
+            background: #dcfce7;
+            transition: background 0.2s;
+        }
+        
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .spec-badge {
+            display: inline-block;
+            background: #f3f4f6;
+            padding: 0.25rem 0.625rem;
+            border-radius: 0.375rem;
+            font-size: 0.8125rem;
+            color: #16a34a;
+            font-weight: 600;
+        }
+        
+        .highlight-row {
+            background: #f0fdf4;
+        }
+        
+        @media print {
+            .page-section { page-break-after: always; }
+            header { display: none; }
+            body { background: white; }
+        }
+        
+        @media (max-width: 768px) {
+            .page-section { padding: 2rem 1.5rem; }
+            h2 { font-size: 1.5rem; }
+            table { font-size: 0.75rem; }
+            th, td { padding: 0.625rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header Navigation -->
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <img 
+                    src="your-logo.svg" 
+                    alt="N&E Innovations Logo" 
+                    class="w-16 h-16"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                />
+                <div class="w-16 h-16 bg-gradient-to-br from-green-600 to-green-400 rounded-lg hidden items-center justify-center text-white font-bold text-xl">
+                    N&E
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">N&E Innovations</h1>
+                    <p class="text-sm text-gray-600">Vi-Kang BOPP Specifications</p>
+                </div>
+            </div>
+            <a href="index.html" class="bg-gradient-to-r from-green-600 to-green-500 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transition-shadow">
+                ← Back to Home
+            </a>
+        </div>
+    </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+<!-- COVER -->
+<div class="page-section bg-gradient-to-br from-green-600 to-green-500 text-white text-center py-20">
+    <h1 class="text-4xl md:text-5xl font-bold mb-6">Vi-Kang BOPP</h1>
+    <div class="text-2xl mb-4 opacity-95">Technical Specifications & Material Properties</div>
+    <div class="text-base opacity-90 leading-relaxed">
+        <strong>Product:</strong> Biaxially Oriented Polypropylene with Antibacterial Additive<br>
+        <strong>Thickness:</strong> 30 microns<br>
+        <strong>Innovation:</strong> Cashew Nut Shell-Based Antimicrobial Enhancement
+    </div>
+</div>
+
+<!-- WHAT IS BOPP -->
+<div class="page-section">
+    <h2>What is BOPP?</h2>
+    
+    <div class="callout">
+        <p><strong>BOPP stands for Biaxially Oriented Polypropylene</strong>, a type of thermoplastic polymer film produced by stretching polypropylene in both the machine direction (MD) and transverse direction (TD). This biaxial orientation enhances its mechanical properties, such as tensile strength and elongation, as well as optical characteristics like haze and gloss.</p>
+        
+        <p style="margin-top: 1rem;">It is commonly used in flexible packaging, labels, and tapes due to its clarity, barrier properties against moisture (WVTR) and oxygen (OTR), and printability (surface tension).</p>
+        
+        <p style="margin-top: 1rem;"><strong style="color: #16a34a;">In this context, the Vi-Kang BOPP incorporates an antibacterial additive derived from cashew nut shells for enhanced antimicrobial performance.</strong></p>
+    </div>
+</div>
+
+<!-- TECHNICAL SPECIFICATIONS -->
+<div class="page-section">
+    <h2>Technical Specifications</h2>
+    
+    <p style="margin-bottom: 1.5rem; color: #6b7280;">
+        Comprehensive material properties measured according to ASTM international standards. All values represent typical performance characteristics of Vi-Kang BOPP film at 30 micron thickness.
+    </p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Property</th>
+                <th style="width: 20%;">Subcategory</th>
+                <th style="width: 18%;">ASTM Standard</th>
+                <th style="width: 12%;">Unit</th>
+                <th style="width: 25%;">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Tensile Strength</strong></td>
+                <td>MD (Machine Direction)</td>
+                <td><span class="spec-badge">D-882</span></td>
+                <td>MPa</td>
+                <td><strong style="color: #16a34a;">≥130</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Tensile Strength</strong></td>
+                <td>TD (Transverse Direction)</td>
+                <td><span class="spec-badge">D-882</span></td>
+                <td>MPa</td>
+                <td><strong style="color: #16a34a;">≥240</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Elongation at Break</strong></td>
+                <td>MD (Machine Direction)</td>
+                <td><span class="spec-badge">D-882</span></td>
+                <td>%</td>
+                <td><strong style="color: #16a34a;">≤175</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Elongation at Break</strong></td>
+                <td>TD (Transverse Direction)</td>
+                <td><span class="spec-badge">D-882</span></td>
+                <td>%</td>
+                <td><strong style="color: #16a34a;">≤60</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Coefficient of Friction</strong></td>
+                <td>O/T-US</td>
+                <td><span class="spec-badge">D-1894</span></td>
+                <td>-</td>
+                <td><strong style="color: #16a34a;">0.35-0.5</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Coefficient of Friction</strong></td>
+                <td>O/U-US</td>
+                <td><span class="spec-badge">D-1894</span></td>
+                <td>-</td>
+                <td><strong style="color: #16a34a;">0.35-0.5</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Thermal Shrinkage</strong></td>
+                <td>MD (Machine Direction)</td>
+                <td><span class="spec-badge">D-1204</span></td>
+                <td>%</td>
+                <td><strong style="color: #16a34a;">≤4.0</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Thermal Shrinkage</strong></td>
+                <td>TD (Transverse Direction)</td>
+                <td><span class="spec-badge">D-1204</span></td>
+                <td>%</td>
+                <td><strong style="color: #16a34a;">≤2.0</strong></td>
+            </tr>
+            <tr class="highlight-row">
+                <td><strong>Haze</strong></td>
+                <td>-</td>
+                <td><span class="spec-badge">D-1003</span></td>
+                <td>%</td>
+                <td><strong style="color: #16a34a;">≤1.8</strong></td>
+            </tr>
+            <tr class="highlight-row">
+                <td><strong>Gloss</strong></td>
+                <td>-</td>
+                <td><span class="spec-badge">D-2457</span></td>
+                <td>%</td>
+                <td><strong style="color: #16a34a;">≥88</strong></td>
+            </tr>
+            <tr class="highlight-row">
+                <td><strong>Surface Tension</strong></td>
+                <td>-</td>
+                <td><span class="spec-badge">D-2457</span></td>
+                <td>Dyne</td>
+                <td><strong style="color: #16a34a;">≥38</strong></td>
+            </tr>
+            <tr>
+                <td><strong>WVTR</strong></td>
+                <td>Water Vapor Transmission Rate</td>
+                <td>-</td>
+                <td>g/m²/day</td>
+                <td><strong style="color: #16a34a;">3.337 ± 0.954</strong></td>
+            </tr>
+            <tr>
+                <td><strong>OTR</strong></td>
+                <td>Oxygen Transmission Rate</td>
+                <td>-</td>
+                <td>cm³/m²/day</td>
+                <td><strong style="color: #16a34a;">43.347 ± 4.260</strong></td>
+            </tr>
+            <tr class="highlight-row">
+                <td><strong>Thickness</strong></td>
+                <td>Standard</td>
+                <td>-</td>
+                <td>microns</td>
+                <td><strong style="color: #16a34a;">30</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div style="margin-top: 2rem; padding: 1.25rem; background: #f9fafb; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+        <h3 style="margin-top: 0; font-size: 1rem; color: #16a34a;">Key Performance Highlights</h3>
+        <ul style="margin-left: 1.5rem; margin-top: 0.75rem; color: #6b7280;">
+            <li><strong>Superior Clarity:</strong> Low haze (≤1.8%) and high gloss (≥88%) for excellent product visibility</li>
+            <li><strong>Excellent Strength:</strong> High tensile strength in both directions ensures durability</li>
+            <li><strong>Barrier Properties:</strong> Low WVTR and OTR provide effective moisture and oxygen protection</li>
+            <li><strong>Printability:</strong> High surface tension (≥38 Dyne) ensures excellent ink adhesion</li>
+            <li><strong>Dimensional Stability:</strong> Low thermal shrinkage maintains form during processing</li>
+            <li><strong>Antimicrobial Enhancement:</strong> Cashew nut shell additive provides antibacterial properties</li>
+        </ul>
+    </div>
+</div>
+
+<!-- APPLICATIONS -->
+<div class="page-section">
+    <h2>Applications</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+        <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 0.75rem; border: 2px solid #86efac;">
+            <h3 style="margin-top: 0; font-size: 1.125rem; color: #16a34a;">Flexible Packaging</h3>
+            <p style="color: #6b7280; font-size: 0.875rem;">Food wraps, snack bags, and protective films</p>
+        </div>
+        
+        <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 0.75rem; border: 2px solid #86efac;">
+            <h3 style="margin-top: 0; font-size: 1.125rem; color: #16a34a;">Labels & Tapes</h3>
+            <p style="color: #6b7280; font-size: 0.875rem;">Product labels, adhesive tapes, and stickers</p>
+        </div>
+        
+        <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 0.75rem; border: 2px solid #86efac;">
+            <h3 style="margin-top: 0; font-size: 1.125rem; color: #16a34a;">Lamination</h3>
+            <p style="color: #6b7280; font-size: 0.875rem;">Multi-layer packaging and protective laminates</p>
+        </div>
+        
+        <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 0.75rem; border: 2px solid #86efac;">
+            <h3 style="margin-top: 0; font-size: 1.125rem; color: #16a34a;">Medical & Hygiene</h3>
+            <p style="color: #6b7280; font-size: 0.875rem;">Sterile packaging with antimicrobial properties</p>
+        </div>
+    </div>
+</div>
+
+</div> <!-- Close container -->
+
+<!-- Footer -->
+<footer class="bg-white border-t border-gray-200 mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="text-center">
+            <p class="text-gray-900 font-semibold mb-2">N&E Innovations Pte Ltd</p>
+            <p class="text-gray-600 mb-3">Vi-Kang BOPP Technical Specifications</p>
+            <p class="text-sm text-gray-500">
+                For more information, contact us at 
+                <a href="mailto:business@vi-kang.com" class="text-green-600 font-semibold hover:underline">
+                    business@vi-kang.com
+                </a>
+            </p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
