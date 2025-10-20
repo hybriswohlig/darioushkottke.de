@@ -1,0 +1,289 @@
+/* ===========================
+   REPORT SHARED STYLES
+   Styles specific to report pages
+   (report-2b, report-lca-disinfectants, vikang-bopp)
+   =========================== */
+
+/* Body with gradient background for reports */
+body {
+    background: linear-gradient(to bottom right, #f9fafb 0%, #e5e7eb 100%);
+    min-height: 100vh;
+}
+
+/* Header Navigation */
+.header-nav {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.header-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo-box {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(to bottom right, #16a34a 0%, #4ade80 100%);
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.logo-text h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #111827;
+    margin-bottom: 0.25rem;
+}
+
+.logo-text p {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.nav-button {
+    background: linear-gradient(to right, #16a34a 0%, #22c55e 100%);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.nav-button:hover {
+    box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+    transform: translateY(-2px);
+}
+
+/* Main Container */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Page Sections & Cards */
+.page, .page-section {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 3rem 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.page {
+    page-break-after: always;
+}
+
+.page-section:hover {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s;
+}
+
+/* Cover Page */
+.cover {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+    color: white;
+    border-radius: 1rem;
+}
+
+.cover h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+}
+
+.cover .subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2.5rem;
+    opacity: 0.95;
+}
+
+.cover .meta {
+    font-size: 1rem;
+    opacity: 0.9;
+    line-height: 2;
+}
+
+/* KPI Cards */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 1.875rem 0;
+}
+
+.kpi-card {
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.kpi-card:hover {
+    border-color: #16a34a;
+    box-shadow: 0 10px 15px rgba(22, 163, 74, 0.1);
+    transform: translateY(-4px);
+}
+
+.kpi-value {
+    font-size: 2.625rem;
+    font-weight: 700;
+    color: #16a34a;
+    margin: 0.625rem 0;
+}
+
+.kpi-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.kpi-context {
+    font-size: 0.8125rem;
+    color: #9ca3af;
+    margin-top: 0.5rem;
+}
+
+/* Chart Container */
+.chart-container {
+    margin: 1.875rem 0;
+    padding: 1.5rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+}
+
+.chart-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #16a34a;
+    margin-bottom: 0.9375rem;
+}
+
+/* Risk Badges */
+.risk-high {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+}
+
+.risk-medium {
+    background: #fef3c7;
+    color: #d97706;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+}
+
+.risk-low {
+    background: #dcfce7;
+    color: #16a34a;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+}
+
+/* Code Blocks */
+.code-block {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+/* Spec Badge (for technical specs) */
+.spec-badge {
+    display: inline-block;
+    background: #f3f4f6;
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.375rem;
+    font-size: 0.8125rem;
+    color: #16a34a;
+    font-weight: 600;
+}
+
+/* Highlight Row (for tables) */
+.highlight-row {
+    background: #f0fdf4;
+}
+
+/* Print Styles */
+@media print {
+    .page, .page-section {
+        page-break-after: always;
+    }
+    header, .header-nav {
+        display: none;
+    }
+    body {
+        background: white;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .page, .page-section {
+        padding: 2rem 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    table {
+        font-size: 0.75rem;
+    }
+
+    th, td {
+        padding: 0.625rem;
+    }
+
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cover h1 {
+        font-size: 2rem;
+    }
+
+    .cover .subtitle {
+        font-size: 1.25rem;
+    }
+}

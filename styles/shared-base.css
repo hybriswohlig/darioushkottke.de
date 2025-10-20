@@ -1,0 +1,113 @@
+/* ===========================
+   SHARED BASE STYLES
+   Core styles used across all pages
+   =========================== */
+
+/* Universal Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Base Body Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #1f2937;
+    line-height: 1.6;
+}
+
+/* Typography - Headings */
+h2 {
+    color: #16a34a;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    border-bottom: 3px solid #16a34a;
+    padding-bottom: 0.625rem;
+}
+
+h3 {
+    color: #16a34a;
+    font-size: 1.375rem;
+    margin: 1.5rem 0 1rem 0;
+    font-weight: 600;
+}
+
+h4 {
+    color: #22c55e;
+    font-size: 1.125rem;
+    margin: 1.25rem 0 0.625rem 0;
+    font-weight: 600;
+}
+
+/* Inline Highlight Badge */
+.highlight {
+    background: #16a34a;
+    color: white;
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+}
+
+/* Lists */
+ul {
+    margin-left: 1.25rem;
+    margin-top: 0.625rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.25rem 0;
+    font-size: 0.875rem;
+    background: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+th {
+    background: #16a34a;
+    color: white;
+    padding: 1rem 0.875rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+td {
+    padding: 0.875rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+tbody tr:hover {
+    background: #dcfce7;
+    transition: background 0.2s;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Callout Boxes */
+.callout {
+    background: #dcfce7;
+    border-left: 4px solid #16a34a;
+    padding: 1.5rem;
+    margin: 1.25rem 0;
+    border-radius: 0.5rem;
+    line-height: 1.8;
+}
+
+/* Footnote Text */
+.footnote {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.625rem;
+    font-style: italic;
+}
