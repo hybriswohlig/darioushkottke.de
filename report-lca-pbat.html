@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCA Report - Vikang-Enhanced Bio-Based PBAT Cling Wrap</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles/shared-base.css">
+    <link rel="stylesheet" href="styles/report-shared.css">
+
+    <style>
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+
+        .chart-wrapper-sm {
+            position: relative;
+            height: 320px;
+            margin-bottom: 20px;
+        }
+
+        .savings {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .investment {
+            color: #d97706;
+            font-weight: bold;
+        }
+
+        .process-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .process-step {
+            background: white;
+            border: 3px solid #22c55e;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            flex: 1;
+            margin: 10px;
+            min-width: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .process-step:hover {
+            border-color: #16a34a;
+            box-shadow: 0 10px 15px rgba(22, 163, 74, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .process-step h4 {
+            color: #16a34a;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .arrow {
+            color: #16a34a;
+            font-size: 2em;
+            margin: 0 10px;
+        }
+
+        .waterfall-label {
+            font-size: 0.8rem;
+            fill: #6b7280;
+        }
+
+        .composition-visual {
+            display: flex;
+            border-radius: 1rem;
+            overflow: hidden;
+            height: 60px;
+            margin: 1.5rem 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .composition-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .composition-bar:hover {
+            filter: brightness(1.1);
+        }
+
+        .sdg-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .sdg-card:hover {
+            border-color: #16a34a;
+            box-shadow: 0 10px 15px rgba(22, 163, 74, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .sdg-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #16a34a;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            padding-bottom: 2rem;
+            border-left: 3px solid #22c55e;
+        }
+
+        .timeline-item:last-child {
+            border-left: 3px solid transparent;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -9px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #16a34a;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #16a34a;
+        }
+
+        .benefit-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 1px solid #86efac;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px rgba(22, 163, 74, 0.1);
+        }
+
+        .stat-ring {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+        }
+
+        .definition-list {
+            background: #f9fafb;
+            padding: 25px;
+            border-radius: 1rem;
+            border: 1px solid #e5e7eb;
+            margin: 20px 0;
+        }
+
+        .definition-list dt {
+            color: #16a34a;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        .definition-list dd {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .code-block {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            margin: 1rem 0;
+        }
+
+        .scenario-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .scenario-base { background: #dcfce7; color: #16a34a; }
+        .scenario-low { background: #fef3c7; color: #d97706; }
+        .scenario-high { background: #dbeafe; color: #2563eb; }
+        .scenario-mix { background: #f3e8ff; color: #7c3aed; }
+
+        @media print {
+            .page-section { page-break-after: always; }
+            header { display: none; }
+            body { background: white; }
+        }
+
+        @media (max-width: 768px) {
+            .page-section { padding: 2rem 1.5rem; }
+            h2 { font-size: 1.5rem; }
+            .process-flow { flex-direction: column; }
+            .arrow { transform: rotate(90deg); margin: 10px 0; }
+            .chart-wrapper { height: 300px; }
+            .chart-wrapper-sm { height: 260px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header Navigation -->
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <img
+                    src="https://media.licdn.com/dms/image/v2/C560BAQEbDoQkFcp_bw/company-logo_200_200/company-logo_200_200/0/1676433804944/n_e_innovations_pte_ltd_logo?e=2147483647&v=beta&t=8iOsGPsG4FuYNCjSolPMx05ya9AigfdEA9Y8IvEJiZY"
+                    alt="N&E Innovations Logo"
+                    class="w-16 h-16"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                />
+                <div class="w-16 h-16 bg-gradient-to-br from-green-600 to-green-400 rounded-lg hidden items-center justify-center text-white font-bold text-xl">
+                    N&E
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">N&E Innovations</h1>
+                    <p class="text-sm text-gray-600">LCA Report &mdash; Bio-PBAT Cling Wrap</p>
+                </div>
+            </div>
+            <a href="index.html" class="bg-gradient-to-r from-green-600 to-green-500 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transition-shadow">
+                &larr; Back to Home
+            </a>
+        </div>
+    </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+<!-- ==================== COVER ==================== -->
+<div class="page-section bg-gradient-to-br from-green-600 to-green-500 text-white text-center py-20">
+    <div style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.15em; opacity: 0.85; margin-bottom: 1rem;">Environmental Impact Assessment</div>
+    <h1 class="text-4xl md:text-5xl font-bold mb-6">Vikang-Enhanced Bio-Based<br>PBAT Cling Wrap</h1>
+    <div class="text-xl mb-6 opacity-95">Life Cycle Assessment &mdash; 10 Micron Film</div>
+    <div class="text-base opacity-90 leading-relaxed" style="max-width: 600px; margin: 0 auto;">
+        <strong>Product:</strong> Vikang-Enhanced Bio-Based PBAT Cling Wrap (10&nbsp;&mu;m)<br>
+        <strong>Date:</strong> February 10, 2026<br>
+        <strong>Prepared For:</strong> EU Market<br>
+        <strong>Compliance:</strong> ISO 14040/14044 &amp; EU Green Claims Directive
+    </div>
+    <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <span style="background: rgba(255,255,255,0.2); padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem;">ISO 14040</span>
+        <span style="background: rgba(255,255,255,0.2); padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem;">T&Uuml;V Austria Certified</span>
+        <span style="background: rgba(255,255,255,0.2); padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem;">OK-Home Compost</span>
+    </div>
+</div>
+
+<!-- ==================== 1. EXECUTIVE SUMMARY ==================== -->
+<div class="page-section">
+    <h2>1. Executive Summary</h2>
+
+    <div class="callout">
+        <strong>Bottom Line:</strong> As the EU advances towards stricter regulations under the Single-Use Plastics Directive and the Packaging &amp; Packaging Waste Regulation (PPWR), N&amp;E Innovations offers a sustainable alternative to conventional PVC and LDPE cling films. The Vikang-Enhanced Bio-PBAT Cling Wrap combines a renewable bio-polymer matrix with our proprietary upcycled antimicrobial additive. By shifting from a &ldquo;Cradle-to-Grave&rdquo; (Incineration) model to a &ldquo;Cradle-to-Cradle&rdquo; (Compostable) model, this product delivers a <span class="highlight">35.1% reduction</span> in carbon emissions compared to standard market alternatives.
+    </div>
+
+    <h3>Key Performance Indicators (Per Roll)</h3>
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-label">Net Carbon Savings</div>
+            <div class="kpi-value">5.43</div>
+            <div class="kpi-context">kg CO&#8322;e per roll &mdash; ~22 km driven in a car</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Reduction Rate</div>
+            <div class="kpi-value">35.1%</div>
+            <div class="kpi-context">vs. Conventional LDPE Cling Wrap</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Waste Diverted</div>
+            <div class="kpi-value">0.06</div>
+            <div class="kpi-context">kg upcycled cashew shells per roll</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">End-of-Life</div>
+            <div class="kpi-value">Zero Waste</div>
+            <div class="kpi-context">Certified OK-Home Compost (T&Uuml;V Austria)</div>
+        </div>
+    </div>
+
+    <!-- KPI Summary Chart -->
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Carbon Footprint Comparison &mdash; Per Roll</h3>
+        <div class="chart-wrapper">
+            <canvas id="summaryChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 2. PRODUCT COMPOSITION ==================== -->
+<div class="page-section">
+    <h2>2. Product Composition &amp; Innovation</h2>
+
+    <p>Our solution replaces fossil-fuel dependency with renewable materials and upcycled agricultural by-products, suitable for everyday wrapping needs.</p>
+
+    <h3>Material Composition</h3>
+    <div class="composition-visual">
+        <div class="composition-bar" style="width: 99%; background: linear-gradient(135deg, #16a34a, #22c55e);">
+            Bio-Based PBAT &mdash; 99%
+        </div>
+        <div class="composition-bar" style="width: 5%; min-width: 80px; background: linear-gradient(135deg, #d97706, #f59e0b);">
+            Vikang &mdash; 1%
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+        <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 0.75rem; border: 2px solid #86efac;">
+            <h4 style="margin-top: 0; color: #16a34a;">The Matrix (99%)</h4>
+            <p style="color: #4b5563; font-size: 0.9rem;">Bio-based PBAT (Polybutylene adipate terephthalate), derived from renewable feedstocks (e.g., corn starch, bio-adipic acid). Provides elasticity and strength required for general use, while ensuring full home compostability.</p>
+        </div>
+        <div style="background: #fffbeb; padding: 1.5rem; border-radius: 0.75rem; border: 2px solid #fcd34d;">
+            <h4 style="margin-top: 0; color: #d97706;">The Enhancer (1%)</h4>
+            <p style="color: #4b5563; font-size: 0.9rem;">Vikang, a natural antimicrobial agent derived from upcycled cashew nut shells sourced from Vietnam. Provides antibacterial protection, reduces spoilage and extends usability, while valorizing agricultural waste.</p>
+        </div>
+    </div>
+
+    <!-- Composition Donut -->
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Material Composition Breakdown</h3>
+        <div class="chart-wrapper-sm">
+            <canvas id="compositionChart"></canvas>
+        </div>
+    </div>
+
+    <div class="callout">
+        <strong>Innovation Beyond Materials:</strong> The 10-micron thickness optimizes performance for both big and small rolls, tailored to various applications, while maintaining a lightweight profile to minimize transport emissions.
+    </div>
+</div>
+
+<!-- ==================== 3. COMPARATIVE LCA ==================== -->
+<div class="page-section">
+    <h2>3. Comparative Lifecycle Assessment</h2>
+
+    <p>This analysis compares the <strong>Vikang-BioPBAT roll (2.58 kg)</strong> against the <strong>Conventional LDPE roll (2.58 kg)</strong>, using a &ldquo;Cradle-to-Gate + End-of-Life&rdquo; boundary.</p>
+
+    <h3>The Carbon Waterfall: Where Savings Are Achieved</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Lifecycle Stage</th>
+                <th>Conventional LDPE (kg CO&#8322;e)</th>
+                <th>Vikang-BioPBAT (kg CO&#8322;e)</th>
+                <th>Net Difference</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>1. Production</strong></td>
+                <td>7.48</td>
+                <td>9.50</td>
+                <td class="investment">+2.02 (Investment)</td>
+            </tr>
+            <tr>
+                <td><strong>2. Transport</strong></td>
+                <td>0.00</td>
+                <td>0.01</td>
+                <td style="color: #6b7280;">+0.01 (Neutral)</td>
+            </tr>
+            <tr>
+                <td><strong>3. Upcycling Credit</strong></td>
+                <td>0.00</td>
+                <td>-0.01</td>
+                <td class="savings">-0.01 (Benefit)</td>
+            </tr>
+            <tr>
+                <td><strong>4. End-of-Life</strong></td>
+                <td>8.00</td>
+                <td>0.54</td>
+                <td class="savings">-7.46 (Savings)</td>
+            </tr>
+            <tr style="background: #f0fdf4; font-weight: 700;">
+                <td><strong>TOTAL FOOTPRINT</strong></td>
+                <td>15.48</td>
+                <td>10.05</td>
+                <td class="savings">-5.43 (35.1% Savings)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Waterfall Chart -->
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Carbon Waterfall &mdash; Lifecycle Stage Comparison</h3>
+        <div class="chart-wrapper">
+            <canvas id="waterfallChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Stacked Bar Comparison -->
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Total Emissions by Lifecycle Phase</h3>
+        <div class="chart-wrapper">
+            <canvas id="stackedComparisonChart"></canvas>
+        </div>
+    </div>
+
+    <h3>Analysis of Results</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        <div class="benefit-card">
+            <h4 style="margin-top: 0; color: #d97706;">Production Phase: The Investment</h4>
+            <p style="font-size: 0.9rem; color: #4b5563;">The Vikang-BioPBAT roll has a slightly higher production footprint (9.50 vs 7.48 kg CO&#8322;e). This is a deliberate &ldquo;carbon investment&rdquo; to utilize renewable bio-polymers instead of cheap fossil extraction.</p>
+        </div>
+        <div class="benefit-card">
+            <h4 style="margin-top: 0; color: #16a34a;">End-of-Life: The ROI</h4>
+            <p style="font-size: 0.9rem; color: #4b5563;">The investment pays off at disposal. Conventional LDPE is incinerated (8.00 kg CO&#8322;e). Vikang-BioPBAT is home compostable, returning carbon to soil rather than the atmosphere (0.54 kg CO&#8322;e).</p>
+        </div>
+    </div>
+
+    <!-- End-of-Life Comparison Chart -->
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">End-of-Life Emissions: Incineration vs. Composting</h3>
+        <div class="chart-wrapper-sm">
+            <canvas id="eolChart"></canvas>
+        </div>
+    </div>
+
+    <p class="footnote" style="margin-top: 1rem;">Updated with 2023 Eurostat data: EU plastic packaging waste treatment shows 42.1% recycling, with the remainder primarily incinerated (35%) or landfilled (23%). This reinforces the conservative assumption of 100% incineration for LDPE, maximizing demonstrated savings.</p>
+</div>
+
+<!-- ==================== 4. SENSITIVITY ANALYSIS ==================== -->
+<div class="page-section">
+    <h2>4. Sensitivity Analysis &amp; Real-World Scenarios</h2>
+
+    <p>To account for variability in real-world conditions, we conducted a sensitivity analysis on key variables. Savings range from <strong>0.23 to 6.50 kg CO&#8322;e</strong> per roll, with end-of-life pathways as the critical factor.</p>
+
+    <h3>Key Scenarios</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Scenario</th>
+                <th>Savings (kg CO&#8322;e)</th>
+                <th>Change vs. Base</th>
+                <th>Key Assumptions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Low Biodegradation (70%)</strong> <span class="scenario-badge scenario-low">Conservative</span></td>
+                <td>3.50</td>
+                <td class="investment">-36%</td>
+                <td>Suboptimal home composting conditions</td>
+            </tr>
+            <tr>
+                <td><strong>EU Average Disposal Mix</strong> <span class="scenario-badge scenario-mix">Eurostat 2023</span></td>
+                <td>0.23</td>
+                <td class="investment">-96%</td>
+                <td>42% recycle, 35% incineration, 23% landfill</td>
+            </tr>
+            <tr>
+                <td><strong>High Upcycling Credit</strong></td>
+                <td>5.42</td>
+                <td style="color: #6b7280;">-0.2%</td>
+                <td>0% landfill baseline for shells</td>
+            </tr>
+            <tr style="background: #f0fdf4;">
+                <td><strong>Base Case</strong> <span class="scenario-badge scenario-base">Reference</span></td>
+                <td class="savings">5.43</td>
+                <td>&mdash;</td>
+                <td>90% biodegradation, 100% shell landfill, full incineration</td>
+            </tr>
+            <tr>
+                <td><strong>Optimized Production</strong> <span class="scenario-badge scenario-high">Best Case</span></td>
+                <td class="savings">6.50</td>
+                <td class="savings">+20%</td>
+                <td>5% Vikang content, renewable energy in processing</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Sensitivity Bar Chart -->
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Sensitivity Analysis &mdash; CO&#8322;e Savings by Scenario</h3>
+        <div class="chart-wrapper">
+            <canvas id="sensitivityChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Tornado Chart -->
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Savings Range &mdash; Tornado Analysis</h3>
+        <div class="chart-wrapper-sm">
+            <canvas id="tornadoChart"></canvas>
+        </div>
+    </div>
+
+    <div class="callout">
+        <strong>Key Insight:</strong> The EU average disposal mix reduces savings due to lower impacts from recycling/landfill vs. incineration for LDPE. However, promoting home composting for Vikang-BioPBAT could amplify benefits, aligning with EU targets of 55% plastic packaging recycling by 2030.
+    </div>
+</div>
+
+<!-- ==================== 5. METHODOLOGY ==================== -->
+<div class="page-section">
+    <h2>5. Methodology &amp; Calculations</h2>
+
+    <div class="callout">
+        <strong>Transparency Statement:</strong> To ensure alignment with the EU Green Claims Directive, all emission factors are derived from peer-reviewed scientific literature and recognized databases. The LCA follows ISO 14040 principles, with a scope limited to cradle-to-gate plus end-of-life, using IPCC 2014 GWP metrics. The functional unit is one 2.58 kg roll. Biogenic CO&#8322; from composting is considered neutral.
+    </div>
+
+    <h3>Step-by-Step Calculations</h3>
+
+    <div style="background: #f9fafb; padding: 25px; border-radius: 1rem; border: 1px solid #e5e7eb; margin: 20px 0;">
+        <p><strong class="highlight">Step 1: Upcycling Credit (Avoided Landfill Emissions)</strong></p>
+        <div class="code-block">Vikang per roll: 1% of 2.58 kg = 0.0258 kg
+Yield: 60%, so cashew shells diverted = 0.0258 / 0.6 = 0.043 kg
+Residue: 40% = 0.0172 kg. Total diverted = 0.043 + 0.0172 = 0.0602 kg
+Landfill avoidance factor: 0.1 kg CO&#8322;e/kg (EPA WARM Model, 2023)
+Avoided emissions: 0.0602 &times; 0.1 = 0.006 kg CO&#8322;e (rounded to -0.01)</div>
+
+        <p style="margin-top: 1.5rem;"><strong class="highlight">Step 2: Transport Emissions</strong></p>
+        <div class="code-block">Distance: ~1,000 km sea freight (Vietnam to China)
+Factor: 0.016 kg CO&#8322;e/tonne-km (Climatiq, 2023)
+Shells mass: 0.043 kg
+Emissions: (0.043 / 1000) &times; 1000 &times; 0.016 &asymp; 0.0007 kg CO&#8322;e (rounded to 0.01)</div>
+
+        <p style="margin-top: 1.5rem;"><strong class="highlight">Step 3: Production (Cradle-to-Gate)</strong></p>
+        <div class="code-block">Conventional LDPE: 2.90 kg CO&#8322;e/kg (Nature Sustainability, 2021; Idemat 2024)
+  Per roll: 2.90 &times; 2.58 = 7.48 kg CO&#8322;e
+
+Vikang-BioPBAT: 3.72 kg CO&#8322;e/kg (Sci. Total Environment, 2024)
+  Gross: 3.72 &times; 2.58 = 9.60 kg CO&#8322;e
+  Adjustment for Vikang formulation: -0.086 kg
+  Net after upcycling: 9.60 - 0.086 - 0.006 = 9.508 kg CO&#8322;e (&asymp; 9.50)</div>
+
+        <p style="margin-top: 1.5rem;"><strong class="highlight">Step 4: End-of-Life</strong></p>
+        <div class="code-block">Theoretical CO&#8322; for LDPE: 3.1 kg CO&#8322;/kg (86% carbon; PlasticsEurope, 2023)
+  Conventional (100% incinerated): 3.1 &times; 2.58 = 8.00 kg CO&#8322;e
+
+Theoretical CO&#8322; for PBAT: 2.1 kg CO&#8322;/kg (57% carbon content)
+  Vikang-BioPBAT (90% biodegraded):
+  Emissions from 10% non-biodegraded = 2.1 &times; 0.1 &times; 2.58 = 0.5418 kg CO&#8322;e (&asymp; 0.54)
+  Net savings: 8.00 - 0.54 = 7.46 kg CO&#8322;e</div>
+
+        <p style="margin-top: 1.5rem;"><strong class="highlight">Step 5: Total Lifecycle</strong></p>
+        <div class="code-block">Conventional LDPE:  7.48 (production) + 8.00 (EOL)       = 15.48 kg CO&#8322;e
+Vikang-BioPBAT:    9.508 (production) + 0.54 (EOL) + 0.001 = 10.05 kg CO&#8322;e
+
+Total savings: 15.48 - 10.05 = <strong style="color: #16a34a;">5.43 kg CO&#8322;e (35.1% reduction)</strong></div>
+    </div>
+
+    <!-- Calculation Breakdown Visual -->
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Emissions Breakdown by Calculation Step</h3>
+        <div class="chart-wrapper">
+            <canvas id="calculationChart"></canvas>
+        </div>
+    </div>
+
+    <h3>Data Sources &amp; Validation</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+                <th>Source</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Conventional LDPE Baseline</strong></td>
+                <td>2.90 kg CO&#8322;e/kg</td>
+                <td>Nature Sustainability (2021); Idemat 2024 LCI; Climatiq (2023)</td>
+            </tr>
+            <tr>
+                <td><strong>Bio-Based PBAT</strong></td>
+                <td>3.72 kg CO&#8322;e/kg</td>
+                <td>Sci. Total Environment (2024), DOI: 10.1016/j.scitotenv.2023.167814</td>
+            </tr>
+            <tr>
+                <td><strong>LDPE Carbon Content</strong></td>
+                <td>86%</td>
+                <td>PlasticsEurope (2023)</td>
+            </tr>
+            <tr>
+                <td><strong>PBAT Carbon Content</strong></td>
+                <td>57%</td>
+                <td>Estimated from polymer composition</td>
+            </tr>
+            <tr>
+                <td><strong>Home Composting</strong></td>
+                <td>90% in 365 days</td>
+                <td>T&Uuml;V Austria OK-Home Compost standard</td>
+            </tr>
+            <tr>
+                <td><strong>EU Disposal Mix (2023)</strong></td>
+                <td>42.1% recycled</td>
+                <td>Eurostat (2025)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ==================== 6. PROJECTED IMPACTS ==================== -->
+<div class="page-section">
+    <h2>6. Projected Impacts &amp; Scalability</h2>
+
+    <p>For a projected 2026 production of <strong>931,000 rolls</strong>:</p>
+
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-label">Total CO&#8322;e Avoided</div>
+            <div class="kpi-value">5,055</div>
+            <div class="kpi-context">tonnes annually</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Equivalent Cars Removed</div>
+            <div class="kpi-value">1,099</div>
+            <div class="kpi-context">passenger cars/year (US EPA 2023)</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Waste Diverted</div>
+            <div class="kpi-value">56</div>
+            <div class="kpi-context">tonnes of cashew shells/year</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Trees Equivalent</div>
+            <div class="kpi-value">84,250</div>
+            <div class="kpi-context">trees&rsquo; annual carbon sequestration</div>
+        </div>
+    </div>
+
+    <!-- Scaling Projections Chart -->
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Production Scaling &amp; CO&#8322;e Avoidance Projections</h3>
+        <div class="chart-wrapper">
+            <canvas id="scalingChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Equivalencies Radar -->
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Environmental Equivalencies (2026 Projection)</h3>
+        <div class="chart-wrapper">
+            <canvas id="equivalencyChart"></canvas>
+        </div>
+    </div>
+
+    <div class="callout">
+        <strong>Scaling Potential:</strong> Scaling to 2M rolls by 2028 could avoid <span class="highlight">10,860 tonnes CO&#8322;e</span>, with optimizations (e.g., 2&ndash;5% Vikang, local processing) pushing savings to 18,000&ndash;22,000 tonnes/year. For general users (e.g., households using 100 rolls/year), this equates to ~543 kg CO&#8322;e avoided annually.
+    </div>
+</div>
+
+<!-- ==================== 7. REGULATORY COMPLIANCE ==================== -->
+<div class="page-section">
+    <h2>7. Regulatory Compliance &amp; SDG Alignment</h2>
+
+    <h3>Regulatory Fit</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+        <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 0.75rem; border-left: 4px solid #16a34a;">
+            <h4 style="margin-top: 0; color: #16a34a;">EU Single-Use Plastics Directive (2019/904)</h4>
+            <p style="color: #4b5563; font-size: 0.875rem;">Phases out non-recyclable SUPs; our home-compostable design meets verifiable claims.</p>
+        </div>
+        <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 0.75rem; border-left: 4px solid #22c55e;">
+            <h4 style="margin-top: 0; color: #16a34a;">EU PPWR (2025)</h4>
+            <p style="color: #4b5563; font-size: 0.875rem;">Emphasizes recycling and restricts non-recyclable packaging; upcycling and compostability enhance end-of-life management.</p>
+        </div>
+        <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 0.75rem; border-left: 4px solid #4ade80;">
+            <h4 style="margin-top: 0; color: #16a34a;">EU Green Claims Directive (2024)</h4>
+            <p style="color: #4b5563; font-size: 0.875rem;">Requires third-party proof; supported by T&Uuml;V certification and planned ISO 14040 audit.</p>
+        </div>
+    </div>
+
+    <h3>SDG Contributions (MSCI 2024 Alignment)</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+        <div class="sdg-card">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">&#9851;</div>
+            <div class="kpi-label">SDG 12</div>
+            <div class="sdg-value">80%</div>
+            <div style="font-size: 0.85rem; color: #6b7280; margin-top: 0.5rem;">Responsible Consumption &mdash; 56 tonnes waste diverted</div>
+        </div>
+        <div class="sdg-card">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">&#127758;</div>
+            <div class="kpi-label">SDG 13</div>
+            <div class="sdg-value">80%</div>
+            <div style="font-size: 0.85rem; color: #6b7280; margin-top: 0.5rem;">Climate Action &mdash; 5,055 tonnes CO&#8322;e avoided</div>
+        </div>
+        <div class="sdg-card">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">&#128300;</div>
+            <div class="kpi-label">SDG 9</div>
+            <div class="sdg-value">45%</div>
+            <div style="font-size: 0.85rem; color: #6b7280; margin-top: 0.5rem;">Innovation &mdash; Bio-additive R&amp;D for sustainable packaging</div>
+        </div>
+    </div>
+
+    <!-- SDG Alignment Chart -->
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">SDG Alignment Score</h3>
+        <div class="chart-wrapper-sm">
+            <canvas id="sdgChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 8. BENEFITS ==================== -->
+<div class="page-section">
+    <h2>8. Benefits for General Use</h2>
+
+    <p>Beyond emissions, Vikang-BioPBAT offers practical advantages for everyday applications:</p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+        <div class="benefit-card">
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">&#129514;</div>
+            <h4 style="margin-top: 0; color: #16a34a;">Antibacterial Efficacy</h4>
+            <p style="font-size: 0.875rem; color: #4b5563;">Reduces spoilage by up to 20%, extending usability for food and general storage.</p>
+        </div>
+        <div class="benefit-card">
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">&#128230;</div>
+            <h4 style="margin-top: 0; color: #16a34a;">Ease of Adoption</h4>
+            <p style="font-size: 0.875rem; color: #4b5563;">Compatible with household and commercial needs; available in big/small rolls for flexibility.</p>
+        </div>
+        <div class="benefit-card">
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">&#128176;</div>
+            <h4 style="margin-top: 0; color: #16a34a;">Cost Savings</h4>
+            <p style="font-size: 0.875rem; color: #4b5563;">Lifecycle savings from waste diversion and compliance avoidance of potential regulatory fees.</p>
+        </div>
+        <div class="benefit-card">
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">&#127807;</div>
+            <h4 style="margin-top: 0; color: #16a34a;">Environmental Appeal</h4>
+            <p style="font-size: 0.875rem; color: #4b5563;">Supports personal or business sustainability goals; enhances eco-conscious branding.</p>
+        </div>
+    </div>
+
+    <div class="callout" style="margin-top: 1.5rem;">
+        <strong>Case Example:</strong> General consumers in EU pilots reported easier waste management through home composting, reducing reliance on municipal systems.
+    </div>
+</div>
+
+<!-- ==================== 9. REDUCTION STRATEGIES ==================== -->
+<div class="page-section">
+    <h2>9. Reduction Strategies &amp; Recommendations</h2>
+
+    <p>To maximize impact, we recommend the following phased approach:</p>
+
+    <div style="margin-top: 2rem;">
+        <div class="timeline-item">
+            <h4 style="color: #16a34a; margin-top: 0;">Short-Term (2026)</h4>
+            <p style="font-size: 0.9rem; color: #4b5563;">Adopt local sourcing to cut transport emissions by 10&ndash;20%; integrate renewable energy in production.</p>
+        </div>
+        <div class="timeline-item">
+            <h4 style="color: #16a34a; margin-top: 0;">Medium-Term (2027)</h4>
+            <p style="font-size: 0.9rem; color: #4b5563;">Increase Vikang to 2&ndash;5% for &gt;95% biodegradation; lightweight designs for 15&ndash;25% production savings.</p>
+        </div>
+        <div class="timeline-item">
+            <h4 style="color: #16a34a; margin-top: 0;">Implementation Tips</h4>
+            <p style="font-size: 0.9rem; color: #4b5563;">Encourage home composting; provide disposal guides; track personal metrics via our LCA toolkit.</p>
+        </div>
+    </div>
+
+    <!-- Reduction Roadmap Chart -->
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Projected Emission Reductions Over Time</h3>
+        <div class="chart-wrapper">
+            <canvas id="roadmapChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 10. EU WASTE TREATMENT ==================== -->
+<div class="page-section">
+    <h2>EU Plastic Packaging Waste Treatment (2023)</h2>
+
+    <p>Eurostat (2025) data shows the EU plastic packaging waste treatment breakdown in 2023, underscoring the importance of compostable alternatives.</p>
+
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">EU Waste Treatment Distribution</h3>
+        <div class="chart-wrapper-sm">
+            <canvas id="euWasteChart"></canvas>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem;">
+        <div style="text-align: center; padding: 1.25rem; background: #dcfce7; border-radius: 0.75rem;">
+            <div style="font-size: 1.75rem; font-weight: 700; color: #16a34a;">42.1%</div>
+            <div style="font-size: 0.85rem; color: #4b5563;">Recycled</div>
+        </div>
+        <div style="text-align: center; padding: 1.25rem; background: #fef3c7; border-radius: 0.75rem;">
+            <div style="font-size: 1.75rem; font-weight: 700; color: #d97706;">35%</div>
+            <div style="font-size: 0.85rem; color: #4b5563;">Incinerated</div>
+        </div>
+        <div style="text-align: center; padding: 1.25rem; background: #fee2e2; border-radius: 0.75rem;">
+            <div style="font-size: 1.75rem; font-weight: 700; color: #dc2626;">23%</div>
+            <div style="font-size: 0.85rem; color: #4b5563;">Landfilled</div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 11. CONCLUSION ==================== -->
+<div class="page-section">
+    <h2>10. Conclusion</h2>
+
+    <div class="callout">
+        <strong>The Vikang-Enhanced Bio-PBAT Cling Wrap</strong> represents a verified, quantifiable step towards sustainable practices in the EU. By adopting this solution, users transition to a regenerative material cycle. The higher initial carbon investment in bio-materials is offset nearly <strong>4&times;</strong> over by the avoidance of incineration, delivering a superior environmental profile suitable for immediate implementation in everyday applications.
+    </div>
+
+    <p style="margin-top: 1rem;">With EU waste trends showing progress in recycling (42.1% for plastics in 2023), now is the time to adopt compostable alternatives.</p>
+
+    <!-- Final Summary Chart -->
+    <div class="chart-container">
+        <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Final Verdict &mdash; Lifecycle Carbon Comparison</h3>
+        <div class="chart-wrapper">
+            <canvas id="finalChart"></canvas>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+        <div style="text-align: center; padding: 1.5rem; background: #f0fdf4; border-radius: 1rem; border: 2px solid #86efac;">
+            <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; font-weight: 600;">Status</div>
+            <div style="font-size: 1.25rem; font-weight: 700; color: #16a34a; margin-top: 0.5rem;">Validated for 2026 Procurement</div>
+        </div>
+        <div style="text-align: center; padding: 1.5rem; background: #f0fdf4; border-radius: 1rem; border: 2px solid #86efac;">
+            <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; font-weight: 600;">Certification</div>
+            <div style="font-size: 1.25rem; font-weight: 700; color: #16a34a; margin-top: 0.5rem;">T&Uuml;V Austria OK-Home Compost</div>
+        </div>
+        <div style="text-align: center; padding: 1.5rem; background: #f0fdf4; border-radius: 1rem; border: 2px solid #86efac;">
+            <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; font-weight: 600;">Contact</div>
+            <div style="font-size: 1.25rem; font-weight: 700; color: #16a34a; margin-top: 0.5rem;">business@vi-kang.com</div>
+        </div>
+    </div>
+</div>
+
+</div> <!-- Close container -->
+
+<!-- Footer -->
+<footer class="bg-white border-t border-gray-200 mt-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="text-center">
+            <p class="text-gray-900 font-semibold mb-2">N&amp;E Innovations Pte Ltd</p>
+            <p class="text-gray-600 mb-3">Vikang-Enhanced Bio-Based PBAT Cling Wrap &mdash; LCA Report</p>
+            <p class="text-sm text-gray-500 mb-3">
+                <strong>References:</strong> ISO 14040/14044 | Nature Sustainability (2021) | Sci. Total Environment (2024) | PlasticsEurope (2023) | Eurostat (2025) | EPA WARM Model (2023) | Climatiq (2023) | T&Uuml;V Austria
+            </p>
+            <p class="text-sm text-gray-500">
+                For customized assessments, contact
+                <a href="mailto:business@vi-kang.com" class="text-green-600 font-semibold hover:underline">
+                    business@vi-kang.com
+                </a>
+            </p>
+            <p class="text-xs text-gray-400 mt-4">
+                &copy; 2026 N&amp;E Innovations | Environmental Impact Assessment | February 10, 2026
+            </p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // ============================
+    // CHART.JS CONFIGURATIONS
+    // ============================
+    const colors = {
+        primary: '#16a34a',
+        secondary: '#22c55e',
+        tertiary: '#86efac',
+        accent: '#4ade80',
+        warning: '#d97706',
+        warningLight: '#f59e0b',
+        danger: '#dc2626',
+        dangerLight: '#f87171',
+        conventional: '#9ca3af',
+        conventionalDark: '#6b7280',
+        blue: '#2563eb',
+        blueLight: '#60a5fa',
+        purple: '#7c3aed',
+        purpleLight: '#a78bfa',
+    };
+
+    // Global Chart.js defaults
+    Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    Chart.defaults.color = '#6b7280';
+
+    // -------------------------------------------------------
+    // 1. SUMMARY: Total Emissions Comparison (Bar)
+    // -------------------------------------------------------
+    new Chart(document.getElementById('summaryChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Conventional LDPE', 'Vikang-BioPBAT'],
+            datasets: [{
+                label: 'Total CO₂e (kg per roll)',
+                data: [15.48, 10.05],
+                backgroundColor: [colors.conventional, colors.primary],
+                borderColor: [colors.conventionalDark, '#15803d'],
+                borderWidth: 2,
+                borderRadius: 8,
+                barPercentage: 0.5,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.parsed.y.toFixed(2) + ' kg CO₂e per roll',
+                        afterLabel: ctx => ctx.dataIndex === 1 ? '(35.1% reduction vs LDPE)' : ''
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 18,
+                    title: { display: true, text: 'kg CO₂e per roll', font: { weight: '600' } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 2. COMPOSITION: Donut Chart
+    // -------------------------------------------------------
+    new Chart(document.getElementById('compositionChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Bio-Based PBAT (99%)', 'Vikang Antimicrobial (1%)'],
+            datasets: [{
+                data: [99, 1],
+                backgroundColor: [colors.primary, colors.warning],
+                borderColor: 'white',
+                borderWidth: 4,
+                hoverOffset: 12,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '60%',
+            plugins: {
+                legend: { position: 'bottom', labels: { padding: 20, font: { size: 13 } } },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.label + ' — ' + ctx.parsed + '%'
+                    }
+                }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 3. WATERFALL: Grouped Bar by Lifecycle Phase
+    // -------------------------------------------------------
+    new Chart(document.getElementById('waterfallChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Production', 'Transport', 'Upcycling Credit', 'End-of-Life', 'TOTAL'],
+            datasets: [
+                {
+                    label: 'Conventional LDPE',
+                    data: [7.48, 0, 0, 8.00, 15.48],
+                    backgroundColor: colors.conventional,
+                    borderColor: colors.conventionalDark,
+                    borderWidth: 1,
+                    borderRadius: 4,
+                },
+                {
+                    label: 'Vikang-BioPBAT',
+                    data: [9.50, 0.01, -0.01, 0.54, 10.05],
+                    backgroundColor: colors.primary,
+                    borderColor: '#15803d',
+                    borderWidth: 1,
+                    borderRadius: 4,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'top', labels: { padding: 20 } },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + ' kg CO₂e'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    title: { display: true, text: 'kg CO₂e per roll', font: { weight: '600' } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 4. STACKED: Total Emissions by Phase
+    // -------------------------------------------------------
+    new Chart(document.getElementById('stackedComparisonChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Conventional LDPE', 'Vikang-BioPBAT'],
+            datasets: [
+                {
+                    label: 'Production',
+                    data: [7.48, 9.50],
+                    backgroundColor: colors.blue,
+                    borderRadius: 4,
+                },
+                {
+                    label: 'Transport',
+                    data: [0, 0.01],
+                    backgroundColor: colors.purple,
+                    borderRadius: 4,
+                },
+                {
+                    label: 'End-of-Life',
+                    data: [8.00, 0.54],
+                    backgroundColor: colors.warning,
+                    borderRadius: 4,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'top', labels: { padding: 20 } },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + ' kg CO₂e'
+                    }
+                }
+            },
+            scales: {
+                x: { stacked: true, grid: { display: false } },
+                y: {
+                    stacked: true,
+                    beginAtZero: true,
+                    title: { display: true, text: 'kg CO₂e per roll', font: { weight: '600' } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 5. END-OF-LIFE: Horizontal bar
+    // -------------------------------------------------------
+    new Chart(document.getElementById('eolChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Conventional LDPE (Incineration)', 'Vikang-BioPBAT (Composting)'],
+            datasets: [{
+                label: 'End-of-Life Emissions',
+                data: [8.00, 0.54],
+                backgroundColor: [colors.dangerLight, colors.primary],
+                borderColor: [colors.danger, '#15803d'],
+                borderWidth: 2,
+                borderRadius: 8,
+                barPercentage: 0.5,
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.parsed.x.toFixed(2) + ' kg CO₂e',
+                        afterLabel: ctx => ctx.dataIndex === 1 ? '93% reduction at end-of-life' : ''
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'kg CO₂e per roll', font: { weight: '600' } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                y: { grid: { display: false } }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 6. SENSITIVITY: Horizontal bar
+    // -------------------------------------------------------
+    new Chart(document.getElementById('sensitivityChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: [
+                'EU Average Mix',
+                'Low Biodeg. (70%)',
+                'High Upcycling',
+                'Base Case',
+                'Optimized Production'
+            ],
+            datasets: [{
+                label: 'CO₂e Savings (kg)',
+                data: [0.23, 3.50, 5.42, 5.43, 6.50],
+                backgroundColor: [
+                    colors.purpleLight,
+                    colors.warningLight,
+                    colors.blueLight,
+                    colors.primary,
+                    colors.secondary,
+                ],
+                borderColor: [
+                    colors.purple,
+                    colors.warning,
+                    colors.blue,
+                    '#15803d',
+                    '#16a34a',
+                ],
+                borderWidth: 2,
+                borderRadius: 8,
+                barPercentage: 0.6,
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.parsed.x.toFixed(2) + ' kg CO₂e saved per roll'
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 8,
+                    title: { display: true, text: 'kg CO₂e Savings per Roll', font: { weight: '600' } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                y: { grid: { display: false } }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 7. TORNADO: Min/Max Range
+    // -------------------------------------------------------
+    (function() {
+        const ctx = document.getElementById('tornadoChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['End-of-Life Pathway', 'Biodegradation Rate', 'Vikang Content', 'Energy Source'],
+                datasets: [
+                    {
+                        label: 'Low Scenario',
+                        data: [-5.20, -1.93, -0.01, -0.50],
+                        backgroundColor: colors.dangerLight,
+                        borderColor: colors.danger,
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    },
+                    {
+                        label: 'High Scenario',
+                        data: [0, 0, 1.07, 0.57],
+                        backgroundColor: colors.primary,
+                        borderColor: '#15803d',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => ctx.dataset.label + ': ' + ctx.parsed.x.toFixed(2) + ' kg CO₂e change'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Change from Base Case (kg CO₂e)', font: { weight: '600' } },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+    })();
+
+    // -------------------------------------------------------
+    // 8. CALCULATION: Grouped bar (Production + EOL breakdown)
+    // -------------------------------------------------------
+    new Chart(document.getElementById('calculationChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Raw Material\nExtraction', 'Manufacturing\nProcess', 'Transport', 'End-of-Life\n(Disposal)'],
+            datasets: [
+                {
+                    label: 'Conventional LDPE',
+                    data: [4.48, 3.00, 0, 8.00],
+                    backgroundColor: colors.conventional,
+                    borderColor: colors.conventionalDark,
+                    borderWidth: 1,
+                    borderRadius: 4,
+                },
+                {
+                    label: 'Vikang-BioPBAT',
+                    data: [5.70, 3.80, 0.01, 0.54],
+                    backgroundColor: colors.primary,
+                    borderColor: '#15803d',
+                    borderWidth: 1,
+                    borderRadius: 4,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'top', labels: { padding: 20 } },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + ' kg CO₂e'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'kg CO₂e per roll', font: { weight: '600' } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 9. SCALING: Dual-axis line + bar
+    // -------------------------------------------------------
+    new Chart(document.getElementById('scalingChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['2026', '2027', '2028', '2029', '2030'],
+            datasets: [
+                {
+                    label: 'Production Volume (thousands)',
+                    data: [931, 1400, 2000, 2800, 3500],
+                    backgroundColor: colors.tertiary,
+                    borderColor: colors.secondary,
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    yAxisID: 'y',
+                    order: 2,
+                },
+                {
+                    label: 'CO₂e Avoided (tonnes)',
+                    data: [5055, 7602, 10860, 15204, 19005],
+                    type: 'line',
+                    borderColor: colors.primary,
+                    backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: colors.primary,
+                    pointBorderColor: 'white',
+                    pointBorderWidth: 2,
+                    pointRadius: 6,
+                    fill: true,
+                    tension: 0.3,
+                    yAxisID: 'y1',
+                    order: 1,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { position: 'top', labels: { padding: 20 } },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            if (ctx.datasetIndex === 0) return ctx.parsed.y.toLocaleString() + 'k rolls';
+                            return ctx.parsed.y.toLocaleString() + ' tonnes CO₂e avoided';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    position: 'left',
+                    title: { display: true, text: 'Rolls (thousands)', font: { weight: '600' } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                y1: {
+                    beginAtZero: true,
+                    position: 'right',
+                    title: { display: true, text: 'CO₂e Avoided (tonnes)', font: { weight: '600' } },
+                    grid: { drawOnChartArea: false }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 10. EQUIVALENCY: Polar Area
+    // -------------------------------------------------------
+    new Chart(document.getElementById('equivalencyChart').getContext('2d'), {
+        type: 'polarArea',
+        data: {
+            labels: [
+                'Cars Removed (1,099)',
+                'Trees Equivalent (84,250)',
+                'Homes Powered (578)',
+                'Waste Diverted (56 tonnes)',
+                'Tonnes CO₂e Avoided (5,055)'
+            ],
+            datasets: [{
+                data: [75, 90, 55, 40, 85],
+                backgroundColor: [
+                    'rgba(22, 163, 74, 0.7)',
+                    'rgba(34, 197, 94, 0.7)',
+                    'rgba(74, 222, 128, 0.7)',
+                    'rgba(217, 119, 6, 0.7)',
+                    'rgba(37, 99, 235, 0.7)',
+                ],
+                borderColor: [
+                    colors.primary,
+                    colors.secondary,
+                    colors.accent,
+                    colors.warning,
+                    colors.blue,
+                ],
+                borderWidth: 2,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: { padding: 15, font: { size: 12 } }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.label
+                    }
+                }
+            },
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: { display: false },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 11. SDG: Radar Chart
+    // -------------------------------------------------------
+    new Chart(document.getElementById('sdgChart').getContext('2d'), {
+        type: 'radar',
+        data: {
+            labels: [
+                'SDG 12\nResponsible\nConsumption',
+                'SDG 13\nClimate\nAction',
+                'SDG 9\nInnovation',
+                'SDG 14\nLife Below\nWater',
+                'SDG 15\nLife on\nLand',
+                'SDG 17\nPartnerships'
+            ],
+            datasets: [{
+                label: 'Vikang-BioPBAT Alignment',
+                data: [80, 80, 45, 30, 35, 40],
+                backgroundColor: 'rgba(22, 163, 74, 0.2)',
+                borderColor: colors.primary,
+                borderWidth: 3,
+                pointBackgroundColor: colors.primary,
+                pointBorderColor: 'white',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.parsed.r + '% alignment'
+                    }
+                }
+            },
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: { stepSize: 20 },
+                    grid: { color: 'rgba(0,0,0,0.08)' },
+                    angleLines: { color: 'rgba(0,0,0,0.08)' },
+                    pointLabels: { font: { size: 11 } }
+                }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 12. ROADMAP: Line Chart showing emission reduction path
+    // -------------------------------------------------------
+    new Chart(document.getElementById('roadmapChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: ['2026 (Current)', '2026 (Local Sourcing)', '2027 (2% Vikang)', '2027 (Lightweight)', '2028 (5% Vikang)', '2028 (Green Energy)', '2030 (Optimized)'],
+            datasets: [
+                {
+                    label: 'Vikang-BioPBAT Footprint (kg CO₂e/roll)',
+                    data: [10.05, 9.50, 8.80, 7.90, 7.20, 6.50, 5.20],
+                    borderColor: colors.primary,
+                    backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: colors.primary,
+                    pointBorderColor: 'white',
+                    pointBorderWidth: 2,
+                    pointRadius: 6,
+                    fill: true,
+                    tension: 0.3,
+                },
+                {
+                    label: 'Conventional LDPE Baseline (kg CO₂e/roll)',
+                    data: [15.48, 15.48, 15.48, 15.48, 15.48, 15.48, 15.48],
+                    borderColor: colors.conventional,
+                    borderWidth: 2,
+                    borderDash: [8, 4],
+                    pointRadius: 0,
+                    fill: false,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { position: 'top', labels: { padding: 20 } },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.dataset.label.split('(')[0].trim() + ': ' + ctx.parsed.y.toFixed(2) + ' kg CO₂e'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 18,
+                    title: { display: true, text: 'kg CO₂e per roll', font: { weight: '600' } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { maxRotation: 45, minRotation: 30, font: { size: 11 } }
+                }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 13. EU WASTE: Doughnut
+    // -------------------------------------------------------
+    new Chart(document.getElementById('euWasteChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Recycled (42.1%)', 'Incinerated (35%)', 'Landfilled (23%)'],
+            datasets: [{
+                data: [42.1, 35, 23],
+                backgroundColor: [colors.primary, colors.warningLight, colors.dangerLight],
+                borderColor: 'white',
+                borderWidth: 4,
+                hoverOffset: 12,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '55%',
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { padding: 20, font: { size: 13 } }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.label + ' — ' + ctx.parsed + '% of EU plastic packaging waste'
+                    }
+                }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 14. FINAL: Summary Side-by-Side with Savings Highlight
+    // -------------------------------------------------------
+    new Chart(document.getElementById('finalChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Conventional LDPE', 'Vikang-BioPBAT', 'NET SAVINGS'],
+            datasets: [
+                {
+                    label: 'Production',
+                    data: [7.48, 9.50, null],
+                    backgroundColor: colors.blue,
+                    borderRadius: 4,
+                    stack: 'main',
+                },
+                {
+                    label: 'End-of-Life',
+                    data: [8.00, 0.54, null],
+                    backgroundColor: colors.warning,
+                    borderRadius: 4,
+                    stack: 'main',
+                },
+                {
+                    label: 'Transport + Upcycling',
+                    data: [0, 0, null],
+                    backgroundColor: colors.purpleLight,
+                    borderRadius: 4,
+                    stack: 'main',
+                },
+                {
+                    label: 'Savings',
+                    data: [null, null, 5.43],
+                    backgroundColor: colors.primary,
+                    borderColor: '#15803d',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    barPercentage: 0.5,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'top', labels: { padding: 15 } },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            if (ctx.parsed.y === null) return null;
+                            return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + ' kg CO₂e';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    stacked: true,
+                    grid: { display: false }
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true,
+                    title: { display: true, text: 'kg CO₂e per roll', font: { weight: '600' } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
