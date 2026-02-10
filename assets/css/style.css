@@ -712,3 +712,28 @@ p {
 
 .bg-green { background: var(--green-50); }
 .bg-gray { background: var(--gray-50); }
+
+/* ============================================
+   Coming Soon Badge Animation
+   ============================================ */
+@keyframes pulse-badge {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 15px 30px rgba(245, 158, 11, 0.5);
+    }
+}
+
+/* Disabled card styles */
+.card-disabled {
+    pointer-events: none;
+    filter: grayscale(20%);
+}
+
+.card-disabled:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+}

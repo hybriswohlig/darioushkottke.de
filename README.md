@@ -4,11 +4,12 @@ A modern, AG1-inspired environmental documentation portal with dynamic content m
 
 ## Features
 
+- **🔒 Private Portal**: Entire website is password-protected - visitors must log in to access any content
 - **AG1-Inspired Design**: Modern, minimal aesthetic with smooth animations
 - **Dynamic Content Management**: Full CRUD system for documents via admin panel
 - **Category-Based Organization**: Separate pages for LCA Reports, Certifications, Impact Studies, Technical Docs, and Compliance
 - **Search & Filter**: Powerful search functionality across all documents
-- **Admin Dashboard**: Secure, password-protected admin panel with statistics
+- **Two-Level Security**: Separate authentication for visitors and admin panel
 - **Mobile Responsive**: Optimized for desktop with basic mobile support
 - **MySQL Database**: Structured data storage for scalability
 
@@ -136,32 +137,58 @@ ErrorDocument 500 /500.php
 1. Rename `new-index.php` to `index.php` (this will be your homepage)
 2. Delete or move the old `index.html` to the `archive` folder
 
-### Step 7: Test the Installation
+### Step 7: Test Visitor Login
 
 1. Visit your website: `https://your-domain.infinityfree.com`
-2. You should see the homepage with categories
-3. Click on any category to view documents
-4. Test the search functionality
 
-### Step 8: Access Admin Panel
+2. **You'll see a login page** - This is the visitor authentication system
+
+3. **Default Visitor Password:** `CompliancePortal2026`
+   - **🔴 CHANGE THIS IMMEDIATELY** after testing!
+   - See [VISITOR_PASSWORD_SETUP.md](VISITOR_PASSWORD_SETUP.md) for instructions
+
+4. After logging in:
+   - You should see the homepage with categories
+   - Click on any category to view documents
+   - Test the search functionality
+   - Session lasts 4 hours
+
+5. **Important:** The entire website is now private - ALL visitors need this password!
+
+📖 **Visitor Password Documentation**: See [VISITOR_PASSWORD_SETUP.md](VISITOR_PASSWORD_SETUP.md) for:
+   - How to change the visitor password
+   - Managing visitor access
+   - Session settings
+   - Sharing access securely
+
+### Step 8: Access Admin Panel & Security Setup
 
 1. Go to `https://your-domain.infinityfree.com/admin/`
 2. Default credentials:
    - Username: `admin`
    - Password: `admin123`
 
-3. **IMPORTANT**: Change the admin password immediately!
-   - You can do this via phpMyAdmin by updating the `admin_users` table
-   - Or create a password change page
+3. **🔴 CRITICAL**: Change the admin password immediately!
 
-To generate a new password hash:
-```php
-<?php
-echo password_hash('your_new_password', PASSWORD_DEFAULT);
-?>
-```
+   **Easy Method - Use Password Change Tool:**
+   - Visit: `https://your-domain.infinityfree.com/admin/change-password.php`
+   - Follow the on-screen instructions
+   - Delete the file after use!
 
-Run this code, copy the hash, and update the `password_hash` field in the `admin_users` table.
+   **Manual Method:**
+   - Generate hash via phpMyAdmin or PHP command line
+   - Update the `admin_users` table
+   - See [SECURITY_SETUP.md](SECURITY_SETUP.md) for detailed instructions
+
+4. **Optional - Add Double Password Protection:**
+   - Set up HTTP Basic Authentication (.htpasswd) for extra security
+   - See [SECURITY_SETUP.md](SECURITY_SETUP.md) for complete guide
+
+📖 **Full Security Documentation**: See [SECURITY_SETUP.md](SECURITY_SETUP.md) for:
+   - Step-by-step password change instructions
+   - How to enable HTTP Basic Auth (double password protection)
+   - Security best practices
+   - Troubleshooting guide
 
 ## Admin Panel Features
 

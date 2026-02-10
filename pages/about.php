@@ -1,3 +1,7 @@
+<?php
+// Protect this page - require visitor authentication
+require_once __DIR__ . '/../includes/visitor-auth.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

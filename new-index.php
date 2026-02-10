@@ -1,3 +1,7 @@
+<?php
+// Protect this page - require visitor authentication
+require_once __DIR__ . '/includes/visitor-auth.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,7 +35,15 @@
                 <ul class="nav-links">
                     <li><a href="/" class="nav-link active">Home</a></li>
                     <li><a href="/pages/about.php" class="nav-link">About</a></li>
-                    <li><a href="https://vi-kang.com/contact/" target="_blank" class="btn btn-primary">Contact Us</a></li>
+                    <li><a href="https://vi-kang.com/contact/" target="_blank" class="btn btn-secondary">Contact Us</a></li>
+                    <li>
+                        <a href="/visitor-logout.php" class="btn btn-ghost" style="display: flex; align-items: center; gap: 0.5rem;">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                            Logout
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -127,30 +139,37 @@
                     </div>
                 </a>
 
-                <!-- Impact Studies -->
-                <a href="/pages/category.php?slug=impact-studies" class="card scroll-animate" style="transition-delay: 0.3s">
-                    <div class="card-icon">
+                <!-- Impact Studies - Coming Soon -->
+                <div class="card scroll-animate card-disabled" style="transition-delay: 0.3s; position: relative; cursor: not-allowed; opacity: 0.7;">
+                    <!-- Coming Soon Badge -->
+                    <div style="position: absolute; top: -10px; right: -10px; z-index: 10;">
+                        <div style="background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%); color: white; padding: 0.5rem 1.25rem; border-radius: 999px; font-weight: 700; font-size: 0.875rem; box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3); animation: pulse-badge 2s ease-in-out infinite;">
+                            ✨ Coming Soon
+                        </div>
+                    </div>
+
+                    <div class="card-icon" style="opacity: 0.6;">
                         <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
                             <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
                         </svg>
                     </div>
-                    <h3 class="card-title">Impact Studies</h3>
-                    <p class="card-description">
+                    <h3 class="card-title" style="opacity: 0.8;">Impact Studies</h3>
+                    <p class="card-description" style="opacity: 0.7;">
                         Detailed analyses of environmental benefits and sustainability advantages
                         of innovative materials and processes.
                     </p>
-                    <div class="card-footer">
+                    <div class="card-footer" style="opacity: 0.6;">
                         <div class="card-meta">
-                            <div class="card-meta-label">Documents</div>
-                            <div class="card-meta-value">3</div>
+                            <div class="card-meta-label">Status</div>
+                            <div class="card-meta-value">In Development</div>
                         </div>
                         <div class="card-meta">
-                            <div class="card-meta-label">Focus</div>
-                            <div class="card-meta-value">CO2 Reduction</div>
+                            <div class="card-meta-label">Launch</div>
+                            <div class="card-meta-value">Q2 2026</div>
                         </div>
                     </div>
-                </a>
+                </div>
 
                 <!-- Technical Documentation -->
                 <a href="/pages/category.php?slug=technical-docs" class="card scroll-animate" style="transition-delay: 0.4s">
