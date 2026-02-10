@@ -233,8 +233,8 @@
                         title: 'ISO 14001 Environmental Management',
                         description: 'Certification for environmental management systems and sustainable practices.',
                         metrics: [
-                            { label: 'Issued', value: 'To be entered' },
-                            { label: 'Valid Until', value: 'missing' },
+                            { label: 'Issued', value: 'Coming Soon', comingSoon: true },
+                            { label: 'Valid Until', value: 'Coming Soon', comingSoon: true },
                             { label: 'Certifying Body', value: 'ISO' }
                         ]
                     },
@@ -245,6 +245,16 @@
                             { label: 'Standard', value: 'FDA' },
                             { label: 'Status', value: 'Active' },
                             { label: 'Renewal', value: 'Annual' }
+                        ]
+                    },
+                    {
+                        title: 'Home Compostable Cling Wrap OK Home Compost Certifications',
+                        description: 'OK Home Compost certification for home compostable cling wrap, issued by TÜV Austria.',
+                        link: 'https://drive.google.com/file/d/1Q71pxhdh0oyn5ZfFXr2eb6gxkcGllYw3/view?usp=sharing',
+                        metrics: [
+                            { label: 'Issued by', value: 'TÜV Austria GMBH' },
+                            { label: 'Valid Since', value: '30.09.25' },
+                            { label: 'Valid Until', value: '30.09.2030' }
                         ]
                     }
                 ]
@@ -325,9 +335,9 @@
                         description: 'Comprehensive report on compliance with FDA food contact regulations.',
                         link: 'https://drive.google.com/file/d/1iHbGGEtKS03mCoG2xCoaafwXFk6sMaAv/view?usp=drive_link',
                         metrics: [
-                            { label: 'Regions', value: 'Global' },
+                            { label: 'Regions', value: 'EU + UK' },
                             { label: 'Status', value: 'Compliant' },
-                            { label: 'Audit Date', value: 'Sep 2025' }
+                            { label: 'Audit Date', value: 'February 2026' }
                         ]
                     },
                     {
@@ -394,10 +404,18 @@
                 `;
 
                 item.metrics.forEach(metric => {
+                    const valueContent = metric.comingSoon
+                        ? `<span class="inline-flex items-center gap-1.5 text-amber-600">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/>
+                            </svg>
+                            <span class="font-bold">Coming Soon</span>
+                           </span>`
+                        : metric.value;
                     html += `
                         <div>
                             <div class="text-sm text-gray-500 mb-1">${metric.label}</div>
-                            <div class="text-lg font-bold text-green-600">${metric.value}</div>
+                            <div class="text-lg font-bold ${metric.comingSoon ? '' : 'text-green-600'}">${valueContent}</div>
                         </div>
                     `;
                 });
