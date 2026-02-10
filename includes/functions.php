@@ -1,0 +1,230 @@
+<?php
+/**
+ * Common Utility Functions
+ */
+
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/db.php';
+
+/**
+ * Sanitize output to prevent XSS attacks
+ */
+function esc($string) {
+    return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+}
+
+/**
+ * Get all categories
+ */
+function getCategories() {
+    $db = getDB();
+    $stmt = $db->query("SELECT * FROM categories ORDER BY display_order ASC");
+    return $stmt->fetchAll();
+}
+
+/**
+ * Get category by slug
+ */
+function getCategoryBySlug($slug) {
+    $db = getDB();
+    $stmt = $db->prepare("SELECT * FROM categories WHERE slug = ? LIMIT 1");
+    $stmt->execute([$slug]);
+    return $stmt->fetch();
+}
+
+/**
+ * Get documents by category with metadata
+ */
+function getDocumentsByCategory($categoryId, $filters = []) {
+    $db = getDB();
+
+    $sql = "SELECT d.* FROM documents d WHERE d.category_id = ?";
+    $params = [$categoryId];
+
+    // Apply filters
+    if (!empty($filters['status'])) {
+        $sql .= " AND d.status = ?";
+        $params[] = $filters['status'];
+    }
+
+    if (!empty($filters['search'])) {
+        $sql .= " AND (d.title LIKE ? OR d.description LIKE ?)";
+        $searchTerm = '%' . $filters['search'] . '%';
+        $params[] = $searchTerm;
+        $params[] = $searchTerm;
+    }
+
+    $sql .= " ORDER BY d.featured DESC, d.date_published DESC, d.created_at DESC";
+
+    $stmt = $db->prepare($sql);
+    $stmt->execute($params);
+    $documents = $stmt->fetchAll();
+
+    // Get metadata for each document
+    foreach ($documents as &$doc) {
+        $doc['metadata'] = getDocumentMetadata($doc['id']);
+    }
+
+    return $documents;
+}
+
+/**
+ * Get document metadata
+ */
+function getDocumentMetadata($documentId) {
+    $db = getDB();
+    $stmt = $db->prepare("SELECT meta_key, meta_value FROM document_metadata WHERE document_id = ? ORDER BY display_order ASC");
+    $stmt->execute([$documentId]);
+    return $stmt->fetchAll();
+}
+
+/**
+ * Get single document by ID
+ */
+function getDocument($id) {
+    $db = getDB();
+    $stmt = $db->prepare("SELECT * FROM documents WHERE id = ? LIMIT 1");
+    $stmt->execute([$id]);
+    $doc = $stmt->fetch();
+
+    if ($doc) {
+        $doc['metadata'] = getDocumentMetadata($doc['id']);
+    }
+
+    return $doc;
+}
+
+/**
+ * Search documents across all categories
+ */
+function searchDocuments($query, $categoryId = null) {
+    $db = getDB();
+
+    $sql = "SELECT d.*, c.name as category_name, c.slug as category_slug
+            FROM documents d
+            JOIN categories c ON d.category_id = c.id
+            WHERE (d.title LIKE ? OR d.description LIKE ?)";
+
+    $searchTerm = '%' . $query . '%';
+    $params = [$searchTerm, $searchTerm];
+
+    if ($categoryId) {
+        $sql .= " AND d.category_id = ?";
+        $params[] = $categoryId;
+    }
+
+    $sql .= " ORDER BY d.featured DESC, d.date_published DESC";
+
+    $stmt = $db->prepare($sql);
+    $stmt->execute($params);
+    $documents = $stmt->fetchAll();
+
+    // Get metadata for each document
+    foreach ($documents as &$doc) {
+        $doc['metadata'] = getDocumentMetadata($doc['id']);
+    }
+
+    return $documents;
+}
+
+/**
+ * Increment document view count
+ */
+function incrementViewCount($documentId) {
+    $db = getDB();
+    $stmt = $db->prepare("UPDATE documents SET view_count = view_count + 1 WHERE id = ?");
+    return $stmt->execute([$documentId]);
+}
+
+/**
+ * Check if user is logged in as admin
+ */
+function isAdminLoggedIn() {
+    return isset($_SESSION['admin_id']) &&
+           isset($_SESSION['admin_username']) &&
+           isset($_SESSION['last_activity']) &&
+           (time() - $_SESSION['last_activity'] < ADMIN_SESSION_TIMEOUT);
+}
+
+/**
+ * Require admin login
+ */
+function requireAdmin() {
+    if (!isAdminLoggedIn()) {
+        header('Location: /admin/login.php');
+        exit;
+    }
+    // Update last activity time
+    $_SESSION['last_activity'] = time();
+}
+
+/**
+ * Verify admin credentials
+ */
+function verifyAdminLogin($username, $password) {
+    $db = getDB();
+    $stmt = $db->prepare("SELECT id, username, password_hash FROM admin_users WHERE username = ? LIMIT 1");
+    $stmt->execute([$username]);
+    $user = $stmt->fetch();
+
+    if ($user && password_verify($password, $user['password_hash'])) {
+        // Update last login
+        $updateStmt = $db->prepare("UPDATE admin_users SET last_login = NOW() WHERE id = ?");
+        $updateStmt->execute([$user['id']]);
+
+        return $user;
+    }
+
+    return false;
+}
+
+/**
+ * Log admin activity
+ */
+function logActivity($action, $entityType = null, $entityId = null, $details = null) {
+    if (!isset($_SESSION['admin_id'])) return;
+
+    $db = getDB();
+    $stmt = $db->prepare("INSERT INTO activity_log (admin_id, action, entity_type, entity_id, details, ip_address) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->execute([
+        $_SESSION['admin_id'],
+        $action,
+        $entityType,
+        $entityId,
+        $details,
+        $_SERVER['REMOTE_ADDR'] ?? null
+    ]);
+}
+
+/**
+ * Format date for display
+ */
+function formatDate($date, $format = 'M d, Y') {
+    if (empty($date)) return 'N/A';
+    return date($format, strtotime($date));
+}
+
+/**
+ * Get status badge HTML
+ */
+function getStatusBadge($status) {
+    $badges = [
+        'published' => '<span class="status-badge status-published">Published</span>',
+        'under_review' => '<span class="status-badge status-review">Under Review</span>',
+        'in_progress' => '<span class="status-badge status-progress">In Progress</span>',
+        'planned' => '<span class="status-badge status-planned">Planned</span>',
+        'pending' => '<span class="status-badge status-pending">Pending</span>',
+    ];
+
+    return $badges[$status] ?? '<span class="status-badge">' . esc($status) . '</span>';
+}
+
+/**
+ * Generate JSON response
+ */
+function jsonResponse($data, $statusCode = 200) {
+    http_response_code($statusCode);
+    header('Content-Type: application/json');
+    echo json_encode($data);
+    exit;
+}
