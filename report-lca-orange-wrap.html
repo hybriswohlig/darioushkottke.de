@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCA Report - Orange Compostable Wrap</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles/shared-base.css">
+    <link rel="stylesheet" href="styles/report-shared.css">
+
+    <style>
+        .chart-wrapper {
+            position: relative;
+            height: 360px;
+            margin-bottom: 20px;
+        }
+
+        .chart-wrapper-sm {
+            position: relative;
+            height: 280px;
+            margin-bottom: 20px;
+        }
+
+        .savings {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .hero-stat {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .hero-stat:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        .hero-stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-stat-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.85;
+        }
+
+        .hero-stat-context {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            opacity: 0.7;
+        }
+
+        .benefit-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 9999px;
+            padding: 0.6rem 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-pill:hover {
+            border-color: #16a34a;
+            background: #f0fdf4;
+            transform: translateY(-2px);
+        }
+
+        .benefit-pill-icon {
+            font-size: 1.2rem;
+        }
+
+        .equivalence-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .equivalence-card:hover {
+            border-color: #f97316;
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .equivalence-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .equivalence-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #ea580c;
+        }
+
+        .equivalence-label {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .orange-gradient {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 50%, #fb923c 100%);
+        }
+
+        .orange-accent {
+            color: #ea580c;
+        }
+
+        .section-divider {
+            height: 4px;
+            background: linear-gradient(90deg, #ea580c, #f97316, #fb923c, transparent);
+            border-radius: 2px;
+            margin: 0 0 2rem 0;
+        }
+
+        /* Override green accents with orange for this report */
+        .page-section h2 {
+            color: #ea580c;
+            border-bottom-color: #ea580c;
+        }
+
+        .page-section h3 {
+            color: #ea580c;
+        }
+
+        .page-section h4 {
+            color: #f97316;
+        }
+
+        .page-section .callout {
+            background: #fff7ed;
+            border-left-color: #ea580c;
+        }
+
+        .page-section .highlight {
+            background: #ea580c;
+        }
+
+        .page-section table th {
+            background: #ea580c;
+        }
+
+        .page-section tbody tr:hover {
+            background: #fff7ed;
+        }
+
+        .kpi-card:hover {
+            border-color: #ea580c;
+            box-shadow: 0 10px 15px rgba(234, 88, 12, 0.1);
+        }
+
+        .kpi-value {
+            color: #ea580c;
+        }
+
+        @media print {
+            .page-section { page-break-after: always; }
+            header { display: none; }
+            body { background: white; }
+        }
+
+        @media (max-width: 768px) {
+            .page-section { padding: 2rem 1.5rem; }
+            h2 { font-size: 1.5rem; }
+            .hero-stat-value { font-size: 2rem; }
+            .chart-wrapper { height: 300px; }
+            .chart-wrapper-sm { height: 240px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header Navigation -->
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <img
+                    src="https://media.licdn.com/dms/image/v2/C560BAQEbDoQkFcp_bw/company-logo_200_200/company-logo_200_200/0/1676433804944/n_e_innovations_pte_ltd_logo?e=2147483647&v=beta&t=8iOsGPsG4FuYNCjSolPMx05ya9AigfdEA9Y8IvEJiZY"
+                    alt="N&E Innovations Logo"
+                    class="w-16 h-16"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                />
+                <div class="w-16 h-16 bg-gradient-to-br from-orange-600 to-orange-400 rounded-lg hidden items-center justify-center text-white font-bold text-xl">
+                    N&E
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">N&E Innovations</h1>
+                    <p class="text-sm text-gray-600">Orange Compostable Wrap &mdash; Environmental Summary</p>
+                </div>
+            </div>
+            <a href="index.html" class="bg-gradient-to-r from-orange-600 to-orange-500 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transition-shadow">
+                &larr; Back to Home
+            </a>
+        </div>
+    </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+<!-- ==================== COVER ==================== -->
+<div class="page-section orange-gradient text-white text-center py-16">
+    <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.15em; opacity: 0.85; margin-bottom: 1rem;">Environmental Impact Overview</div>
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Orange Compostable Wrap</h1>
+    <div class="text-xl mb-6 opacity-95">A Greener Alternative &mdash; Verified by Science</div>
+    <p style="max-width: 560px; margin: 0 auto; font-size: 0.95rem; opacity: 0.9; line-height: 1.7;">
+        Our innovative home-compostable cling wrap reduces carbon emissions by <strong>21%</strong> compared to conventional plastic, while returning to nature within 12 months.
+    </p>
+    <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <span style="background: rgba(255,255,255,0.2); padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem;">Home Compostable</span>
+        <span style="background: rgba(255,255,255,0.2); padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem;">T&Uuml;V Austria Certified</span>
+        <span style="background: rgba(255,255,255,0.2); padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem;">21% Lower Emissions</span>
+        <span style="background: rgba(255,255,255,0.2); padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem;">EU Market Ready</span>
+    </div>
+</div>
+
+<!-- ==================== AT A GLANCE ==================== -->
+<div class="page-section">
+    <h2>At a Glance</h2>
+    <div class="section-divider"></div>
+
+    <p style="font-size: 1.05rem; color: #4b5563; max-width: 700px; margin-bottom: 2rem;">
+        Each roll of Orange Compostable Wrap avoids <strong>2.67 kg of CO&#8322; emissions</strong> compared to conventional cling film. Across our 2026 production plan, that adds up to meaningful climate impact.
+    </p>
+
+    <!-- Hero Stats -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div class="hero-stat" style="background: linear-gradient(135deg, #fff7ed, #ffedd5);">
+            <div class="hero-stat-value orange-accent">21%</div>
+            <div class="hero-stat-label" style="color: #9a3412;">Lower Carbon Footprint</div>
+            <div class="hero-stat-context" style="color: #9a3412;">per roll vs. conventional wrap</div>
+        </div>
+        <div class="hero-stat" style="background: linear-gradient(135deg, #f0fdf4, #dcfce7);">
+            <div class="hero-stat-value" style="color: #16a34a;">2,486</div>
+            <div class="hero-stat-label" style="color: #166534;">Tonnes CO&#8322;e Avoided</div>
+            <div class="hero-stat-context" style="color: #166534;">projected annually (2026)</div>
+        </div>
+        <div class="hero-stat" style="background: linear-gradient(135deg, #eff6ff, #dbeafe);">
+            <div class="hero-stat-value" style="color: #2563eb;">90%</div>
+            <div class="hero-stat-label" style="color: #1e40af;">Biodegrades in 12 Months</div>
+            <div class="hero-stat-context" style="color: #1e40af;">certified home composting</div>
+        </div>
+        <div class="hero-stat" style="background: linear-gradient(135deg, #faf5ff, #f3e8ff);">
+            <div class="hero-stat-value" style="color: #7c3aed;">84</div>
+            <div class="hero-stat-label" style="color: #5b21b6;">Tonnes Waste Diverted</div>
+            <div class="hero-stat-context" style="color: #5b21b6;">upcycled agricultural by-products/year</div>
+        </div>
+    </div>
+
+    <!-- Quick Summary Chart -->
+    <div class="chart-container" style="border-color: #fed7aa;">
+        <h3 style="text-align: center; margin-bottom: 20px;">Carbon Footprint &mdash; Per Roll Comparison</h3>
+        <div class="chart-wrapper-sm">
+            <canvas id="summaryChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== HOW IT WORKS ==================== -->
+<div class="page-section">
+    <h2>How It Works</h2>
+    <div class="section-divider"></div>
+
+    <p style="font-size: 1rem; color: #4b5563; margin-bottom: 1.5rem;">
+        Our wrap uses a <strong>proprietary blend of plant-derived and bio-based materials</strong>, enhanced with a natural antimicrobial additive made from upcycled agricultural waste. The result is a high-performance cling wrap that works just like conventional plastic &mdash; but returns to nature instead of polluting it.
+    </p>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.5rem 0;">
+        <div class="benefit-pill"><span class="benefit-pill-icon">&#127807;</span> Plant-Based Ingredients</div>
+        <div class="benefit-pill"><span class="benefit-pill-icon">&#9851;</span> Upcycled Agricultural Waste</div>
+        <div class="benefit-pill"><span class="benefit-pill-icon">&#129514;</span> Natural Antibacterial Protection</div>
+        <div class="benefit-pill"><span class="benefit-pill-icon">&#127968;</span> Home Compostable</div>
+        <div class="benefit-pill"><span class="benefit-pill-icon">&#128170;</span> Same Cling &amp; Stretch Performance</div>
+        <div class="benefit-pill"><span class="benefit-pill-icon">&#127754;</span> Zero Microplastics</div>
+    </div>
+
+    <div class="callout" style="margin-top: 1.5rem;">
+        <strong>Antibacterial Bonus:</strong> Our natural additive reduces food spoilage by up to 20%. Less spoilage means less food waste &mdash; and every kilogram of food waste avoided prevents roughly <strong>3.4 kg of CO&#8322; emissions</strong>. This makes the wrap a carbon-multiplier in everyday use.
+    </div>
+</div>
+
+<!-- ==================== THE CARBON STORY ==================== -->
+<div class="page-section">
+    <h2>The Carbon Story</h2>
+    <div class="section-divider"></div>
+
+    <p style="font-size: 1rem; color: #4b5563; margin-bottom: 1.5rem;">
+        Conventional cling wrap is made from fossil fuels and incinerated at end of life, releasing all stored carbon back into the atmosphere. Our wrap takes a different path: it biodegrades naturally, returning carbon to the soil instead.
+    </p>
+
+    <!-- Simple Lifecycle Comparison -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0;">
+        <div style="background: #fef2f2; border: 2px solid #fecaca; border-radius: 1rem; padding: 1.5rem; text-align: center;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">&#10060;</div>
+            <h4 style="color: #dc2626; margin-top: 0;">Conventional Wrap</h4>
+            <div style="font-size: 2.5rem; font-weight: 800; color: #dc2626;">12.90</div>
+            <div style="font-size: 0.85rem; color: #991b1b;">kg CO&#8322;e per roll</div>
+            <p style="font-size: 0.8rem; color: #6b7280; margin-top: 0.75rem;">Fossil-fuel based &rarr; Incinerated &rarr; Full carbon released</p>
+        </div>
+        <div style="background: #fff7ed; border: 2px solid #fed7aa; border-radius: 1rem; padding: 1.5rem; text-align: center;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">&#9989;</div>
+            <h4 style="color: #ea580c; margin-top: 0;">Orange Compostable Wrap</h4>
+            <div style="font-size: 2.5rem; font-weight: 800; color: #ea580c;">10.25</div>
+            <div style="font-size: 0.85rem; color: #9a3412;">kg CO&#8322;e per roll</div>
+            <p style="font-size: 0.8rem; color: #6b7280; margin-top: 0.75rem;">Bio-based &rarr; Home composted &rarr; Returns to soil</p>
+        </div>
+    </div>
+
+    <!-- Where the Savings Come From -->
+    <div class="chart-container" style="border-color: #fed7aa;">
+        <h3 style="text-align: center; margin-bottom: 20px;">Where the Savings Come From</h3>
+        <div class="chart-wrapper">
+            <canvas id="waterfallChart"></canvas>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Lifecycle Stage</th>
+                <th>Conventional Wrap</th>
+                <th>Orange Compostable Wrap</th>
+                <th>Difference</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Production</strong></td>
+                <td>4.90 kg CO&#8322;e</td>
+                <td>9.71 kg CO&#8322;e</td>
+                <td style="color: #d97706; font-weight: 600;">+4.81 (bio-based investment)</td>
+            </tr>
+            <tr>
+                <td><strong>Upcycling Benefit</strong></td>
+                <td>&mdash;</td>
+                <td>-0.32 kg CO&#8322;e</td>
+                <td class="savings">-0.32 (waste diverted)</td>
+            </tr>
+            <tr>
+                <td><strong>End-of-Life</strong></td>
+                <td>8.00 kg CO&#8322;e</td>
+                <td>0.54 kg CO&#8322;e</td>
+                <td class="savings">-7.46 (composting vs. incineration)</td>
+            </tr>
+            <tr style="background: #fff7ed; font-weight: 700;">
+                <td><strong>TOTAL</strong></td>
+                <td>12.90 kg CO&#8322;e</td>
+                <td>10.25 kg CO&#8322;e</td>
+                <td class="savings">-2.65 kg CO&#8322;e (21% reduction)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="callout">
+        <strong>Key takeaway:</strong> While our bio-based production costs more carbon upfront, it pays back nearly <strong>2.5&times;</strong> through waste upcycling and composting at end-of-life. The biggest win is avoiding incineration &mdash; saving <strong>7.46 kg CO&#8322;e</strong> per roll.
+    </div>
+</div>
+
+<!-- ==================== END-OF-LIFE ==================== -->
+<div class="page-section">
+    <h2>End-of-Life: Compost, Not Landfill</h2>
+    <div class="section-divider"></div>
+
+    <p style="font-size: 1rem; color: #4b5563; margin-bottom: 1.5rem;">
+        This is where our wrap truly shines. Certified by <strong>T&Uuml;V Austria OK-Home Compost</strong>, it biodegrades 90% within 12 months under normal home composting conditions &mdash; no industrial facility needed.
+    </p>
+
+    <div class="chart-container" style="border-color: #fed7aa;">
+        <h3 style="text-align: center; margin-bottom: 20px;">End-of-Life Emissions: Incineration vs. Composting</h3>
+        <div class="chart-wrapper-sm">
+            <canvas id="eolChart"></canvas>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+        <div style="background: #f0fdf4; padding: 1.25rem; border-radius: 0.75rem; text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">&#127793;</div>
+            <strong style="color: #16a34a;">90% Biodegradation</strong>
+            <p style="font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem;">Within 365 days at home</p>
+        </div>
+        <div style="background: #fff7ed; padding: 1.25rem; border-radius: 0.75rem; text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">&#127754;</div>
+            <strong style="color: #ea580c;">Zero Microplastics</strong>
+            <p style="font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem;">No residue in soil or water</p>
+        </div>
+        <div style="background: #eff6ff; padding: 1.25rem; border-radius: 0.75rem; text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">&#9851;</div>
+            <strong style="color: #2563eb;">Cradle-to-Cradle</strong>
+            <p style="font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem;">Carbon returns to soil, not sky</p>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== REAL-WORLD IMPACT ==================== -->
+<div class="page-section">
+    <h2>Real-World Impact (2026)</h2>
+    <div class="section-divider"></div>
+
+    <p style="font-size: 1rem; color: #4b5563; margin-bottom: 1.5rem;">
+        With a projected production of <strong>931,000 rolls</strong> in 2026, here is what our collective impact looks like:
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin: 1.5rem 0;">
+        <div class="equivalence-card">
+            <div class="equivalence-icon">&#128663;</div>
+            <div class="equivalence-value">537</div>
+            <div class="equivalence-label">Cars taken off the road<br>for one full year</div>
+        </div>
+        <div class="equivalence-card">
+            <div class="equivalence-icon">&#127794;</div>
+            <div class="equivalence-value">41,167</div>
+            <div class="equivalence-label">Trees&rsquo; worth of annual<br>carbon sequestration</div>
+        </div>
+        <div class="equivalence-card">
+            <div class="equivalence-icon">&#127968;</div>
+            <div class="equivalence-value">282</div>
+            <div class="equivalence-label">Homes&rsquo; annual<br>electricity emissions</div>
+        </div>
+        <div class="equivalence-card">
+            <div class="equivalence-icon">&#9851;</div>
+            <div class="equivalence-value">84 t</div>
+            <div class="equivalence-label">Agricultural waste<br>diverted from landfill</div>
+        </div>
+    </div>
+
+    <!-- Impact Chart -->
+    <div class="chart-container" style="border-color: #fed7aa;">
+        <h3 style="text-align: center; margin-bottom: 20px;">Projected Growth &amp; Impact</h3>
+        <div class="chart-wrapper">
+            <canvas id="scalingChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== SENSITIVITY ==================== -->
+<div class="page-section">
+    <h2>Savings May Vary</h2>
+    <div class="section-divider"></div>
+
+    <p style="font-size: 1rem; color: #4b5563; margin-bottom: 1.5rem;">
+        Real-world conditions affect performance. We tested different scenarios to show you the full picture. In all cases, our wrap delivers meaningful environmental benefits.
+    </p>
+
+    <div class="chart-container" style="border-color: #fed7aa;">
+        <h3 style="text-align: center; margin-bottom: 20px;">CO&#8322;e Savings Per Roll &mdash; By Scenario</h3>
+        <div class="chart-wrapper">
+            <canvas id="sensitivityChart"></canvas>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+        <div style="background: #fef3c7; padding: 1.25rem; border-radius: 0.75rem; border-left: 4px solid #d97706;">
+            <strong style="color: #92400e;">Conservative</strong>
+            <p style="font-size: 0.85rem; color: #4b5563; margin-top: 0.25rem;">1.80 kg CO&#8322;e saved &mdash; Even in suboptimal composting, savings are meaningful.</p>
+        </div>
+        <div style="background: #fff7ed; padding: 1.25rem; border-radius: 0.75rem; border-left: 4px solid #ea580c;">
+            <strong style="color: #9a3412;">Base Case</strong>
+            <p style="font-size: 0.85rem; color: #4b5563; margin-top: 0.25rem;">2.65 kg CO&#8322;e saved &mdash; Standard home composting with certified conditions.</p>
+        </div>
+        <div style="background: #f0fdf4; padding: 1.25rem; border-radius: 0.75rem; border-left: 4px solid #16a34a;">
+            <strong style="color: #166534;">Optimized</strong>
+            <p style="font-size: 0.85rem; color: #4b5563; margin-top: 0.25rem;">3.20 kg CO&#8322;e saved &mdash; With renewable energy &amp; local sourcing improvements.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== CERTIFICATIONS & COMPLIANCE ==================== -->
+<div class="page-section">
+    <h2>Certifications &amp; Compliance</h2>
+    <div class="section-divider"></div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+        <div style="background: #fff7ed; padding: 1.5rem; border-radius: 0.75rem; border-left: 4px solid #ea580c;">
+            <h4 style="margin-top: 0;">T&Uuml;V Austria OK-Home Compost</h4>
+            <p style="font-size: 0.85rem; color: #4b5563;">Independently certified to biodegrade 90% within 365 days under home composting conditions.</p>
+        </div>
+        <div style="background: #fff7ed; padding: 1.5rem; border-radius: 0.75rem; border-left: 4px solid #f97316;">
+            <h4 style="margin-top: 0;">EU Single-Use Plastics Directive</h4>
+            <p style="font-size: 0.85rem; color: #4b5563;">Meets requirements for verifiable compostability claims, aligned with phase-out of non-recyclable plastics.</p>
+        </div>
+        <div style="background: #fff7ed; padding: 1.5rem; border-radius: 0.75rem; border-left: 4px solid #fb923c;">
+            <h4 style="margin-top: 0;">EU PPWR (2025)</h4>
+            <p style="font-size: 0.85rem; color: #4b5563;">Compostability supports packaging waste regulation compliance; upcycling enhances end-of-life management.</p>
+        </div>
+    </div>
+
+    <!-- SDG Alignment -->
+    <div style="margin-top: 2rem;">
+        <h3>Sustainability Goals</h3>
+        <div class="chart-container" style="border-color: #fed7aa;">
+            <div class="chart-wrapper-sm">
+                <canvas id="sdgChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== METHODOLOGY NOTE ==================== -->
+<div class="page-section">
+    <h2>How We Calculated This</h2>
+    <div class="section-divider"></div>
+
+    <p style="font-size: 0.95rem; color: #4b5563; margin-bottom: 1rem;">
+        This report follows internationally recognised life cycle assessment (LCA) principles. Here is a brief overview of our approach:
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+        <div style="background: #f9fafb; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #e5e7eb;">
+            <strong style="color: #ea580c;">Scope</strong>
+            <p style="font-size: 0.85rem; color: #4b5563; margin-top: 0.25rem;">Cradle-to-gate (production) plus end-of-life disposal. Covers all emissions from raw materials through final decomposition.</p>
+        </div>
+        <div style="background: #f9fafb; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #e5e7eb;">
+            <strong style="color: #ea580c;">Standard</strong>
+            <p style="font-size: 0.85rem; color: #4b5563; margin-top: 0.25rem;">Aligned with ISO 14040/14044 and IPCC 2014 Global Warming Potential metrics. Third-party ISO 14040 audit planned for Q4 2026.</p>
+        </div>
+        <div style="background: #f9fafb; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #e5e7eb;">
+            <strong style="color: #ea580c;">Data Sources</strong>
+            <p style="font-size: 0.85rem; color: #4b5563; margin-top: 0.25rem;">Peer-reviewed literature (Nature Sustainability, PlasticsEurope, Eurostat), T&Uuml;V Austria certifications, and EPA emission factors.</p>
+        </div>
+        <div style="background: #f9fafb; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #e5e7eb;">
+            <strong style="color: #ea580c;">Comparison</strong>
+            <p style="font-size: 0.85rem; color: #4b5563; margin-top: 0.25rem;">Benchmarked against conventional LDPE cling wrap (2.58 kg roll, European production averages, 100% incineration at end-of-life).</p>
+        </div>
+    </div>
+
+    <p class="footnote" style="margin-top: 1rem; font-size: 0.8rem; color: #9ca3af;">
+        Savings may vary based on actual disposal conditions, composting environment, and regional waste management infrastructure. Conservative assumptions used throughout. Full third-party verification via ISO 14040 audit planned Q4 2026.
+    </p>
+</div>
+
+<!-- ==================== CONCLUSION / CTA ==================== -->
+<div class="page-section orange-gradient text-white text-center" style="padding: 3rem 2.5rem;">
+    <h2 style="color: white; border-bottom: none; font-size: 2rem; margin-bottom: 1rem;">Ready for a Greener Wrap?</h2>
+    <p style="max-width: 560px; margin: 0 auto 2rem; font-size: 1rem; opacity: 0.95; line-height: 1.7;">
+        The Orange Compostable Wrap delivers real, verified environmental benefits &mdash; without compromising on performance. Every roll is a step towards zero-waste packaging.
+    </p>
+
+    <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+        <div style="background: rgba(255,255,255,0.15); padding: 1.25rem 1.5rem; border-radius: 1rem; min-width: 180px;">
+            <div style="font-size: 1.75rem; font-weight: 800;">21%</div>
+            <div style="font-size: 0.8rem; opacity: 0.85;">Lower Carbon Footprint</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.15); padding: 1.25rem 1.5rem; border-radius: 1rem; min-width: 180px;">
+            <div style="font-size: 1.75rem; font-weight: 800;">90%</div>
+            <div style="font-size: 0.8rem; opacity: 0.85;">Biodegrades at Home</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.15); padding: 1.25rem 1.5rem; border-radius: 1rem; min-width: 180px;">
+            <div style="font-size: 1.75rem; font-weight: 800;">Zero</div>
+            <div style="font-size: 0.8rem; opacity: 0.85;">Microplastics</div>
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <div style="background: rgba(255,255,255,0.1); padding: 1rem 1.5rem; border-radius: 0.75rem; text-align: center;">
+            <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.7;">Status</div>
+            <div style="font-weight: 700; margin-top: 0.25rem;">Validated for 2026</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.1); padding: 1rem 1.5rem; border-radius: 0.75rem; text-align: center;">
+            <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.7;">Certification</div>
+            <div style="font-weight: 700; margin-top: 0.25rem;">T&Uuml;V Austria OK-Home Compost</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.1); padding: 1rem 1.5rem; border-radius: 0.75rem; text-align: center;">
+            <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.7;">Contact</div>
+            <div style="font-weight: 700; margin-top: 0.25rem;">business@vi-kang.com</div>
+        </div>
+    </div>
+</div>
+
+</div> <!-- Close container -->
+
+<!-- Footer -->
+<footer class="bg-white border-t border-gray-200 mt-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="text-center">
+            <p class="text-gray-900 font-semibold mb-2">N&amp;E Innovations Pte Ltd</p>
+            <p class="text-gray-600 mb-3">Orange Compostable Wrap &mdash; Environmental Impact Overview</p>
+            <p class="text-sm text-gray-500 mb-3">
+                Assessment aligned with ISO 14040/14044 | T&Uuml;V Austria OK-Home Compost Certified | February 2026
+            </p>
+            <p class="text-sm text-gray-500">
+                For more information, contact
+                <a href="mailto:business@vi-kang.com" style="color: #ea580c; font-weight: 600; text-decoration: none;">
+                    business@vi-kang.com
+                </a>
+            </p>
+            <p class="text-xs text-gray-400 mt-4">
+                &copy; 2026 N&amp;E Innovations | This overview is for informational purposes. Full LCA audit (ISO 14040) planned Q4 2026.
+            </p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // ============================
+    // CHART CONFIGURATIONS
+    // ============================
+    const orange = {
+        primary: '#ea580c',
+        secondary: '#f97316',
+        tertiary: '#fb923c',
+        light: '#fed7aa',
+        bg: '#fff7ed',
+        green: '#16a34a',
+        greenLight: '#22c55e',
+        blue: '#2563eb',
+        blueLight: '#60a5fa',
+        purple: '#7c3aed',
+        red: '#dc2626',
+        redLight: '#f87171',
+        gray: '#9ca3af',
+        grayDark: '#6b7280',
+    };
+
+    Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    Chart.defaults.color = '#6b7280';
+
+    // -------------------------------------------------------
+    // 1. SUMMARY BAR
+    // -------------------------------------------------------
+    new Chart(document.getElementById('summaryChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Conventional Wrap', 'Orange Compostable Wrap'],
+            datasets: [{
+                label: 'Total CO₂e (kg per roll)',
+                data: [12.90, 10.25],
+                backgroundColor: [orange.gray, orange.primary],
+                borderColor: [orange.grayDark, '#c2410c'],
+                borderWidth: 2,
+                borderRadius: 10,
+                barPercentage: 0.45,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.parsed.y.toFixed(2) + ' kg CO₂e per roll',
+                        afterLabel: ctx => ctx.dataIndex === 1 ? '21% lower emissions' : ''
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 15,
+                    title: { display: true, text: 'kg CO₂e per roll', font: { weight: '600' } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 2. WATERFALL - Where Savings Come From
+    // -------------------------------------------------------
+    new Chart(document.getElementById('waterfallChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Conventional\nBaseline', 'Production\nDifference', 'Upcycling\nBenefit', 'End-of-Life\nSavings', 'Orange Wrap\nTotal'],
+            datasets: [{
+                label: 'kg CO₂e',
+                data: [12.90, 4.81, -0.32, -7.46, 10.25],
+                backgroundColor: [
+                    orange.gray,
+                    orange.tertiary,
+                    orange.green,
+                    orange.green,
+                    orange.primary,
+                ],
+                borderColor: [
+                    orange.grayDark,
+                    '#c2410c',
+                    '#15803d',
+                    '#15803d',
+                    '#c2410c',
+                ],
+                borderWidth: 2,
+                borderRadius: 8,
+                barPercentage: 0.55,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            const v = ctx.parsed.y;
+                            if (ctx.dataIndex === 0 || ctx.dataIndex === 4) return v.toFixed(2) + ' kg CO₂e total';
+                            if (v > 0) return '+' + v.toFixed(2) + ' kg CO₂e (higher)';
+                            return v.toFixed(2) + ' kg CO₂e (saved)';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    title: { display: true, text: 'kg CO₂e per roll', font: { weight: '600' } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 3. END-OF-LIFE HORIZONTAL BAR
+    // -------------------------------------------------------
+    new Chart(document.getElementById('eolChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Conventional (Incinerated)', 'Orange Wrap (Composted)'],
+            datasets: [{
+                label: 'End-of-Life Emissions',
+                data: [8.00, 0.54],
+                backgroundColor: [orange.redLight, orange.primary],
+                borderColor: [orange.red, '#c2410c'],
+                borderWidth: 2,
+                borderRadius: 10,
+                barPercentage: 0.45,
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.parsed.x.toFixed(2) + ' kg CO₂e',
+                        afterLabel: ctx => ctx.dataIndex === 1 ? '93% lower end-of-life emissions' : ''
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'kg CO₂e per roll', font: { weight: '600' } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                y: { grid: { display: false } }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 4. SCALING PROJECTIONS
+    // -------------------------------------------------------
+    new Chart(document.getElementById('scalingChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['2026', '2027', '2028'],
+            datasets: [
+                {
+                    label: 'Rolls Produced (thousands)',
+                    data: [931, 1400, 2000],
+                    backgroundColor: orange.light,
+                    borderColor: orange.tertiary,
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    yAxisID: 'y',
+                    order: 2,
+                },
+                {
+                    label: 'CO₂e Avoided (tonnes)',
+                    data: [2470, 4200, 6600],
+                    type: 'line',
+                    borderColor: orange.primary,
+                    backgroundColor: 'rgba(234, 88, 12, 0.08)',
+                    borderWidth: 3,
+                    pointBackgroundColor: orange.primary,
+                    pointBorderColor: 'white',
+                    pointBorderWidth: 2,
+                    pointRadius: 7,
+                    fill: true,
+                    tension: 0.3,
+                    yAxisID: 'y1',
+                    order: 1,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { position: 'top', labels: { padding: 20 } },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            if (ctx.datasetIndex === 0) return ctx.parsed.y.toLocaleString() + 'k rolls';
+                            return ctx.parsed.y.toLocaleString() + ' tonnes CO₂e avoided';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    position: 'left',
+                    title: { display: true, text: 'Rolls (thousands)', font: { weight: '600' } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                y1: {
+                    beginAtZero: true,
+                    position: 'right',
+                    title: { display: true, text: 'CO₂e Avoided (tonnes)', font: { weight: '600' } },
+                    grid: { drawOnChartArea: false }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 5. SENSITIVITY HORIZONTAL BAR
+    // -------------------------------------------------------
+    new Chart(document.getElementById('sensitivityChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: [
+                'Low Biodegradation (70%)',
+                'Mixed Disposal (50/50)',
+                'Base Case (90%)',
+                'Enhanced Upcycling',
+                'Optimized Production'
+            ],
+            datasets: [{
+                label: 'CO₂e Savings (kg per roll)',
+                data: [1.80, 2.20, 2.65, 2.70, 3.20],
+                backgroundColor: [
+                    '#fbbf24',
+                    orange.tertiary,
+                    orange.primary,
+                    orange.green,
+                    orange.greenLight,
+                ],
+                borderColor: [
+                    '#d97706',
+                    '#c2410c',
+                    '#9a3412',
+                    '#15803d',
+                    '#16a34a',
+                ],
+                borderWidth: 2,
+                borderRadius: 8,
+                barPercentage: 0.55,
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.parsed.x.toFixed(2) + ' kg CO₂e saved per roll'
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 4,
+                    title: { display: true, text: 'kg CO₂e Savings per Roll', font: { weight: '600' } },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                y: { grid: { display: false } }
+            }
+        }
+    });
+
+    // -------------------------------------------------------
+    // 6. SDG RADAR
+    // -------------------------------------------------------
+    new Chart(document.getElementById('sdgChart').getContext('2d'), {
+        type: 'radar',
+        data: {
+            labels: [
+                'SDG 12\nResponsible\nConsumption',
+                'SDG 13\nClimate\nAction',
+                'SDG 9\nInnovation',
+                'SDG 8\nDecent\nWork',
+                'SDG 17\nPartnerships'
+            ],
+            datasets: [{
+                label: 'Orange Compostable Wrap',
+                data: [80, 80, 45, 35, 40],
+                backgroundColor: 'rgba(234, 88, 12, 0.15)',
+                borderColor: orange.primary,
+                borderWidth: 3,
+                pointBackgroundColor: orange.primary,
+                pointBorderColor: 'white',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.parsed.r + '% alignment'
+                    }
+                }
+            },
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: { stepSize: 20 },
+                    grid: { color: 'rgba(0,0,0,0.08)' },
+                    angleLines: { color: 'rgba(0,0,0,0.08)' },
+                    pointLabels: { font: { size: 11 } }
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
