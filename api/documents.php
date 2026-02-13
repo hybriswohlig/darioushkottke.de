@@ -91,8 +91,8 @@ function handleCreate($input) {
         // Insert document
         $stmt = $db->prepare("
             INSERT INTO documents (category_id, title, description, file_url, thumbnail_url,
-                                   status, version, date_published, featured)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                   status, version, date_published, featured, tag)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
 
         $stmt->execute([
@@ -104,7 +104,8 @@ function handleCreate($input) {
             $input['status'] ?? 'published',
             $input['version'] ?? null,
             $input['date_published'] ?? null,
-            isset($input['featured']) ? (int)$input['featured'] : 0
+            isset($input['featured']) ? (int)$input['featured'] : 0,
+            $input['tag'] ?? null
         ]);
 
         $documentId = $db->lastInsertId();
@@ -162,7 +163,7 @@ function handleUpdate($input) {
         $params = [];
 
         $allowedFields = ['category_id', 'title', 'description', 'file_url', 'thumbnail_url',
-                          'status', 'version', 'date_published', 'featured'];
+                          'status', 'version', 'date_published', 'featured', 'tag'];
 
         foreach ($allowedFields as $field) {
             if (isset($input[$field])) {

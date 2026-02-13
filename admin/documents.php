@@ -235,6 +235,21 @@ $documents = $stmt->fetchAll();
             gap: var(--space-sm);
             margin-bottom: var(--space-sm);
         }
+
+        .tag-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .tag-vikang { background: #16a34a; color: #fff; }
+        .tag-compostable { background: #065f46; color: #d1fae5; }
+        .tag-biodegradable { background: #0d9488; color: #fff; }
+        .tag-untagged { background: #e5e7eb; color: #4b5563; }
     </style>
 </head>
 <body>
@@ -258,6 +273,14 @@ $documents = $stmt->fetchAll();
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                             Documents
+                        </a>
+                    </li>
+                    <li class="admin-nav-item">
+                        <a href="/admin/users.php" class="admin-nav-link">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                            Users
                         </a>
                     </li>
                     <li class="admin-nav-item">
@@ -300,6 +323,7 @@ $documents = $stmt->fetchAll();
                             <th>Title</th>
                             <th>Category</th>
                             <th>Status</th>
+                            <th>Tag</th>
                             <th>Views</th>
                             <th>Date</th>
                             <th>Actions</th>
@@ -316,6 +340,7 @@ $documents = $stmt->fetchAll();
                                 </td>
                                 <td><?php echo esc($doc['category_name']); ?></td>
                                 <td><?php echo getStatusBadge($doc['status']); ?></td>
+                                <td><?php echo getTagBadge($doc['tag']); ?></td>
                                 <td><?php echo $doc['view_count']; ?></td>
                                 <td><?php echo formatDate($doc['created_at']); ?></td>
                                 <td>
@@ -384,6 +409,16 @@ $documents = $stmt->fetchAll();
                 </div>
 
                 <div class="form-group">
+                    <label for="tag" class="form-label">Product Tag</label>
+                    <select id="tag" name="tag" class="form-select">
+                        <option value="">Untagged</option>
+                        <option value="vikang">VIKANG</option>
+                        <option value="compostable">Compostable</option>
+                        <option value="biodegradable">Biodegradable</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label for="version" class="form-label">Version</label>
                     <input type="text" id="version" name="version" class="form-input" placeholder="1.0">
                 </div>
@@ -432,6 +467,7 @@ $documents = $stmt->fetchAll();
             document.getElementById('version').value = doc.version || '';
             document.getElementById('date_published').value = doc.date_published || '';
             document.getElementById('featured').checked = doc.featured == 1;
+            document.getElementById('tag').value = doc.tag || '';
             document.getElementById('documentModal').classList.add('active');
         }
 
@@ -477,6 +513,7 @@ $documents = $stmt->fetchAll();
                 description: formData.get('description'),
                 file_url: formData.get('file_url') || null,
                 status: formData.get('status'),
+                tag: formData.get('tag') || null,
                 version: formData.get('version') || null,
                 date_published: formData.get('date_published') || null,
                 featured: formData.get('featured') ? 1 : 0

@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize filters
     initFilters();
+
+    // Initialize tag filters
+    initTagFilters();
 });
 
 /**
@@ -86,6 +89,7 @@ function initSearch() {
         // Debounce search
         searchTimeout = setTimeout(() => {
             filterCards(query);
+            trackSearch(query);
         }, 300);
     });
 }
@@ -166,6 +170,7 @@ function initFilters() {
             this.classList.add('active');
 
             const filterValue = this.dataset.filter;
+            trackFilter('status', filterValue);
 
             if (filterValue === 'all') {
                 showAllCards();
@@ -199,6 +204,73 @@ function filterByStatus(status) {
 }
 
 /**
+ * Initialize tag filter buttons (for PHP page client-side filtering)
+ */
+function initTagFilters() {
+    const tagFilterBtns = document.querySelectorAll('.tag-filter-btn');
+    if (tagFilterBtns.length === 0) return;
+
+    tagFilterBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Toggle active state
+            tagFilterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            const tagValue = this.dataset.tag;
+            trackFilter('tag', tagValue);
+            filterCardsByTag(tagValue);
+        });
+    });
+}
+
+/**
+ * Filter cards by tag
+ */
+function filterCardsByTag(tag) {
+    const section = document.getElementById('all-documents');
+    if (!section) return;
+
+    const cards = section.querySelectorAll('.card');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+        const cardTag = card.dataset.tag;
+
+        if (tag === 'all' || cardTag === tag) {
+            card.style.display = '';
+            card.classList.add('fade-in');
+            visibleCount++;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    // Handle no results
+    let noResultsEl = section.querySelector('.no-results-tag');
+    if (visibleCount === 0 && !noResultsEl) {
+        const grid = section.querySelector('.grid');
+        if (grid) {
+            noResultsEl = document.createElement('div');
+            noResultsEl.className = 'no-results-tag text-center';
+            noResultsEl.style.gridColumn = '1 / -1';
+            noResultsEl.style.padding = '3rem';
+            noResultsEl.innerHTML = `
+                <svg style="width: 64px; height: 64px; margin: 0 auto 1rem; color: var(--gray-400);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <h3 style="color: var(--gray-700); margin-bottom: 0.5rem;">No documents found</h3>
+                <p style="color: var(--gray-500);">No documents match the selected filter</p>
+            `;
+            grid.appendChild(noResultsEl);
+        }
+    } else if (visibleCount > 0 && noResultsEl) {
+        noResultsEl.remove();
+    }
+}
+
+/**
  * Smooth scroll to section
  */
 function scrollToSection(sectionId) {
@@ -220,13 +292,48 @@ function scrollToSection(sectionId) {
 function trackDocumentView(documentId) {
     if (!documentId) return;
 
-    fetch('/api/track-view.php', {
+    fetch('/api/user-activity.php', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ document_id: documentId })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'document_view',
+            entity_type: 'document',
+            entity_id: documentId,
+            page: window.location.pathname
+        })
     }).catch(err => console.error('Error tracking view:', err));
+}
+
+/**
+ * Track search query
+ */
+function trackSearch(query) {
+    if (!query || query.length < 2) return;
+
+    fetch('/api/user-activity.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'search',
+            details: query,
+            page: window.location.pathname
+        })
+    }).catch(err => console.error('Error tracking search:', err));
+}
+
+/**
+ * Track filter usage
+ */
+function trackFilter(filterType, filterValue) {
+    fetch('/api/user-activity.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'filter',
+            details: JSON.stringify({ type: filterType, value: filterValue }),
+            page: window.location.pathname
+        })
+    }).catch(err => console.error('Error tracking filter:', err));
 }
 
 /**

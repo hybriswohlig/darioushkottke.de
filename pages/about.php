@@ -1,6 +1,6 @@
 <?php
-// Protect this page - require visitor authentication
-require_once __DIR__ . '/../includes/visitor-auth.php';
+// Protect this page - require user authentication
+require_once __DIR__ . '/../includes/user-auth.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,6 +15,14 @@ require_once __DIR__ . '/../includes/visitor-auth.php';
     <link rel="icon" type="image/svg+xml" href="/file.svg">
 </head>
 <body>
+    <?php if (isset($GLOBALS['user_expiry_warning_days'])): ?>
+    <div id="expiry-banner" style="background: #fef3c7; color: #92400e; padding: 0.75rem 1rem; text-align: center; font-size: 0.875rem; border-bottom: 1px solid #fbbf24; position: relative;">
+        <strong>Notice:</strong> Your portal access expires in <?php echo $GLOBALS['user_expiry_warning_days']; ?> day<?php echo $GLOBALS['user_expiry_warning_days'] !== 1 ? 's' : ''; ?>.
+        Please contact <a href="mailto:business@vi-kang.com" style="color: #92400e; font-weight: 600; text-decoration: underline;">business@vi-kang.com</a> to extend your access.
+        <button onclick="this.parentElement.style.display='none'" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #92400e; cursor: pointer; font-size: 1.25rem;">&times;</button>
+    </div>
+    <?php endif; ?>
+
     <!-- Header -->
     <header class="header">
         <div class="container">

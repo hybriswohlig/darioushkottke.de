@@ -100,9 +100,14 @@
                         <p class="text-sm text-gray-600">Environmental Documentation Portal</p>
                     </div>
                 </div>
-                <a href="https://vi-kang.com/contact/" target="_blank" class="bg-gradient-to-r from-green-600 to-green-500 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transition-shadow inline-block">
-                    Contact Us
-                </a>
+                <div class="flex items-center gap-4">
+                    <a href="https://vi-kang.com/technology/" target="_blank" class="text-gray-700 font-semibold px-5 py-2 rounded-full border-2 border-gray-200 hover:border-green-500 hover:text-green-600 transition-all inline-block">
+                        About Vi-kang
+                    </a>
+                    <a href="https://vi-kang.com/contact/" target="_blank" class="bg-gradient-to-r from-green-600 to-green-500 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transition-shadow inline-block">
+                        Contact Us
+                    </a>
+                </div>
             </div>
         </div>
     </header>
@@ -112,7 +117,13 @@
             <!-- Sidebar Navigation -->
             <aside class="w-80 flex-shrink-0">
                 <nav class="bg-white rounded-2xl shadow-sm p-2 sticky top-8">
-                    <button class="nav-button active" onclick="showSection('lca-reports')">
+                    <button class="nav-button active" onclick="showSection('all-documents')">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                        </svg>
+                        <span>All Documents</span>
+                    </button>
+                    <button class="nav-button" onclick="showSection('lca-reports')">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="20" x2="12" y2="10"></line>
                             <line x1="18" y1="20" x2="18" y2="4"></line>
@@ -186,6 +197,7 @@
                     {
                         title: 'PVC + Vikang Assessment (Based on PHA)',
                         description: 'Comprehensive environmental impact analysis comparing PVC + Vikang cling wrap against conventional PVC products.',
+                        tag: null,
                         metrics: [
                             { label: 'CO2e Savings', value: '59%' },
                             { label: 'Date', value: 'Oct 2025' },
@@ -196,6 +208,7 @@
                     {
                         title: 'Carbon Footprint Reduction Report - Vikang Composite',
                         description: 'Carbon footprint reduction analysis of Vikang PVC clingfilms based on cashew shell numbers.',
+                        tag: null,
                         metrics: [
                             { label: 'Status', value: 'Under Review' },
                             { label: 'Date', value: '10 Oct 2025' },
@@ -206,6 +219,7 @@
                     {
                         title: 'LCA Report - Liquid & Powder Disinfectants',
                         description: 'Greenly LCA Report for Liquid & Powder Disinfectants',
+                        tag: null,
                         metrics: [
                             { label: 'Status', value: 'Finished by Greenly' },
                             { label: 'Date', value: '19 Jan 2024' },
@@ -216,6 +230,7 @@
                     {
                         title: 'LCA Report - Vikang-Enhanced Bio-Based PBAT Cling Wrap',
                         description: 'Environmental impact assessment of the Vikang-Enhanced Bio-PBAT Cling Wrap (10μm) for the EU market, demonstrating a 35.1% carbon reduction vs. conventional LDPE.',
+                        tag: null,
                         metrics: [
                             { label: 'CO2e Savings', value: '35.1%' },
                             { label: 'Date', value: 'Feb 2026' },
@@ -226,6 +241,7 @@
                     {
                         title: 'LCA Report - Vikang-Enhanced Fossil-Based PBAT Cling Wrap',
                         description: 'Environmental impact assessment of the Vikang-Enhanced Fossil-Based PBAT Cling Wrap (10μm) for the EU market. Carbon-neutral vs. LDPE with circularity and zero microplastics benefits.',
+                        tag: null,
                         metrics: [
                             { label: 'CO2e Difference', value: 'Neutral (+0.16)' },
                             { label: 'Date', value: 'Feb 2026' },
@@ -236,6 +252,7 @@
                     {
                         title: 'Orange Compostable Wrap - Environmental Overview',
                         description: 'Non-technical one-pager summarising the environmental benefits of the Orange Compostable Wrap — 21% lower emissions, home compostable, zero microplastics.',
+                        tag: null,
                         metrics: [
                             { label: 'CO2e Savings', value: '21%' },
                             { label: 'Date', value: 'Feb 2026' },
@@ -252,6 +269,7 @@
                     {
                         title: 'ISO 14001 Environmental Management',
                         description: 'Certification for environmental management systems and sustainable practices.',
+                        tag: null,
                         metrics: [
                             { label: 'Issued', value: 'Coming Soon', comingSoon: true },
                             { label: 'Valid Until', value: 'Coming Soon', comingSoon: true },
@@ -261,6 +279,7 @@
                     {
                         title: 'Food Contact Safety Certification',
                         description: 'Approved for direct food contact applications with compliance to international standards.',
+                        tag: null,
                         metrics: [
                             { label: 'Standard', value: 'FDA' },
                             { label: 'Status', value: 'Active' },
@@ -270,6 +289,7 @@
                     {
                         title: 'Home Compostable Cling Wrap OK Home Compost Certifications',
                         description: 'OK Home Compost certification for home compostable cling wrap, issued by TÜV Austria.',
+                        tag: null,
                         link: 'https://drive.google.com/file/d/1Q71pxhdh0oyn5ZfFXr2eb6gxkcGllYw3/view?usp=sharing',
                         metrics: [
                             { label: 'Issued by', value: 'TÜV Austria GMBH' },
@@ -286,6 +306,7 @@
                     {
                         title: 'VIKANG-Based Plasticizer Impact Study',
                         description: 'Analysis of environmental benefits from using vikang additives versus traditional additives.',
+                        tag: null,
                         metrics: [
                             { label: 'Reduction', value: 'xxx% CO2e' },
                             { label: 'Scope', value: 'Full LCA' },
@@ -295,6 +316,7 @@
                     {
                         title: 'Cashew Shell Utilization Study',
                         description: 'Environmental and economic analysis of utilizing cashew shell waste in PVC production.',
+                        tag: null,
                         metrics: [
                             { label: 'Waste Reduction', value: 'TBD' },
                             { label: 'Status', value: 'TBD' },
@@ -304,6 +326,7 @@
                     {
                         title: 'Foodwaste reduction study',
                         description: 'Environmental and economic analysis of the reduction of foodwaste with the use of Vikang additives',
+                        tag: null,
                         metrics: [
                             { label: 'Status', value: 'To be done' },
                             { label: 'Date', value: 'Not yet confirmed' },
@@ -319,6 +342,7 @@
                     {
                         title: 'Product Specifications - Vikang PVC',
                         description: 'Complete technical specifications including material composition, performance characteristics, and application guidelines.',
+                        tag: null,
                         metrics: [
                             { label: 'Version', value: '3.2' },
                             { label: 'Last Updated', value: 'Oct 2025' },
@@ -328,6 +352,7 @@
                     {
                         title: 'Product Specifications - Vi-Kang BOPP',
                         description: 'Technical data sheet detailing performance characteristics such as tensile strength, elongation at break, coefficient of friction, thermal shrinkage, haze, gloss, surface tension, WVTR, OTR, and thickness for the antibacterial BOPP film.',
+                        tag: null,
                         link: 'vikang-bopp.html',
                         metrics: [
                         { label: 'Version', value: 'N/A' },
@@ -338,6 +363,7 @@
                     {
                         title: 'Testing Protocols & Methods',
                         description: 'Standardized testing procedures for quality control and environmental impact assessment.',
+                        tag: null,
                         metrics: [
                             { label: 'Standards', value: 'ISO' },
                             { label: 'Tests', value: '(to be added by us)' },
@@ -353,6 +379,7 @@
                     {
                         title: 'Regulatory Compliance Report',
                         description: 'Comprehensive report on compliance with FDA food contact regulations.',
+                        tag: null,
                         link: 'https://drive.google.com/file/d/1iHbGGEtKS03mCoG2xCoaafwXFk6sMaAv/view?usp=drive_link',
                         metrics: [
                             { label: 'Regions', value: 'EU + UK' },
@@ -363,6 +390,7 @@
                     {
                         title: 'REACH Compliance Documentation',
                         description: 'European REACH regulation compliance for chemical substances and materials used in production.',
+                        tag: null,
                         metrics: [
                             { label: 'Registration', value: 'Complete' },
                             { label: 'Status', value: 'Approved' },
@@ -383,12 +411,163 @@
             }
         };
 
+        let currentTagFilter = 'all';
+
+        function getTagBadgeHtml(tag) {
+            const tags = {
+                'vikang':        { label: 'VIKANG',        bg: '#16a34a', color: '#ffffff' },
+                'compostable':   { label: 'Compostable',   bg: '#065f46', color: '#d1fae5' },
+                'biodegradable': { label: 'Biodegradable', bg: '#0d9488', color: '#ffffff' },
+            };
+            const t = tags[tag];
+            if (t) {
+                return `<span onclick="filterByTag('${tag}')" style="display:inline-flex;align-items:center;padding:4px 12px;font-size:0.75rem;font-weight:700;border-radius:999px;text-transform:uppercase;letter-spacing:0.05em;cursor:pointer;background:${t.bg};color:${t.color};transition:transform 0.15s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">${t.label}</span>`;
+            }
+            return `<span style="display:inline-flex;align-items:center;padding:4px 12px;font-size:0.75rem;font-weight:700;border-radius:999px;text-transform:uppercase;letter-spacing:0.05em;background:#e5e7eb;color:#4b5563;">Untagged</span>`;
+        }
+
+        function getFilterBtnStyle(tag, isActive) {
+            const colors = {
+                'all': '#16a34a',
+                'vikang': '#16a34a',
+                'compostable': '#065f46',
+                'biodegradable': '#0d9488'
+            };
+            const bg = isActive ? (colors[tag] || '#16a34a') : 'white';
+            const color = isActive ? 'white' : '#374151';
+            const border = isActive ? (colors[tag] || '#16a34a') : '#e5e7eb';
+            return `padding:8px 20px;border-radius:999px;border:2px solid ${border};background:${bg};color:${color};font-weight:600;cursor:pointer;transition:all 0.15s;font-size:0.875rem;`;
+        }
+
+        function filterByTag(tag) {
+            currentTagFilter = tag;
+            showAllDocumentsSection();
+        }
+
+        function showAllDocumentsSection() {
+            // Gather all items from all sections
+            const allItems = [];
+            Object.keys(content).forEach(key => {
+                content[key].items.forEach(item => {
+                    allItems.push({
+                        ...item,
+                        categoryKey: key,
+                        categoryTitle: content[key].title
+                    });
+                });
+            });
+
+            // Filter items
+            const filteredItems = currentTagFilter === 'all'
+                ? allItems
+                : allItems.filter(item => item.tag === currentTagFilter);
+
+            let html = `
+                <div class="bg-white rounded-2xl shadow-sm p-8 mb-6">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-3">All Documents</h2>
+                    <p class="text-lg text-gray-600 leading-relaxed">Browse all environmental documentation across every category</p>
+                </div>
+
+                <!-- Tag Filters -->
+                <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;">
+                    <button onclick="filterByTag('all')" style="${getFilterBtnStyle('all', currentTagFilter === 'all')}">All</button>
+                    <button onclick="filterByTag('vikang')" style="${getFilterBtnStyle('vikang', currentTagFilter === 'vikang')}">VIKANG</button>
+                    <button onclick="filterByTag('compostable')" style="${getFilterBtnStyle('compostable', currentTagFilter === 'compostable')}">Compostable</button>
+                    <button onclick="filterByTag('biodegradable')" style="${getFilterBtnStyle('biodegradable', currentTagFilter === 'biodegradable')}">Biodegradable</button>
+                </div>
+
+                <div class="space-y-6">
+            `;
+
+            if (filteredItems.length === 0) {
+                html += `
+                    <div class="text-center py-12 text-gray-500">
+                        <svg style="width:64px;height:64px;margin:0 auto 1rem;color:#9ca3af;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <p class="text-lg">No documents match the selected filter</p>
+                    </div>
+                `;
+            }
+
+            filteredItems.forEach(item => {
+                const tagBadge = getTagBadgeHtml(item.tag);
+                html += `
+                    <div class="content-card">
+                        <div class="flex items-start justify-between mb-2">
+                            <div>
+                                <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+                                    ${tagBadge}
+                                    <span class="text-xs text-gray-400">${item.categoryTitle}</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">${item.title}</h3>
+                                <p class="text-gray-600 leading-relaxed">${item.description}</p>
+                            </div>
+                            ${item.link ? `
+                                <a href="${item.link}" class="ml-4 p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors flex-shrink-0">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                </a>
+                            ` : ''}
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-100">
+                `;
+
+                item.metrics.forEach(metric => {
+                    const valueContent = metric.comingSoon
+                        ? `<span class="inline-flex items-center gap-1.5 text-amber-600"><span class="font-bold">Coming Soon</span></span>`
+                        : metric.value;
+                    html += `
+                        <div>
+                            <div class="text-sm text-gray-500 mb-1">${metric.label}</div>
+                            <div class="text-lg font-bold ${metric.comingSoon ? '' : 'text-green-600'}">${valueContent}</div>
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+
+                // Add subdocuments if they exist
+                if (item.subdocuments && item.subdocuments.length > 0) {
+                    html += `
+                        <div class="mt-6 pt-6 border-t border-gray-100">
+                            <div class="text-sm font-semibold text-gray-700 mb-3">Related Documents</div>
+                            <div class="flex flex-wrap gap-3">
+                    `;
+                    item.subdocuments.forEach(doc => {
+                        html += `
+                            <a href="${doc.link}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border border-green-200 rounded-lg transition-all duration-200 group">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                <span class="text-sm font-medium text-gray-700 group-hover:text-green-700">${doc.name}</span>
+                            </a>
+                        `;
+                    });
+                    html += `</div></div>`;
+                }
+
+                html += `</div>`;
+            });
+
+            html += '</div>';
+            document.getElementById('main-content').innerHTML = html;
+        }
+
         function showSection(sectionId) {
             // Update active button
             document.querySelectorAll('.nav-button').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.closest('.nav-button').classList.add('active');
+
+            if (sectionId === 'all-documents') {
+                showAllDocumentsSection();
+                return;
+            }
 
             // Get content
             const sectionContent = content[sectionId];
@@ -484,7 +663,7 @@
         }
 
         // Load initial content
-        showSection('lca-reports');
+        showAllDocumentsSection();
     </script>
 </body>
 </html>

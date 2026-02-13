@@ -487,6 +487,98 @@ p {
 }
 
 /* ============================================
+   Tag Badges
+   ============================================ */
+.tag-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-xs) var(--space-md);
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.tag-badge:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-sm);
+}
+
+.tag-vikang {
+    background: var(--primary-green);
+    color: #ffffff;
+}
+
+.tag-compostable {
+    background: #065f46;
+    color: #d1fae5;
+}
+
+.tag-biodegradable {
+    background: #0d9488;
+    color: #ffffff;
+}
+
+.tag-untagged {
+    background: var(--gray-200);
+    color: var(--gray-600);
+    cursor: default;
+}
+
+.tag-untagged:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* ============================================
+   Tag Filter Buttons
+   ============================================ */
+.tag-filters {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-2xl);
+}
+
+.tag-filter-btn {
+    padding: var(--space-sm) var(--space-lg);
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius-full);
+    background: white;
+    color: var(--gray-700);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+}
+
+.tag-filter-btn:hover {
+    border-color: var(--primary-green);
+    color: var(--primary-green);
+}
+
+.tag-filter-btn.active {
+    background: var(--primary-green);
+    border-color: var(--primary-green);
+    color: white;
+}
+
+.tag-filter-btn[data-tag="compostable"].active {
+    background: #065f46;
+    border-color: #065f46;
+}
+
+.tag-filter-btn[data-tag="biodegradable"].active {
+    background: #0d9488;
+    border-color: #0d9488;
+}
+
+/* ============================================
    Search & Filters
    ============================================ */
 .search-bar {

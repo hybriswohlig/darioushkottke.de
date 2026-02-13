@@ -1,6 +1,13 @@
 <?php
-// Protect this page - require visitor authentication
-require_once __DIR__ . '/includes/visitor-auth.php';
+// Protect this page - require user authentication
+require_once __DIR__ . '/includes/user-auth.php';
+
+// Get all documents for the "All Documents" section
+try {
+    $allDocuments = getAllDocuments();
+} catch (Exception $e) {
+    $allDocuments = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +27,14 @@ require_once __DIR__ . '/includes/visitor-auth.php';
     <link rel="icon" type="image/svg+xml" href="/file.svg">
 </head>
 <body>
+    <?php if (isset($GLOBALS['user_expiry_warning_days'])): ?>
+    <div id="expiry-banner" style="background: #fef3c7; color: #92400e; padding: 0.75rem 1rem; text-align: center; font-size: 0.875rem; border-bottom: 1px solid #fbbf24; position: relative;">
+        <strong>Notice:</strong> Your portal access expires in <?php echo $GLOBALS['user_expiry_warning_days']; ?> day<?php echo $GLOBALS['user_expiry_warning_days'] !== 1 ? 's' : ''; ?>.
+        Please contact <a href="mailto:business@vi-kang.com" style="color: #92400e; font-weight: 600; text-decoration: underline;">business@vi-kang.com</a> to extend your access.
+        <button onclick="this.parentElement.style.display='none'" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #92400e; cursor: pointer; font-size: 1.25rem;">&times;</button>
+    </div>
+    <?php endif; ?>
+
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -35,9 +50,13 @@ require_once __DIR__ . '/includes/visitor-auth.php';
                 <ul class="nav-links">
                     <li><a href="/" class="nav-link active">Home</a></li>
                     <li><a href="/pages/about.php" class="nav-link">About</a></li>
+                    <li><a href="https://vi-kang.com/technology/" target="_blank" class="btn btn-ghost">About Vi-kang</a></li>
                     <li><a href="https://vi-kang.com/contact/" target="_blank" class="btn btn-secondary">Contact Us</a></li>
                     <li>
-                        <a href="/visitor-logout.php" class="btn btn-ghost" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: var(--gray-600); font-size: 0.875rem;"><?php echo esc($_SESSION['user_name'] ?? ''); ?></span>
+                    </li>
+                    <li>
+                        <a href="/logout.php" class="btn btn-ghost" style="display: flex; align-items: center; gap: 0.5rem;">
                             <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                             </svg>
@@ -223,6 +242,80 @@ require_once __DIR__ . '/includes/visitor-auth.php';
                     </div>
                 </a>
             </div>
+        </div>
+    </section>
+
+    <!-- All Documents Section -->
+    <section class="section" id="all-documents">
+        <div class="container">
+            <div class="text-center mb-2xl">
+                <h2 class="scroll-animate">All Documents</h2>
+                <p class="text-large text-gray scroll-animate">
+                    Browse all environmental documentation across every category
+                </p>
+            </div>
+
+            <!-- Tag Filter Buttons -->
+            <div class="tag-filters scroll-animate">
+                <button class="tag-filter-btn active" data-tag="all">All</button>
+                <button class="tag-filter-btn" data-tag="vikang">VIKANG</button>
+                <button class="tag-filter-btn" data-tag="compostable">Compostable</button>
+                <button class="tag-filter-btn" data-tag="biodegradable">Biodegradable</button>
+            </div>
+
+            <!-- Documents Grid -->
+            <?php if (empty($allDocuments)): ?>
+                <div class="text-center" style="padding: 3rem 0;">
+                    <svg style="width: 64px; height: 64px; margin: 0 auto 1rem; color: var(--gray-400);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <h3 style="color: var(--gray-700); margin-bottom: 0.5rem;">No documents found</h3>
+                    <p style="color: var(--gray-500);">Documents will appear here once they are added</p>
+                </div>
+            <?php else: ?>
+                <div class="grid grid-2" id="all-documents-grid">
+                    <?php foreach ($allDocuments as $doc): ?>
+                        <div class="card scroll-animate" data-status="<?php echo esc($doc['status']); ?>" data-tag="<?php echo esc($doc['tag'] ?? 'untagged'); ?>">
+                            <!-- Tag Badge & Category -->
+                            <div style="margin-bottom: var(--space-md); display: flex; align-items: center; gap: var(--space-sm);">
+                                <?php echo getTagBadge($doc['tag']); ?>
+                                <span style="font-size: 0.75rem; color: var(--gray-500);">
+                                    <?php echo esc($doc['category_name']); ?>
+                                </span>
+                            </div>
+
+                            <h3 class="card-title"><?php echo esc($doc['title']); ?></h3>
+                            <p class="card-description"><?php echo esc($doc['description']); ?></p>
+
+                            <?php if (!empty($doc['metadata'])): ?>
+                                <div class="card-footer">
+                                    <?php foreach ($doc['metadata'] as $meta): ?>
+                                        <div class="card-meta">
+                                            <div class="card-meta-label"><?php echo esc($meta['meta_key']); ?></div>
+                                            <div class="card-meta-value"><?php echo esc($meta['meta_value']); ?></div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <div style="margin-top: var(--space-lg); display: flex; gap: var(--space-md); align-items: center; justify-content: space-between;">
+                                <?php echo getStatusBadge($doc['status']); ?>
+                                <?php if (!empty($doc['file_url'])): ?>
+                                    <a href="<?php echo esc($doc['file_url']); ?>"
+                                       <?php echo (strpos($doc['file_url'], 'http') === 0) ? 'target="_blank" rel="noopener noreferrer"' : ''; ?>
+                                       class="btn btn-ghost" style="padding: 0.5rem 1rem;"
+                                       onclick="trackDocumentView(<?php echo $doc['id']; ?>)">
+                                        View Document
+                                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
     </section>
 

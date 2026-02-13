@@ -7,6 +7,10 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+# Redirect old visitor login/logout URLs to new user auth URLs
+RewriteRule ^visitor-login\.php$ /login.php [R=301,L]
+RewriteRule ^visitor-logout\.php$ /logout.php [R=301,L]
+
 # Remove .php extension from URLs
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f

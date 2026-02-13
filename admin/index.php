@@ -22,6 +22,25 @@ $stats['total_views'] = $stmt->fetch()['total'] ?? 0;
 // Categories
 $categories = getCategories();
 
+// Active users
+$stmt = $db->query("SELECT COUNT(*) as count FROM users WHERE status = 'active'");
+$stats['active_users'] = $stmt->fetch()['count'];
+
+// Recent user activity
+$recentUserActivity = [];
+try {
+    $stmt = $db->query("
+        SELECT ual.*, u.full_name, u.email
+        FROM user_activity_log ual
+        JOIN users u ON ual.user_id = u.id
+        ORDER BY ual.created_at DESC
+        LIMIT 10
+    ");
+    $recentUserActivity = $stmt->fetchAll();
+} catch (PDOException $e) {
+    // Table might not exist yet during migration
+}
+
 // Recent documents
 $stmt = $db->query("
     SELECT d.*, c.name as category_name
@@ -209,6 +228,14 @@ $recentActivity = $stmt->fetchAll();
                         </a>
                     </li>
                     <li class="admin-nav-item">
+                        <a href="/admin/users.php" class="admin-nav-link">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                            Users
+                        </a>
+                    </li>
+                    <li class="admin-nav-item">
                         <a href="/" class="admin-nav-link" target="_blank">
                             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
@@ -255,6 +282,10 @@ $recentActivity = $stmt->fetchAll();
                     <div class="stat-label">Categories</div>
                     <div class="stat-value"><?php echo count($categories); ?></div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-label">Active Users</div>
+                    <div class="stat-value"><?php echo $stats['active_users']; ?></div>
+                </div>
             </div>
 
             <!-- Recent Documents -->
@@ -286,9 +317,38 @@ $recentActivity = $stmt->fetchAll();
                 </div>
             </section>
 
-            <!-- Recent Activity -->
+            <!-- Recent User Activity -->
+            <?php if (!empty($recentUserActivity)): ?>
+            <section style="margin-bottom: var(--space-2xl);">
+                <h2 class="section-title">Recent User Activity</h2>
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>Page</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($recentUserActivity as $ua): ?>
+                                <tr>
+                                    <td><strong><?php echo esc($ua['full_name']); ?></strong></td>
+                                    <td><?php echo esc($ua['action']); ?></td>
+                                    <td><?php echo esc($ua['page'] ?? $ua['details'] ?? '-'); ?></td>
+                                    <td><?php echo formatDate($ua['created_at'], 'M d, Y H:i'); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <?php endif; ?>
+
+            <!-- Recent Admin Activity -->
             <section>
-                <h2 class="section-title">Recent Activity</h2>
+                <h2 class="section-title">Recent Admin Activity</h2>
                 <div class="data-table">
                     <table>
                         <thead>

@@ -128,6 +128,49 @@ function searchDocuments($query, $categoryId = null) {
 }
 
 /**
+ * Get all documents across all categories, optionally filtered by tag
+ */
+function getAllDocuments($tagFilter = null) {
+    $db = getDB();
+
+    $sql = "SELECT d.*, c.name as category_name, c.slug as category_slug
+            FROM documents d
+            JOIN categories c ON d.category_id = c.id
+            WHERE 1=1";
+    $params = [];
+
+    if ($tagFilter !== null && $tagFilter !== '') {
+        $sql .= " AND d.tag = ?";
+        $params[] = $tagFilter;
+    }
+
+    $sql .= " ORDER BY d.featured DESC, d.date_published DESC, d.created_at DESC";
+
+    $stmt = $db->prepare($sql);
+    $stmt->execute($params);
+    $documents = $stmt->fetchAll();
+
+    foreach ($documents as &$doc) {
+        $doc['metadata'] = getDocumentMetadata($doc['id']);
+    }
+
+    return $documents;
+}
+
+/**
+ * Get tag badge HTML
+ */
+function getTagBadge($tag) {
+    $badges = [
+        'vikang'        => '<span class="tag-badge tag-vikang">VIKANG</span>',
+        'compostable'   => '<span class="tag-badge tag-compostable">Compostable</span>',
+        'biodegradable' => '<span class="tag-badge tag-biodegradable">Biodegradable</span>',
+    ];
+
+    return $badges[$tag] ?? '<span class="tag-badge tag-untagged">Untagged</span>';
+}
+
+/**
  * Increment document view count
  */
 function incrementViewCount($documentId) {
@@ -227,4 +270,75 @@ function jsonResponse($data, $statusCode = 200) {
     header('Content-Type: application/json');
     echo json_encode($data);
     exit;
+}
+
+/**
+ * Generate a temporary password for new user accounts
+ */
+function generateTempPassword($length = 10) {
+    $chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
+    $password = '';
+    for ($i = 0; $i < $length; $i++) {
+        $password .= $chars[random_int(0, strlen($chars) - 1)];
+    }
+    if (!preg_match('/[0-9]/', $password)) {
+        $password[strlen($password) - 1] = (string)random_int(2, 9);
+    }
+    return $password;
+}
+
+/**
+ * Validate password against rules (min 8 chars, at least 1 number)
+ */
+function validatePassword($password) {
+    if (strlen($password) < 8) {
+        return 'Password must be at least 8 characters long.';
+    }
+    if (!preg_match('/[0-9]/', $password)) {
+        return 'Password must contain at least one number.';
+    }
+    return null;
+}
+
+/**
+ * Get user by ID
+ */
+function getUserById($id) {
+    $db = getDB();
+    $stmt = $db->prepare("SELECT id, full_name, email, company, status, expiry_date, must_change_password, last_login, created_at, updated_at FROM users WHERE id = ? LIMIT 1");
+    $stmt->execute([$id]);
+    $user = $stmt->fetch();
+    return $user ?: null;
+}
+
+/**
+ * Get all users
+ */
+function getAllUsers() {
+    $db = getDB();
+    $stmt = $db->query("SELECT id, full_name, email, company, status, expiry_date, must_change_password, last_login, created_at FROM users ORDER BY created_at DESC");
+    return $stmt->fetchAll();
+}
+
+/**
+ * Log user activity
+ */
+function logUserActivity($action, $page = null, $entityType = null, $entityId = null, $details = null) {
+    if (!isset($_SESSION['user_id'])) return;
+
+    try {
+        $db = getDB();
+        $stmt = $db->prepare("INSERT INTO user_activity_log (user_id, action, page, entity_type, entity_id, details, ip_address) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([
+            $_SESSION['user_id'],
+            $action,
+            $page,
+            $entityType,
+            $entityId,
+            $details,
+            $_SERVER['REMOTE_ADDR'] ?? null
+        ]);
+    } catch (PDOException $e) {
+        error_log("User activity log error: " . $e->getMessage());
+    }
 }

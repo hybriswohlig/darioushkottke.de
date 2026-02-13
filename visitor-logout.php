@@ -1,9 +1,4 @@
 <?php
-require_once __DIR__ . '/includes/visitor-auth.php';
-
-// Logout visitor
-logoutVisitor();
-
-// Redirect to login page
-header('Location: /visitor-login.php');
+// Redirect to new logout page
+header('Location: /logout.php', true, 301);
 exit;
