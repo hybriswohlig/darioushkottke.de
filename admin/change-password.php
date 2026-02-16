@@ -39,7 +39,7 @@ if (isset($new_password)) {
     echo "<h2>Next Steps:</h2>";
     echo "<ol>";
     echo "<li>Copy the hash above</li>";
-    echo "<li>Log in to <strong>phpMyAdmin</strong> in your InfinityFree control panel</li>";
+    echo "<li>Log in to <strong>phpMyAdmin</strong> or connect to your MySQL database</li>";
     echo "<li>Select your database</li>";
     echo "<li>Navigate to the <code>admin_users</code> table</li>";
     echo "<li>Click <strong>Edit</strong> on the admin user</li>";

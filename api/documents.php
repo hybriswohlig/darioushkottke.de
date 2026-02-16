@@ -90,16 +90,30 @@ function handleCreate($input) {
 
         // Insert document
         $stmt = $db->prepare("
-            INSERT INTO documents (category_id, title, description, file_url, thumbnail_url,
-                                   status, version, date_published, featured, tag)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO documents (category_id, title, description, file_url, document_type, file_path,
+                                   thumbnail_url, status, version, date_published, featured, tag)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
+
+        $documentType = $input['document_type'] ?? 'link';
+        $filePath = null;
+        $fileUrl = $input['file_url'] ?? null;
+
+        if ($documentType === 'pdf') {
+            $filePath = $input['file_path'] ?? null;
+            $fileUrl = null; // PDFs don't use external URLs
+            if (empty($filePath)) {
+                jsonResponse(['error' => 'PDF document requires a file_path'], 400);
+            }
+        }
 
         $stmt->execute([
             $input['category_id'],
             $input['title'],
             $input['description'],
-            $input['file_url'] ?? null,
+            $fileUrl,
+            $documentType,
+            $filePath,
             $input['thumbnail_url'] ?? null,
             $input['status'] ?? 'published',
             $input['version'] ?? null,
@@ -162,8 +176,9 @@ function handleUpdate($input) {
         $updateFields = [];
         $params = [];
 
-        $allowedFields = ['category_id', 'title', 'description', 'file_url', 'thumbnail_url',
-                          'status', 'version', 'date_published', 'featured', 'tag'];
+        $allowedFields = ['category_id', 'title', 'description', 'file_url', 'document_type',
+                          'file_path', 'thumbnail_url', 'status', 'version', 'date_published',
+                          'featured', 'tag'];
 
         foreach ($allowedFields as $field) {
             if (isset($input[$field])) {
@@ -231,10 +246,18 @@ function handleDelete($input) {
     $db = getDB();
 
     try {
-        // Get document title for logging
+        // Get document for logging and file cleanup
         $doc = getDocument($input['id']);
         if (!$doc) {
             jsonResponse(['error' => 'Document not found'], 404);
+        }
+
+        // Delete PDF file from disk if this is a PDF document
+        if (($doc['document_type'] ?? '') === 'pdf' && !empty($doc['file_path'])) {
+            $fullPath = __DIR__ . '/../' . $doc['file_path'];
+            if (file_exists($fullPath)) {
+                unlink($fullPath);
+            }
         }
 
         $stmt = $db->prepare("DELETE FROM documents WHERE id = ?");

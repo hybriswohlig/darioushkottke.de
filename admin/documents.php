@@ -322,6 +322,7 @@ $documents = $stmt->fetchAll();
                         <tr>
                             <th>Title</th>
                             <th>Category</th>
+                            <th>Type</th>
                             <th>Status</th>
                             <th>Tag</th>
                             <th>Views</th>
@@ -339,6 +340,15 @@ $documents = $stmt->fetchAll();
                                     <?php endif; ?>
                                 </td>
                                 <td><?php echo esc($doc['category_name']); ?></td>
+                                <td>
+                                    <?php
+                                    $typeLabels = ['link' => 'Link', 'pdf' => 'PDF', 'html' => 'HTML'];
+                                    $type = $doc['document_type'] ?? 'link';
+                                    echo '<span class="status-badge" style="background: ' .
+                                        ($type === 'pdf' ? '#dc2626; color: #fff' : ($type === 'html' ? '#2563eb; color: #fff' : '#e5e7eb; color: #4b5563')) .
+                                        ';">' . ($typeLabels[$type] ?? 'Link') . '</span>';
+                                    ?>
+                                </td>
                                 <td><?php echo getStatusBadge($doc['status']); ?></td>
                                 <td><?php echo getTagBadge($doc['tag']); ?></td>
                                 <td><?php echo $doc['view_count']; ?></td>
@@ -393,8 +403,33 @@ $documents = $stmt->fetchAll();
                 </div>
 
                 <div class="form-group">
-                    <label for="file_url" class="form-label">File URL (Google Drive, etc.)</label>
+                    <label for="document_type" class="form-label">Document Type *</label>
+                    <select id="document_type" name="document_type" class="form-select" onchange="toggleDocumentTypeFields()">
+                        <option value="link">External Link (Google Drive, Dropbox, etc.)</option>
+                        <option value="pdf">PDF Upload</option>
+                        <option value="html">HTML Report (local .html file)</option>
+                    </select>
+                </div>
+
+                <!-- External Link field -->
+                <div class="form-group" id="field-link">
+                    <label for="file_url" class="form-label">File URL</label>
                     <input type="url" id="file_url" name="file_url" class="form-input" placeholder="https://">
+                </div>
+
+                <!-- PDF Upload field -->
+                <div class="form-group" id="field-pdf" style="display: none;">
+                    <label for="pdf_file" class="form-label">Upload PDF (max 20MB)</label>
+                    <input type="file" id="pdf_file" name="pdf_file" accept=".pdf,application/pdf" class="form-input">
+                    <div id="pdf-upload-status" style="margin-top: var(--space-sm); font-size: 0.875rem; color: var(--gray-600);"></div>
+                    <input type="hidden" id="file_path" name="file_path" value="">
+                </div>
+
+                <!-- HTML Report field -->
+                <div class="form-group" id="field-html" style="display: none;">
+                    <label for="html_file_url" class="form-label">HTML File Name</label>
+                    <input type="text" id="html_file_url" name="html_file_url" class="form-input" placeholder="report-name.html">
+                    <small style="color: var(--gray-500);">Enter the filename of the HTML report in the root directory</small>
                 </div>
 
                 <div class="form-group">
@@ -448,11 +483,22 @@ $documents = $stmt->fetchAll();
     <script>
         let editMode = false;
 
+        function toggleDocumentTypeFields() {
+            const type = document.getElementById('document_type').value;
+            document.getElementById('field-link').style.display = (type === 'link') ? '' : 'none';
+            document.getElementById('field-pdf').style.display = (type === 'pdf') ? '' : 'none';
+            document.getElementById('field-html').style.display = (type === 'html') ? '' : 'none';
+        }
+
         function openAddModal() {
             editMode = false;
             document.getElementById('modalTitle').textContent = 'Add New Document';
             document.getElementById('documentForm').reset();
             document.getElementById('documentId').value = '';
+            document.getElementById('file_path').value = '';
+            document.getElementById('pdf-upload-status').textContent = '';
+            document.getElementById('document_type').value = 'link';
+            toggleDocumentTypeFields();
             document.getElementById('documentModal').classList.add('active');
         }
 
@@ -463,12 +509,30 @@ $documents = $stmt->fetchAll();
             document.getElementById('category_id').value = doc.category_id;
             document.getElementById('title').value = doc.title;
             document.getElementById('description').value = doc.description;
-            document.getElementById('file_url').value = doc.file_url || '';
             document.getElementById('status').value = doc.status;
             document.getElementById('version').value = doc.version || '';
             document.getElementById('date_published').value = doc.date_published || '';
             document.getElementById('featured').checked = doc.featured == 1;
             document.getElementById('tag').value = doc.tag || '';
+
+            // Set document type and populate the correct field
+            const docType = doc.document_type || 'link';
+            document.getElementById('document_type').value = docType;
+            document.getElementById('file_url').value = '';
+            document.getElementById('html_file_url').value = '';
+            document.getElementById('file_path').value = doc.file_path || '';
+            document.getElementById('pdf-upload-status').textContent = '';
+
+            if (docType === 'link') {
+                document.getElementById('file_url').value = doc.file_url || '';
+            } else if (docType === 'html') {
+                document.getElementById('html_file_url').value = doc.file_url || '';
+            } else if (docType === 'pdf' && doc.file_path) {
+                document.getElementById('pdf-upload-status').textContent =
+                    'Current file: ' + doc.file_path.split('/').pop();
+            }
+
+            toggleDocumentTypeFields();
             document.getElementById('documentModal').classList.add('active');
         }
 
@@ -508,17 +572,71 @@ $documents = $stmt->fetchAll();
             e.preventDefault();
 
             const formData = new FormData(this);
+            const docType = formData.get('document_type') || 'link';
+
+            // Step 1: If PDF type and a new file was selected, upload it first
+            if (docType === 'pdf') {
+                const pdfFile = document.getElementById('pdf_file').files[0];
+                if (pdfFile) {
+                    document.getElementById('pdf-upload-status').textContent = 'Uploading...';
+
+                    const uploadData = new FormData();
+                    uploadData.append('pdf_file', pdfFile);
+
+                    try {
+                        const uploadRes = await fetch('/api/upload-document.php', {
+                            method: 'POST',
+                            body: uploadData
+                        });
+                        const uploadResult = await uploadRes.json();
+
+                        if (!uploadResult.success) {
+                            alert('Upload error: ' + (uploadResult.error || 'Failed to upload PDF'));
+                            document.getElementById('pdf-upload-status').textContent = 'Upload failed.';
+                            return;
+                        }
+
+                        document.getElementById('file_path').value = uploadResult.file_path;
+                        document.getElementById('pdf-upload-status').textContent = 'Upload complete.';
+                    } catch (error) {
+                        console.error('Upload error:', error);
+                        alert('Failed to upload PDF file');
+                        document.getElementById('pdf-upload-status').textContent = 'Upload failed.';
+                        return;
+                    }
+                }
+
+                // Validate that we have a file_path (either from new upload or existing)
+                if (!document.getElementById('file_path').value) {
+                    alert('Please select a PDF file to upload');
+                    return;
+                }
+            }
+
+            // Step 2: Build JSON data and send to documents API
             const data = {
                 category_id: formData.get('category_id'),
                 title: formData.get('title'),
                 description: formData.get('description'),
-                file_url: formData.get('file_url') || null,
+                document_type: docType,
                 status: formData.get('status'),
                 tag: formData.get('tag') || null,
                 version: formData.get('version') || null,
                 date_published: formData.get('date_published') || null,
                 featured: formData.get('featured') ? 1 : 0
             };
+
+            // Set file_url or file_path based on type
+            if (docType === 'link') {
+                data.file_url = formData.get('file_url') || null;
+                data.file_path = null;
+            } else if (docType === 'pdf') {
+                data.file_url = null;
+                data.file_path = document.getElementById('file_path').value;
+            } else if (docType === 'html') {
+                data.file_url = formData.get('html_file_url') || null;
+                data.file_path = null;
+            }
 
             if (editMode) {
                 data.id = formData.get('id');

@@ -1,6 +1,6 @@
 -- Migration: Add user authentication tables
 -- Run this AFTER the existing schema.sql has been applied
--- Compatible with MySQL 5.7+ and InfinityFree hosting
+-- Compatible with MySQL 5.7+
 
 -- Create users table
 CREATE TABLE IF NOT EXISTS users (

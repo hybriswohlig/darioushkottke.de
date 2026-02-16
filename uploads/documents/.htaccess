@@ -1,0 +1,4 @@
+# Deny all direct access to uploaded documents
+# They must be served through /api/serve-pdf.php with authentication
+Order deny,allow
+Deny from all

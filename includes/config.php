@@ -2,21 +2,20 @@
 /**
  * Configuration File for N&E Innovations Compliance Portal
  *
- * IMPORTANT: After uploading to InfinityFree, update these values with your actual database credentials
- * You can find these in your InfinityFree control panel under MySQL Databases
+ * IMPORTANT: Update these values with your actual database credentials from your AWS Lightsail instance
  */
 
 // Database Configuration
-define('DB_HOST', 'localhost');              // Usually 'localhost' or 'sqlXXX.infinityfree.com'
-define('DB_NAME', 'your_database_name');     // Your MySQL database name (e.g., 'epiz_12345678_compliance')
-define('DB_USER', 'your_database_user');     // Your MySQL username (e.g., 'epiz_12345678')
-define('DB_PASS', 'your_database_password'); // Your MySQL password
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'your_database_name');
+define('DB_USER', 'your_database_user');
+define('DB_PASS', 'your_database_password');
 define('DB_CHARSET', 'utf8mb4');
 
 // Site Configuration
 define('SITE_NAME', 'N&E Innovations');
 define('SITE_TAGLINE', 'Compliance Documentation Portal');
-define('SITE_URL', 'https://your-domain.infinityfree.com'); // Update with your actual domain
+define('SITE_URL', 'https://your-domain.com'); // Update with your actual domain
 define('CONTACT_EMAIL', 'business@vi-kang.com');
 define('CONTACT_URL', 'https://vi-kang.com/contact/');
 
@@ -30,9 +29,10 @@ ini_set('session.cookie_httponly', 1);
 ini_set('session.cookie_secure', 1);   // Set to 1 if using HTTPS
 ini_set('session.use_strict_mode', 1);
 
-// File Upload Settings (if needed later)
-define('MAX_FILE_SIZE', 5242880); // 5MB in bytes
+// File Upload Settings
+define('MAX_FILE_SIZE', 20971520); // 20MB in bytes
 define('ALLOWED_FILE_TYPES', ['pdf', 'doc', 'docx', 'xls', 'xlsx']);
+define('UPLOAD_DIR', __DIR__ . '/../uploads/documents/');
 
 // Pagination
 define('ITEMS_PER_PAGE', 12);

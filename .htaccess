@@ -1,11 +1,12 @@
 # N&E Innovations Compliance Portal - Apache Configuration
+# Deployed on AWS Lightsail (Bitnami LAMP with PHP-FPM)
 
 # Enable Rewrite Engine
 RewriteEngine On
 
-# Redirect to HTTPS (recommended for security)
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# Redirect to HTTPS (enable once SSL is configured)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # Redirect old visitor login/logout URLs to new user auth URLs
 RewriteRule ^visitor-login\.php$ /login.php [R=301,L]
@@ -16,7 +17,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.*)$ $1.php [L]
 
-# Redirect old index.html to new-index.php (or index.php after renaming)
+# Default index
 RewriteRule ^index\.html$ index.php [L]
 RewriteRule ^$ index.php [L]
 
@@ -26,7 +27,7 @@ ErrorDocument 500 /500.php
 
 # Security headers
 <IfModule mod_headers.c>
-    # Prevent clickjacking
+    # Prevent clickjacking (allows same-origin iframes for PDF viewer)
     Header always set X-Frame-Options "SAMEORIGIN"
 
     # XSS Protection
@@ -40,7 +41,7 @@ ErrorDocument 500 /500.php
 </IfModule>
 
 # Protect sensitive files
-<FilesMatch "(\.htaccess|config\.php|db\.php|\.env|\.git)">
+<FilesMatch "(\.htaccess|\.user\.ini|config\.php|db\.php|\.env|\.git)">
     Order allow,deny
     Deny from all
 </FilesMatch>
@@ -48,10 +49,5 @@ ErrorDocument 500 /500.php
 # Disable directory browsing
 Options -Indexes
 
-# PHP settings
-<IfModule mod_php7.c>
-    php_value upload_max_filesize 5M
-    php_value post_max_size 5M
-    php_value max_execution_time 300
-    php_value memory_limit 128M
-</IfModule>
+# NOTE: PHP settings are configured in .user.ini (required for PHP-FPM)
+# The .user.ini file sets: upload_max_filesize, post_max_size, memory_limit, max_execution_time

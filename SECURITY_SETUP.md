@@ -1,358 +1,184 @@
 # Security Setup Guide
-## N&E Innovations Compliance Portal
-
-This guide covers all password protection and security measures for your website.
+## N&E Innovations Compliance Portal (AWS Lightsail)
 
 ---
 
-## Current Security Features
+## Authentication System
 
-Your compliance portal has **two levels of password protection**:
+The portal has **two separate authentication layers**:
 
-### 1. Admin Panel Login (PHP Session-Based)
-- **Location**: `/admin/` directory
-- **Type**: PHP login with database authentication
-- **Default Credentials**:
-  - Username: `admin`
-  - Password: `admin123`
+### 1. User Portal Login
+- **Location**: All pages (enforced by `includes/user-auth.php`)
+- **Type**: Individual email/password accounts stored in `users` table
 - **Features**:
-  - Secure password hashing (bcrypt)
-  - Session management
-  - Activity logging
-  - Automatic timeout after 1 hour of inactivity
+  - Bcrypt password hashing
+  - 4-hour session timeout
+  - Account expiry dates
+  - Forced password change on first login
+  - Activity logging per user
 
-### 2. Optional HTTP Basic Authentication
-- **Location**: Can be added to `/admin/` directory
-- **Type**: Apache .htpasswd protection
-- **Purpose**: Additional security layer BEFORE PHP login
-- **Status**: Currently disabled (needs manual setup)
+### 2. Admin Panel Login
+- **Location**: `/admin/` directory
+- **Type**: Separate username/password in `admin_users` table
+- **Default Credentials**: admin / admin123
+- **Features**:
+  - 1-hour session timeout
+  - Admin activity logging
 
 ---
 
-## ⚠️ CRITICAL: Change Default Admin Password
+## Critical: Change Default Admin Password
 
-**IMMEDIATELY after installation, change the default admin password!**
+**Immediately after installation, change the default admin password.**
 
-### Method 1: Using the Password Generator (Recommended)
-
-1. Navigate to: `https://your-domain.infinityfree.com/admin/change-password.php`
-
-2. You'll see instructions. Download the file, open it in a text editor
-
-3. Find this line:
-   ```php
-   // $new_password = 'your_new_password';
-   ```
-
-4. Uncomment and set your new password:
-   ```php
-   $new_password = 'MyNewSecurePassword123!';
-   ```
-
-5. Save and re-upload the file
-
-6. Visit the page again - it will show your password hash
-
-7. Log in to **phpMyAdmin**:
-   - Go to InfinityFree Control Panel
-   - Click **phpMyAdmin**
-   - Select your database
-   - Navigate to `admin_users` table
-   - Click **Edit** on the admin user
-   - Replace the `password_hash` field with the new hash
-   - Click **Go** to save
-
-8. **DELETE** `change-password.php` from your server immediately!
-
-9. Test the new password by logging out and back in
-
-### Method 2: Using PHP Command Line
-
-If you have PHP command line access:
+### Method 1: Via MySQL Command Line
 
 ```bash
-php -r "echo password_hash('YourNewPassword', PASSWORD_DEFAULT);"
+# SSH into your Lightsail instance
+ssh -i your-key.pem bitnami@YOUR_IP
+
+# Generate a new password hash
+php -r "echo password_hash('YourNewSecurePassword', PASSWORD_DEFAULT) . PHP_EOL;"
+
+# Update in database
+mysql -u root -p
 ```
 
-Copy the output hash and update it in the database via phpMyAdmin.
-
----
-
-## Adding HTTP Basic Authentication (Double Password Protection)
-
-For extra security, add Apache .htpasswd protection as a second layer.
-
-### Step 1: Create Password File
-
-**On Your Computer (Mac/Linux):**
-
-1. Open Terminal
-
-2. Run:
-   ```bash
-   htpasswd -c .htpasswd admin
-   ```
-
-3. Enter your password when prompted
-
-4. This creates a `.htpasswd` file
-
-**On Windows:**
-
-Use an online .htpasswd generator:
-- Visit: https://hostingcanada.org/htpasswd-generator/
-- Enter username: `admin`
-- Enter a strong password
-- Copy the generated line
-
-Create a file named `.htpasswd` with this content:
-```
-admin:$apr1$encrypted$hashhere
+```sql
+USE compliance_portal;
+UPDATE admin_users SET password_hash = 'PASTE_HASH_HERE' WHERE username = 'admin';
 ```
 
-### Step 2: Upload .htpasswd File
+### Method 2: Using the Password Generator
 
-1. Upload `.htpasswd` to a secure location on your server
-   - **Recommended**: Upload OUTSIDE of `htdocs` (if possible)
-   - **Alternative**: Upload to `htdocs` (but protect it with .htaccess)
-
-2. Note the **full server path**. Examples:
-   - Outside htdocs: `/home/username/.htpasswd`
-   - Inside htdocs: `/home/username/htdocs/.htpasswd`
-
-### Step 3: Enable .htaccess Protection
-
-1. Open `/admin/.htaccess` file
-
-2. Find these commented lines:
-   ```apache
-   # AuthType Basic
-   # AuthName "N&E Innovations Admin Area"
-   # AuthUserFile /full/path/to/.htpasswd
-   # Require valid-user
-   ```
-
-3. Uncomment them:
-   ```apache
-   AuthType Basic
-   AuthName "N&E Innovations Admin Area"
-   AuthUserFile /home/yourusername/htdocs/.htpasswd
-   Require valid-user
-   ```
-
-4. Replace `/home/yourusername/htdocs/.htpasswd` with your actual path
-
-5. Save and upload
-
-### Step 4: Test Double Authentication
-
-1. Visit `/admin/` in your browser
-
-2. You should see **two password prompts**:
-   - **First**: HTTP Basic Auth (browser popup) - Use .htpasswd username/password
-   - **Second**: PHP Login Page - Use admin panel username/password
-
-3. Both must be correct to access the admin panel
+1. Edit `admin/change-password.php` on the server
+2. Uncomment and set your password
+3. Visit the page in browser to get the hash
+4. Update the hash in the database
+5. **Delete the file immediately after use**
 
 ---
 
-## Finding Your Server Path (for .htpasswd)
+## SSL/HTTPS Setup
 
-### Method 1: Create a Test PHP File
+Use the Bitnami HTTPS tool (Let's Encrypt):
 
-1. Create `path.php` in your `htdocs` folder:
-   ```php
-   <?php
-   echo "Full server path: " . __DIR__;
-   ?>
-   ```
+```bash
+sudo /opt/bitnami/bncert-tool
+```
 
-2. Visit: `https://your-domain.infinityfree.com/path.php`
+After SSL is configured, uncomment the HTTPS redirect in `.htaccess`:
 
-3. Note the path shown (e.g., `/home/epiz_12345678/htdocs`)
-
-4. Your .htpasswd path would be: `/home/epiz_12345678/htdocs/.htpasswd`
-   or outside: `/home/epiz_12345678/.htpasswd`
-
-5. **DELETE** `path.php` after getting the path
-
-### Method 2: Check InfinityFree Control Panel
-
-- InfinityFree usually displays your home directory path
-- Look for "Home Directory" or "Document Root" information
+```apache
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+```
 
 ---
 
-## Password Best Practices
+## PHP-FPM Configuration
 
-### Strong Password Requirements:
+Since Bitnami LAMP uses PHP-FPM (not mod_php), PHP settings are configured in `.user.ini` in the document root, **not** via `php_value` in `.htaccess`.
 
-✅ **DO:**
-- Use at least 12 characters
-- Mix uppercase and lowercase letters
-- Include numbers (0-9)
-- Use special characters (!@#$%^&*)
-- Use unique passwords for each system
-- Consider using a password manager
+Current settings in `.user.ini`:
+```ini
+upload_max_filesize = 25M
+post_max_size = 25M
+max_execution_time = 300
+memory_limit = 256M
+```
 
-❌ **DON'T:**
-- Use personal information (names, birthdays)
-- Use common words or patterns
-- Reuse passwords from other sites
-- Share passwords via email or chat
-- Use default passwords
-
-### Example Strong Passwords:
-- `Tr0pic@l$unSet2026!`
-- `Qu!ckB0wnF0x#Jumps`
-- `L1m3$toNe#River99`
+To modify: edit `.user.ini` and wait up to 5 minutes for PHP-FPM to pick up changes (or restart PHP-FPM).
 
 ---
 
-## Additional Security Measures
+## File Permissions
 
-### 1. Enable HTTPS (SSL)
+Recommended for Bitnami LAMP:
 
-1. Go to InfinityFree Control Panel
-2. Navigate to **SSL Certificates**
-3. Enable **Free SSL** (Let's Encrypt)
-4. Wait for activation (can take a few minutes)
-5. Your site will be accessible via `https://`
+```bash
+# General files
+sudo chown -R bitnami:daemon /opt/bitnami/apache2/htdocs
+sudo chmod -R 755 /opt/bitnami/apache2/htdocs
 
-The `.htaccess` file automatically redirects HTTP to HTTPS once SSL is enabled.
+# PHP/HTML/JS files
+sudo find /opt/bitnami/apache2/htdocs -name "*.php" -exec chmod 644 {} \;
 
-### 2. Regular Security Maintenance
+# Writable directories (uploads, logs)
+sudo chmod 775 /opt/bitnami/apache2/htdocs/uploads/documents
+sudo chmod 775 /opt/bitnami/apache2/htdocs/logs
+```
 
-**Weekly:**
-- Check activity logs in admin dashboard
-- Verify all document links are working
+---
 
-**Monthly:**
-- Review user accounts (if you add more admins)
-- Check for any suspicious activity in logs
-- Backup your database
+## Protected Files
 
-**Quarterly:**
-- Update admin password
-- Review and update security settings
-- Test all authentication systems
+The `.htaccess` blocks direct HTTP access to:
+- `.htaccess` itself
+- `.user.ini` (PHP settings)
+- `config.php` (database credentials)
+- `db.php` (database connection)
+- `.env` files
+- `.git` directory
 
-### 3. Database Security
-
-**Protect phpMyAdmin Access:**
-- Never share phpMyAdmin credentials
-- Use strong MySQL password
-- Only access from trusted networks
-
-**Regular Backups:**
-1. Log in to phpMyAdmin
-2. Select your database
-3. Click **Export**
-4. Choose **Quick** method
-5. Click **Go** to download
-6. Store backups securely offline
-
-### 4. File Permissions
-
-Recommended permissions for InfinityFree:
-- Directories: `755`
-- PHP files: `644`
-- .htaccess files: `644`
-- .htpasswd file: `644`
-
-### 5. Hide Sensitive Information
-
-**In config.php:**
-- Set `display_errors = 0` in production
-- Use strong `SECURE_KEY`
-- Never commit config.php to public repositories
-
-**Protect sensitive files:**
-The `.htaccess` file already blocks access to:
-- `.htaccess`
-- `config.php`
-- `db.php`
-- `.env`
-- `.git`
+Uploaded PDFs in `uploads/documents/` are blocked by a separate `.htaccess` in that directory. They can only be accessed through the authenticated PHP endpoints.
 
 ---
 
 ## Security Checklist
 
-After installation, complete this checklist:
+After installation:
 
 - [ ] Change default admin password from `admin123`
-- [ ] Update `SECURE_KEY` in `includes/config.php`
-- [ ] Enable HTTPS/SSL in InfinityFree
-- [ ] (Optional) Set up HTTP Basic Auth for /admin/
-- [ ] Delete `change-password.php` after use
-- [ ] Test login with new credentials
+- [ ] Update `SECURE_KEY` in `includes/config.php` to a random string
+- [ ] Set up SSL with `bncert-tool`
+- [ ] Uncomment HTTPS redirect in `.htaccess`
+- [ ] Delete `admin/change-password.php` if used
+- [ ] Verify `uploads/documents/` returns 403 when accessed directly
+- [ ] Create user accounts via admin panel (don't share admin credentials)
 - [ ] Set up regular database backups
 - [ ] Review activity logs weekly
-- [ ] Add your admin email to config
-- [ ] Test password reset procedure
-- [ ] Document your passwords securely (use password manager)
 
 ---
 
-## Troubleshooting
+## Database Backup
 
-### "Access Denied" when accessing /admin/
+```bash
+# SSH into instance
+mysqldump -u root -p compliance_portal > backup_$(date +%Y%m%d).sql
 
-**Cause**: HTTP Basic Auth is enabled but credentials are wrong
-
-**Solution**:
-1. Check your .htpasswd username/password
-2. Try disabling HTTP Auth temporarily (comment out lines in `/admin/.htaccess`)
-3. Use PHP login alone until HTTP Auth is properly configured
-
-### "Session Expired" Too Frequently
-
-**Cause**: Session timeout set too short
-
-**Solution**:
-1. Edit `includes/config.php`
-2. Change `ADMIN_SESSION_TIMEOUT` value:
-   ```php
-   define('ADMIN_SESSION_TIMEOUT', 7200); // 2 hours instead of 1
-   ```
-
-### Forgot Admin Password
-
-**Solution**:
-1. Use `change-password.php` to generate new hash
-2. Update directly in database via phpMyAdmin
-3. No email reset needed - direct database access
+# Download to local machine
+scp -i your-key.pem bitnami@YOUR_IP:~/backup_*.sql ./
+```
 
 ---
 
-## Getting Help
+## Firewall (Lightsail Networking)
 
-If you encounter security issues:
+In the Lightsail console, configure the instance networking to only allow:
+- **Port 22** (SSH) - restrict to your IP if possible
+- **Port 80** (HTTP)
+- **Port 443** (HTTPS)
 
-1. **Check this guide** - Most issues are covered here
-2. **InfinityFree Forum**: https://forum.infinityfree.com/
-3. **Email Support**: business@vi-kang.com
+Block all other inbound ports.
 
 ---
 
 ## Important Reminders
 
-🔴 **NEVER:**
+**NEVER:**
 - Share admin credentials publicly
-- Commit passwords to Git repositories
-- Use HTTP (always use HTTPS)
+- Commit `config.php` with real credentials to a public repository
 - Leave default passwords unchanged
-- Keep password generator files on server
+- Keep `change-password.php` on the server after use
 
-🟢 **ALWAYS:**
+**ALWAYS:**
 - Use strong, unique passwords
 - Enable HTTPS/SSL
-- Keep regular backups
-- Monitor activity logs
-- Delete sensitive utility files after use
+- Keep regular database backups
+- Monitor activity logs via admin panel
+- Set account expiry dates for temporary users
 
 ---
 
-**Last Updated**: February 2026
-**Portal Version**: 1.0
+Last Updated: February 2026

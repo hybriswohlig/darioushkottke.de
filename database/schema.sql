@@ -1,5 +1,5 @@
 -- N&E Innovations Compliance Portal Database Schema
--- Compatible with MySQL 5.7+ and InfinityFree hosting
+-- Compatible with MySQL 5.7+
 
 -- Create categories table
 CREATE TABLE IF NOT EXISTS categories (
@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS documents (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     file_url VARCHAR(500),
+    document_type ENUM('link', 'pdf', 'html') NOT NULL DEFAULT 'link',
+    file_path VARCHAR(500) DEFAULT NULL,
     thumbnail_url VARCHAR(500),
     status VARCHAR(50) DEFAULT 'published',
     version VARCHAR(50),
@@ -33,7 +35,8 @@ CREATE TABLE IF NOT EXISTS documents (
     INDEX idx_category (category_id),
     INDEX idx_status (status),
     INDEX idx_featured (featured),
-    INDEX idx_tag (tag)
+    INDEX idx_tag (tag),
+    INDEX idx_document_type (document_type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Create document metadata table (for flexible key-value metrics)
@@ -89,6 +92,19 @@ CREATE TABLE IF NOT EXISTS users (
     INDEX idx_email (email),
     INDEX idx_status (status),
     INDEX idx_expiry (expiry_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Create document downloads audit table (tracks watermarked PDF downloads)
+CREATE TABLE IF NOT EXISTS document_downloads (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    document_id INT NOT NULL,
+    user_id INT NOT NULL,
+    ip_address VARCHAR(45) DEFAULT NULL,
+    downloaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (document_id) REFERENCES documents(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_document (document_id),
+    INDEX idx_user (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Create user activity log table
