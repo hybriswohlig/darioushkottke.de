@@ -138,7 +138,7 @@ function getAllDocuments($tagFilter = null) {
     $sql = "SELECT d.*, c.name as category_name, c.slug as category_slug
             FROM documents d
             JOIN categories c ON d.category_id = c.id
-            WHERE 1=1";
+            WHERE d.status = 'published'";
     $params = [];
 
     if ($tagFilter !== null && $tagFilter !== '') {
