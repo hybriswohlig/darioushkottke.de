@@ -255,6 +255,7 @@ function formatDate($date, $format = 'M d, Y') {
 function getStatusBadge($status) {
     $badges = [
         'published' => '<span class="status-badge status-published">Published</span>',
+        'draft' => '<span class="status-badge status-draft">Draft (hidden)</span>',
         'under_review' => '<span class="status-badge status-review">Under Review</span>',
         'in_progress' => '<span class="status-badge status-progress">In Progress</span>',
         'planned' => '<span class="status-badge status-planned">Planned</span>',

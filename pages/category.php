@@ -18,14 +18,12 @@ if (!$category) {
     exit;
 }
 
-// Get filter parameters
+// Get filter parameters (status is not exposed to users - only published docs are shown)
 $searchQuery = $_GET['search'] ?? '';
-$statusFilter = $_GET['status'] ?? '';
 
-// Get documents for this category
+// Get documents for this category (only published are shown to normal users)
 $filters = [
-    'search' => $searchQuery,
-    'status' => $statusFilter
+    'search' => $searchQuery
 ];
 $documents = getDocumentsByCategory($category['id'], $filters);
 ?>

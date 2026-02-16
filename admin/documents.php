@@ -400,11 +400,12 @@ $documents = $stmt->fetchAll();
                 <div class="form-group">
                     <label for="status" class="form-label">Status *</label>
                     <select id="status" name="status" class="form-select" required>
-                        <option value="published">Published</option>
-                        <option value="under_review">Under Review</option>
-                        <option value="in_progress">In Progress</option>
-                        <option value="planned">Planned</option>
-                        <option value="pending">Pending</option>
+                        <option value="published">Published (visible to users)</option>
+                        <option value="draft">Draft (hidden from users)</option>
+                        <option value="under_review">Under Review (hidden)</option>
+                        <option value="in_progress">In Progress (hidden)</option>
+                        <option value="planned">Planned (hidden)</option>
+                        <option value="pending">Pending (hidden)</option>
                     </select>
                 </div>
 

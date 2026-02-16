@@ -466,6 +466,11 @@ p {
     color: var(--primary-green-dark);
 }
 
+.status-draft {
+    background: var(--gray-200);
+    color: var(--gray-600);
+}
+
 .status-review {
     background: #fef3c7;
     color: #92400e;
