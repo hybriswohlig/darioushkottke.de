@@ -137,7 +137,7 @@ $reason = $_GET['reason'] ?? 'expired';
             <?php else: ?>
                 <h1 class="expired-title">Access Expired</h1>
                 <p class="expired-description">
-                    Your access to the Environmental Documentation Portal has expired.
+                    Your access to the Compliance Documentation Portal has expired.
                     Please contact the administrator to renew your access.
                 </p>
             <?php endif; ?>

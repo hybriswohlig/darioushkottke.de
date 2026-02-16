@@ -15,7 +15,7 @@ define('DB_CHARSET', 'utf8mb4');
 
 // Site Configuration
 define('SITE_NAME', 'N&E Innovations');
-define('SITE_TAGLINE', 'Environmental Documentation Portal');
+define('SITE_TAGLINE', 'Compliance Documentation Portal');
 define('SITE_URL', 'https://your-domain.infinityfree.com'); // Update with your actual domain
 define('CONTACT_EMAIL', 'business@vi-kang.com');
 define('CONTACT_URL', 'https://vi-kang.com/contact/');

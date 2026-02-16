@@ -14,7 +14,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>N&E Innovations - Environmental Documentation Portal</title>
+    <title>N&E Innovations - Compliance Documentation Portal</title>
     <meta name="description" content="Access comprehensive environmental impact assessments, certifications, and compliance documentation for N&E Innovations products.">
 
     <!-- Stylesheets -->
@@ -43,7 +43,7 @@ try {
                     <img src="/file.svg" alt="N&E Innovations" class="nav-logo" onerror="this.style.display='none'">
                     <div class="nav-title">
                         <h1>N&E Innovations</h1>
-                        <p class="nav-tagline">Environmental Documentation Portal</p>
+                        <p class="nav-tagline">Compliance Documentation Portal</p>
                     </div>
                 </a>
 

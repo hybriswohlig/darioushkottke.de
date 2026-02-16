@@ -261,7 +261,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="login-header">
                 <div class="login-logo">N&E</div>
                 <h1 class="login-title">Welcome</h1>
-                <p class="login-subtitle">Environmental Documentation Portal</p>
+                <p class="login-subtitle">Compliance Documentation Portal</p>
             </div>
 
             <?php if ($showTimeout): ?>

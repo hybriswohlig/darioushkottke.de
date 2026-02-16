@@ -31,7 +31,7 @@ require_once __DIR__ . '/../includes/user-auth.php';
                     <img src="/file.svg" alt="N&E Innovations" class="nav-logo" onerror="this.style.display='none'">
                     <div class="nav-title">
                         <h1>N&E Innovations</h1>
-                        <p class="nav-tagline">Environmental Documentation Portal</p>
+                        <p class="nav-tagline">Compliance Documentation Portal</p>
                     </div>
                 </a>
 
