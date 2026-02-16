@@ -41,10 +41,12 @@ function getDocumentsByCategory($categoryId, $filters = []) {
     $sql = "SELECT d.* FROM documents d WHERE d.category_id = ?";
     $params = [$categoryId];
 
-    // Apply filters
-    if (!empty($filters['status'])) {
+    // Public view: only show published unless caller explicitly requests another status (e.g. admin)
+    if (array_key_exists('status', $filters) && $filters['status'] !== '') {
         $sql .= " AND d.status = ?";
         $params[] = $filters['status'];
+    } else {
+        $sql .= " AND d.status = 'published'";
     }
 
     if (!empty($filters['search'])) {
@@ -103,7 +105,7 @@ function searchDocuments($query, $categoryId = null) {
     $sql = "SELECT d.*, c.name as category_name, c.slug as category_slug
             FROM documents d
             JOIN categories c ON d.category_id = c.id
-            WHERE (d.title LIKE ? OR d.description LIKE ?)";
+            WHERE (d.title LIKE ? OR d.description LIKE ?) AND d.status = 'published'";
 
     $searchTerm = '%' . $query . '%';
     $params = [$searchTerm, $searchTerm];
