@@ -8,6 +8,13 @@ try {
 } catch (Exception $e) {
     $allDocuments = [];
 }
+
+// Get dynamic document counts per category
+try {
+    $categoryCounts = getCategoryDocumentCounts();
+} catch (Exception $e) {
+    $categoryCounts = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -125,7 +132,7 @@ try {
                     <div class="card-footer">
                         <div class="card-meta">
                             <div class="card-meta-label">Documents</div>
-                            <div class="card-meta-value">3</div>
+                            <div class="card-meta-value"><?php echo $categoryCounts['lca-reports'] ?? 0; ?></div>
                         </div>
                         <div class="card-meta">
                             <div class="card-meta-label">Latest</div>
@@ -150,7 +157,7 @@ try {
                     <div class="card-footer">
                         <div class="card-meta">
                             <div class="card-meta-label">Documents</div>
-                            <div class="card-meta-value">2</div>
+                            <div class="card-meta-value"><?php echo $categoryCounts['certifications'] ?? 0; ?></div>
                         </div>
                         <div class="card-meta">
                             <div class="card-meta-label">Status</div>
@@ -159,37 +166,30 @@ try {
                     </div>
                 </a>
 
-                <!-- Impact Studies - Coming Soon -->
-                <div class="card scroll-animate card-disabled" style="transition-delay: 0.3s; position: relative; cursor: not-allowed; opacity: 0.7;">
-                    <!-- Coming Soon Badge -->
-                    <div style="position: absolute; top: -10px; right: -10px; z-index: 10;">
-                        <div style="background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%); color: white; padding: 0.5rem 1.25rem; border-radius: 999px; font-weight: 700; font-size: 0.875rem; box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3); animation: pulse-badge 2s ease-in-out infinite;">
-                            ✨ Coming Soon
-                        </div>
-                    </div>
-
-                    <div class="card-icon" style="opacity: 0.6;">
+                <!-- Impact Studies -->
+                <a href="/pages/category.php?slug=impact-studies" class="card scroll-animate" style="transition-delay: 0.3s">
+                    <div class="card-icon">
                         <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
                             <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
                         </svg>
                     </div>
-                    <h3 class="card-title" style="opacity: 0.8;">Impact Studies</h3>
-                    <p class="card-description" style="opacity: 0.7;">
+                    <h3 class="card-title">Impact Studies</h3>
+                    <p class="card-description">
                         Detailed analyses of environmental benefits and sustainability advantages
                         of innovative materials and processes.
                     </p>
-                    <div class="card-footer" style="opacity: 0.6;">
+                    <div class="card-footer">
+                        <div class="card-meta">
+                            <div class="card-meta-label">Documents</div>
+                            <div class="card-meta-value"><?php echo $categoryCounts['impact-studies'] ?? 0; ?></div>
+                        </div>
                         <div class="card-meta">
                             <div class="card-meta-label">Status</div>
-                            <div class="card-meta-value">In Development</div>
-                        </div>
-                        <div class="card-meta">
-                            <div class="card-meta-label">Launch</div>
-                            <div class="card-meta-value">Q2 2026</div>
+                            <div class="card-meta-value">Active</div>
                         </div>
                     </div>
-                </div>
+                </a>
 
                 <!-- Technical Documentation -->
                 <a href="/pages/category.php?slug=technical-docs" class="card scroll-animate" style="transition-delay: 0.4s">
@@ -209,7 +209,7 @@ try {
                     <div class="card-footer">
                         <div class="card-meta">
                             <div class="card-meta-label">Documents</div>
-                            <div class="card-meta-value">3</div>
+                            <div class="card-meta-value"><?php echo $categoryCounts['technical-docs'] ?? 0; ?></div>
                         </div>
                         <div class="card-meta">
                             <div class="card-meta-label">Type</div>
@@ -234,7 +234,7 @@ try {
                     <div class="card-footer">
                         <div class="card-meta">
                             <div class="card-meta-label">Documents</div>
-                            <div class="card-meta-value">2</div>
+                            <div class="card-meta-value"><?php echo $categoryCounts['compliance'] ?? 0; ?></div>
                         </div>
                         <div class="card-meta">
                             <div class="card-meta-label">Standards</div>
@@ -275,8 +275,17 @@ try {
                 </div>
             <?php else: ?>
                 <div class="grid grid-2" id="all-documents-grid">
-                    <?php foreach ($allDocuments as $doc): ?>
-                        <div class="card scroll-animate" data-status="<?php echo esc($doc['status']); ?>" data-tag="<?php echo esc($doc['tag'] ?? 'untagged'); ?>">
+                    <?php foreach ($allDocuments as $doc):
+                        $isPreview = in_array($doc['status'], ['planned', 'in_progress']);
+                    ?>
+                        <div class="card scroll-animate<?php echo $isPreview ? ' card-preview' : ''; ?>" data-status="<?php echo esc($doc['status']); ?>" data-tag="<?php echo esc($doc['tag'] ?? 'untagged'); ?>" style="position: relative;">
+                            <?php if ($isPreview): ?>
+                                <!-- Coming Soon Badge -->
+                                <div style="position: absolute; top: -10px; right: -10px; z-index: 10;">
+                                    <div class="coming-soon-badge">Coming Soon</div>
+                                </div>
+                            <?php endif; ?>
+
                             <!-- Tag Badge & Category -->
                             <div style="margin-bottom: var(--space-md); display: flex; align-items: center; gap: var(--space-sm);">
                                 <?php echo getTagBadge($doc['tag']); ?>
@@ -301,7 +310,9 @@ try {
 
                             <div style="margin-top: var(--space-lg); display: flex; gap: var(--space-md); align-items: center; justify-content: space-between;">
                                 <?php echo getStatusBadge($doc['status']); ?>
-                                <?php if (($doc['document_type'] ?? '') === 'pdf' && !empty($doc['file_path'])): ?>
+                                <?php if ($isPreview): ?>
+                                    <span style="font-size: 0.875rem; color: var(--gray-400); font-weight: 500;">Available soon</span>
+                                <?php elseif (($doc['document_type'] ?? '') === 'pdf' && !empty($doc['file_path'])): ?>
                                     <a href="/view-document.php?id=<?php echo $doc['id']; ?>"
                                        class="btn btn-ghost" style="padding: 0.5rem 1rem;"
                                        onclick="trackDocumentView(<?php echo $doc['id']; ?>)">

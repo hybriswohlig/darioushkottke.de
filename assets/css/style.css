@@ -839,6 +839,28 @@ p {
     box-shadow: var(--shadow-sm);
 }
 
+/* Coming Soon badge for preview documents */
+.coming-soon-badge {
+    background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+    color: white;
+    padding: 0.375rem 1rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.8125rem;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    white-space: nowrap;
+}
+
+/* Preview card styles (planned / in_progress documents) */
+.card-preview {
+    opacity: 0.75;
+    border-style: dashed;
+}
+
+.card-preview:hover {
+    opacity: 0.9;
+}
+
 /* ============================================
    Enterprise Legal Footer
    ============================================ */

@@ -132,9 +132,16 @@ $documents = getDocumentsByCategory($category['id'], $filters);
                 </div>
             <?php else: ?>
                 <div class="grid grid-2">
-                    <?php foreach ($documents as $doc): ?>
-                        <div class="card scroll-animate" data-status="<?php echo esc($doc['status']); ?>" data-tag="<?php echo esc($doc['tag'] ?? 'untagged'); ?>">
-                            <?php if ($doc['featured']): ?>
+                    <?php foreach ($documents as $doc):
+                        $isPreview = in_array($doc['status'], ['planned', 'in_progress']);
+                    ?>
+                        <div class="card scroll-animate<?php echo $isPreview ? ' card-preview' : ''; ?>" data-status="<?php echo esc($doc['status']); ?>" data-tag="<?php echo esc($doc['tag'] ?? 'untagged'); ?>" style="position: relative;">
+                            <?php if ($isPreview): ?>
+                                <!-- Coming Soon Badge -->
+                                <div style="position: absolute; top: -10px; right: -10px; z-index: 10;">
+                                    <div class="coming-soon-badge">Coming Soon</div>
+                                </div>
+                            <?php elseif ($doc['featured']): ?>
                                 <div style="position: absolute; top: 1rem; right: 1rem; background: var(--accent-green); color: white; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 600;">
                                     Featured
                                 </div>
@@ -163,7 +170,9 @@ $documents = getDocumentsByCategory($category['id'], $filters);
                             <div style="margin-top: var(--space-lg); display: flex; gap: var(--space-md); align-items: center; justify-content: space-between;">
                                 <?php echo getStatusBadge($doc['status']); ?>
 
-                                <?php if (($doc['document_type'] ?? '') === 'pdf' && !empty($doc['file_path'])): ?>
+                                <?php if ($isPreview): ?>
+                                    <span style="font-size: 0.875rem; color: var(--gray-400); font-weight: 500;">Available soon</span>
+                                <?php elseif (($doc['document_type'] ?? '') === 'pdf' && !empty($doc['file_path'])): ?>
                                     <a
                                         href="/view-document.php?id=<?php echo $doc['id']; ?>"
                                         class="btn btn-ghost"

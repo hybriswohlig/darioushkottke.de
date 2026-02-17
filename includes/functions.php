@@ -41,12 +41,12 @@ function getDocumentsByCategory($categoryId, $filters = []) {
     $sql = "SELECT d.* FROM documents d WHERE d.category_id = ?";
     $params = [$categoryId];
 
-    // Public view: only show published unless caller explicitly requests another status (e.g. admin)
+    // Public view: show published + planned + in_progress unless caller explicitly requests a specific status
     if (array_key_exists('status', $filters) && $filters['status'] !== '') {
         $sql .= " AND d.status = ?";
         $params[] = $filters['status'];
     } else {
-        $sql .= " AND d.status = 'published'";
+        $sql .= " AND d.status IN ('published', 'planned', 'in_progress')";
     }
 
     if (!empty($filters['search'])) {
@@ -131,6 +131,7 @@ function searchDocuments($query, $categoryId = null) {
 
 /**
  * Get all documents across all categories, optionally filtered by tag
+ * Includes planned and in_progress documents for preview
  */
 function getAllDocuments($tagFilter = null) {
     $db = getDB();
@@ -138,7 +139,7 @@ function getAllDocuments($tagFilter = null) {
     $sql = "SELECT d.*, c.name as category_name, c.slug as category_slug
             FROM documents d
             JOIN categories c ON d.category_id = c.id
-            WHERE d.status = 'published'";
+            WHERE d.status IN ('published', 'planned', 'in_progress')";
     $params = [];
 
     if ($tagFilter !== null && $tagFilter !== '') {
@@ -157,6 +158,23 @@ function getAllDocuments($tagFilter = null) {
     }
 
     return $documents;
+}
+
+/**
+ * Get document counts per category (published + planned + in_progress)
+ */
+function getCategoryDocumentCounts() {
+    $db = getDB();
+    $stmt = $db->query("SELECT c.slug, COUNT(d.id) as doc_count
+                         FROM categories c
+                         LEFT JOIN documents d ON d.category_id = c.id AND d.status IN ('published', 'planned', 'in_progress')
+                         GROUP BY c.id, c.slug");
+    $rows = $stmt->fetchAll();
+    $counts = [];
+    foreach ($rows as $row) {
+        $counts[$row['slug']] = (int) $row['doc_count'];
+    }
+    return $counts;
 }
 
 /**
