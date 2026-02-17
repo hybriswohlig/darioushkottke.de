@@ -379,7 +379,7 @@ $documents = $stmt->fetchAll();
                 <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
 
-            <form id="documentForm">
+            <form id="documentForm" novalidate>
                 <input type="hidden" id="documentId" name="id">
 
                 <div class="form-group">
@@ -488,6 +488,10 @@ $documents = $stmt->fetchAll();
             document.getElementById('field-link').style.display = (type === 'link') ? '' : 'none';
             document.getElementById('field-pdf').style.display = (type === 'pdf') ? '' : 'none';
             document.getElementById('field-html').style.display = (type === 'html') ? '' : 'none';
+
+            // Clear hidden fields to prevent stale values
+            if (type !== 'link') document.getElementById('file_url').value = '';
+            if (type !== 'html') document.getElementById('html_file_url').value = '';
         }
 
         function openAddModal() {

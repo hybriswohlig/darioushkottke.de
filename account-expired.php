@@ -9,16 +9,12 @@ $reason = $_GET['reason'] ?? 'expired';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Access Unavailable - N&E Innovations</title>
+    <meta name="robots" content="noindex, nofollow">
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="icon" type="image/svg+xml" href="/file.svg">
     <style>
         body {
             background: linear-gradient(135deg, var(--green-50) 0%, #ffffff 50%, var(--green-50) 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: var(--space-xl);
         }
 
         .login-container {
@@ -113,6 +109,7 @@ $reason = $_GET['reason'] ?? 'expired';
     </style>
 </head>
 <body>
+    <div class="auth-page-content">
     <div class="bg-decoration bg-decoration-1"></div>
     <div class="bg-decoration bg-decoration-2"></div>
 
@@ -159,5 +156,8 @@ $reason = $_GET['reason'] ?? 'expired';
             <p>N&E Innovations Pte Ltd &bull; Environmental Impact Documentation</p>
         </div>
     </div>
+    </div>
+
+    <?php include __DIR__ . '/includes/legal-footer.php'; ?>
 </body>
 </html>

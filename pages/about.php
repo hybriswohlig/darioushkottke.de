@@ -9,6 +9,7 @@ require_once __DIR__ . '/../includes/user-auth.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - N&E Innovations</title>
     <meta name="description" content="Learn more about N&E Innovations' environmental documentation portal">
+    <meta name="robots" content="noindex, nofollow">
 
     <link rel="stylesheet" href="/assets/css/style.css">
     <script defer src="https://plausible.io/js/pa-GG3eaoYtZaGluUY9M-pw0.js"></script>
@@ -123,6 +124,8 @@ require_once __DIR__ . '/../includes/user-auth.php';
             </div>
         </div>
     </footer>
+
+    <?php include __DIR__ . '/../includes/legal-footer.php'; ?>
 
     <script src="/assets/js/main.js"></script>
 </body>
