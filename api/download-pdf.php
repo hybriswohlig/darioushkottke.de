@@ -6,6 +6,9 @@
  * This enables tracking of document sharing.
  */
 
+// Start output buffering early to catch any stray output from includes
+ob_start();
+
 require_once __DIR__ . '/../includes/user-auth.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -90,6 +93,9 @@ try {
         $pdf->Cell($size['width'] - 20, 5, $watermarkText, 0, 0, 'C');
     }
 
+    // Generate PDF as string first (avoids header conflicts from prior output)
+    $pdfContent = $pdf->Output('', 'S');
+
     // Log the download in document_downloads table
     try {
         $db = getDB();
@@ -106,12 +112,30 @@ try {
     // Log in user activity
     logUserActivity('document_download', $_SERVER['REQUEST_URI'], 'document', $id, 'Watermarked PDF download');
 
-    // Output the watermarked PDF as a download
+    // Clean any output buffers that may have been started by includes
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
+
+    // Send clean headers and PDF content
     $filename = preg_replace('/[^a-zA-Z0-9._-]/', '_', $doc['title']) . '.pdf';
-    $pdf->Output($filename, 'D');
+    header('Content-Type: application/pdf');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    header('Content-Length: ' . strlen($pdfContent));
+    header('Cache-Control: no-store, no-cache, must-revalidate');
+    header('Pragma: no-cache');
+    header('X-Content-Type-Options: nosniff');
+    echo $pdfContent;
+    exit;
 
 } catch (Exception $e) {
     error_log("PDF watermarking error: " . $e->getMessage());
+    // Clean output buffers before sending error
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
     http_response_code(500);
-    exit('Failed to generate watermarked PDF. Please try again.');
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'Failed to generate watermarked PDF. Please try again.']);
+    exit;
 }

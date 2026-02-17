@@ -96,7 +96,7 @@ logUserActivity('document_view', $_SERVER['REQUEST_URI'], 'document', $id, 'PDF 
             </div>
 
             <!-- Document Header -->
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-xl); flex-wrap: wrap; gap: var(--space-md);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-lg); flex-wrap: wrap; gap: var(--space-md);">
                 <div style="flex: 1; min-width: 0;">
                     <h2 style="margin: 0 0 var(--space-sm) 0; font-size: 1.75rem;"><?php echo esc($doc['title']); ?></h2>
                     <p style="color: var(--gray-600); margin: 0;"><?php echo esc($doc['description']); ?></p>
@@ -111,24 +111,29 @@ logUserActivity('document_view', $_SERVER['REQUEST_URI'], 'document', $id, 'PDF 
                         </div>
                     <?php endif; ?>
                 </div>
-                <a href="/api/download-pdf.php?id=<?php echo $doc['id']; ?>"
-                   class="btn btn-primary"
-                   id="download-btn"
-                   onclick="handleDownload(this)"
-                   style="display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    Download PDF
-                </a>
             </div>
 
-            <!-- PDF Viewer -->
-            <div style="width: 100%; height: 80vh; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); overflow: hidden; background: var(--gray-100);">
+            <!-- PDF Viewer with integrated download button -->
+            <div style="position: relative; width: 100%; height: 85vh; border-radius: var(--radius-lg); overflow: hidden; background: var(--gray-800);">
+                <!-- Download button overlay -->
+                <div style="position: absolute; top: 0; left: 0; right: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, transparent 100%);">
+                    <span style="color: rgba(255,255,255,0.9); font-size: 0.875rem; font-weight: 500;"><?php echo esc($doc['title']); ?></span>
+                    <button
+                        type="button"
+                        id="download-btn"
+                        onclick="downloadPDF(<?php echo $doc['id']; ?>)"
+                        style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--primary-green); color: white; border: none; border-radius: var(--radius-md); cursor: pointer; font-size: 0.875rem; font-weight: 600; transition: opacity 0.2s;">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        Download
+                    </button>
+                </div>
                 <iframe
-                    src="/api/serve-pdf.php?id=<?php echo $doc['id']; ?>"
+                    src="/api/serve-pdf.php?id=<?php echo $doc['id']; ?>#toolbar=0&navpanes=0"
                     style="width: 100%; height: 100%; border: none;"
                     title="<?php echo esc($doc['title']); ?>"
+                    oncontextmenu="return false;"
                 ></iframe>
             </div>
 
@@ -147,18 +152,76 @@ logUserActivity('document_view', $_SERVER['REQUEST_URI'], 'document', $id, 'PDF 
     <?php include __DIR__ . '/includes/legal-footer.php'; ?>
 
     <script>
-        function handleDownload(btn) {
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> Preparing download...';
-            btn.style.pointerEvents = 'none';
+        async function downloadPDF(docId) {
+            const btn = document.getElementById('download-btn');
+            const originalHTML = btn.innerHTML;
+
+            // Show loading state
+            btn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="animation: spin 1s linear infinite;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Preparing...';
+            btn.disabled = true;
             btn.style.opacity = '0.7';
-            setTimeout(function() {
-                btn.innerHTML = originalText;
-                btn.style.pointerEvents = '';
-                btn.style.opacity = '';
-            }, 5000);
+
+            try {
+                const response = await fetch('/api/download-pdf.php?id=' + docId, {
+                    credentials: 'same-origin'
+                });
+
+                if (!response.ok) {
+                    let errorMsg = 'Download failed';
+                    try {
+                        const errData = await response.json();
+                        errorMsg = errData.error || errorMsg;
+                    } catch(e) {
+                        errorMsg = 'Download failed (status ' + response.status + ')';
+                    }
+                    throw new Error(errorMsg);
+                }
+
+                const blob = await response.blob();
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = 'document.pdf';
+                if (contentDisposition) {
+                    const match = contentDisposition.match(/filename="?([^";\n]+)"?/);
+                    if (match) filename = match[1];
+                }
+
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                // Show success briefly
+                btn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Downloaded';
+                btn.style.opacity = '1';
+                setTimeout(function() {
+                    btn.innerHTML = originalHTML;
+                    btn.disabled = false;
+                }, 2000);
+
+            } catch (error) {
+                console.error('Download error:', error);
+                btn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Error';
+                btn.style.background = '#dc2626';
+                btn.style.opacity = '1';
+                setTimeout(function() {
+                    btn.innerHTML = originalHTML;
+                    btn.style.background = '';
+                    btn.disabled = false;
+                }, 3000);
+                alert('Download failed: ' + error.message);
+            }
         }
     </script>
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
 
     <script src="/assets/js/main.js"></script>
 </body>
