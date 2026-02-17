@@ -526,7 +526,10 @@ $documents = $stmt->fetchAll();
             if (docType === 'link') {
                 document.getElementById('file_url').value = doc.file_url || '';
             } else if (docType === 'html') {
-                document.getElementById('html_file_url').value = doc.file_url || '';
+                // Strip leading '/' for display in form
+                let htmlVal = doc.file_url || '';
+                if (htmlVal.startsWith('/')) htmlVal = htmlVal.substring(1);
+                document.getElementById('html_file_url').value = htmlVal;
             } else if (docType === 'pdf' && doc.file_path) {
                 document.getElementById('pdf-upload-status').textContent =
                     'Current file: ' + doc.file_path.split('/').pop();
@@ -634,7 +637,11 @@ $documents = $stmt->fetchAll();
                 data.file_url = null;
                 data.file_path = document.getElementById('file_path').value;
             } else if (docType === 'html') {
-                data.file_url = formData.get('html_file_url') || null;
+                let htmlFile = formData.get('html_file_url') || null;
+                if (htmlFile && !htmlFile.startsWith('/')) {
+                    htmlFile = '/' + htmlFile;
+                }
+                data.file_url = htmlFile;
                 data.file_path = null;
             }
 

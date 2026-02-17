@@ -181,7 +181,7 @@ function handleUpdate($input) {
                           'featured', 'tag'];
 
         foreach ($allowedFields as $field) {
-            if (isset($input[$field])) {
+            if (array_key_exists($field, $input)) {
                 $updateFields[] = "$field = ?";
                 $params[] = $input[$field];
             }
