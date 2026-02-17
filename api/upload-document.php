@@ -5,6 +5,7 @@
  * Accepts multipart/form-data with a 'pdf_file' field
  */
 
+require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/functions.php';
 
 header('Content-Type: application/json');

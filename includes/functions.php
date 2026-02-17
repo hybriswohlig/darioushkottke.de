@@ -169,7 +169,7 @@ function getTagBadge($tag) {
         'biodegradable' => '<span class="tag-badge tag-biodegradable">Biodegradable</span>',
     ];
 
-    return $badges[$tag] ?? '<span class="tag-badge tag-untagged">Untagged</span>';
+    return $badges[$tag ?? ''] ?? '<span class="tag-badge tag-untagged">Untagged</span>';
 }
 
 /**
