@@ -385,7 +385,7 @@ try {
                 <img src="/file.svg" alt="N&E Innovations" class="footer-logo" onerror="this.style.display='none'">
                 <h3 class="footer-title">N&E Innovations Pte Ltd</h3>
                 <p class="footer-description">
-                    Environmental Impact Assessments of N&E Innovations Products
+                    Restricted internal compliance portal for authorized partners only. Unauthorized access prohibited.
                 </p>
                 <div class="footer-contact">
                     For more information, contact us at

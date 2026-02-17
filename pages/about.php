@@ -45,14 +45,30 @@ require_once __DIR__ . '/../includes/user-auth.php';
         </div>
     </header>
 
-    <!-- Hero -->
+    <!-- Hero (same as landing page) -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1 class="hero-title">About Our Portal</h1>
+                <h1 class="hero-title">Environmental Impact Documentation</h1>
                 <p class="hero-description">
-                    Transparent environmental documentation for sustainable innovation
+                    Comprehensive environmental assessments, certifications, and compliance documentation
+                    for sustainable innovation in packaging and materials.
                 </p>
+                <div class="hero-cta">
+                    <a href="/#categories" class="btn btn-primary">
+                        Explore Documentation
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </a>
+                    <a href="/pages/search.php" class="btn btn-secondary">
+                        Search Documents
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -115,7 +131,7 @@ require_once __DIR__ . '/../includes/user-auth.php';
                 <img src="/file.svg" alt="N&E Innovations" class="footer-logo" onerror="this.style.display='none'">
                 <h3 class="footer-title">N&E Innovations Pte Ltd</h3>
                 <p class="footer-description">
-                    Environmental Impact Assessments of N&E Innovations Products
+                    Restricted internal compliance portal for authorized partners only. Unauthorized access prohibited.
                 </p>
                 <div class="footer-contact">
                     For more information, contact us at
