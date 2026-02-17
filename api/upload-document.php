@@ -8,6 +8,14 @@
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/functions.php';
 
+// Fallback if config didn't define these (e.g. server has different config)
+if (!defined('UPLOAD_DIR')) {
+    define('UPLOAD_DIR', dirname(__DIR__) . '/uploads/documents/');
+}
+if (!defined('MAX_FILE_SIZE')) {
+    define('MAX_FILE_SIZE', 20971520); // 20MB
+}
+
 header('Content-Type: application/json');
 
 // Require admin authentication
