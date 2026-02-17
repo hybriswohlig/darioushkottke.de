@@ -74,6 +74,7 @@ try {
     $pdf = new Fpdi();
     $pdf->setPrintHeader(false);
     $pdf->setPrintFooter(false);
+    $pdf->SetAutoPageBreak(false, 0);
 
     $pageCount = $pdf->setSourceFile($fullPath);
 
@@ -85,7 +86,7 @@ try {
         $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
         $pdf->useTemplate($templateId, 0, 0, $size['width'], $size['height']);
 
-        // Draw watermark footer
+        // Draw watermark footer on the existing page (no new page created)
         $pdf->SetFont('helvetica', '', 7);
         $pdf->SetTextColor(128, 128, 128);
         $footerY = $size['height'] - 8; // 8mm from bottom
