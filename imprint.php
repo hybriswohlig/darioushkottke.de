@@ -38,7 +38,7 @@ require_once __DIR__ . '/includes/config.php';
         </div>
 
         <h1>Imprint / Legal Notice</h1>
-        <p class="legal-subtitle">Information pursuant to &sect;5 German Digital Services Act (DDG)</p>
+        <p class="legal-subtitle">Provider identification pursuant to &sect; 5 Digitale-Dienste-Gesetz (DDG)</p>
 
         <h2>Company</h2>
         <p>
@@ -50,11 +50,11 @@ require_once __DIR__ . '/includes/config.php';
 
         <h2>Registration</h2>
         <p>
-            Registered with ACRA (Singapore)<br>
+            Registered with the Accounting and Corporate Regulatory Authority (ACRA)<br>
             Registration No. / Unique Entity Number (UEN): 202009883G
         </p>
 
-        <h2>Managing Director</h2>
+        <h2>Managing Director / Authorized Representative</h2>
         <p>Didi Gan</p>
 
         <h2>Contact</h2>
@@ -62,12 +62,12 @@ require_once __DIR__ . '/includes/config.php';
 
         <h2>Scope</h2>
         <p>
-            This portal is provided for authorized business partners to access compliance and product-related documentation.
+            This restricted internal compliance documentation portal is provided exclusively for authorized business partners and provides access to all relevant compliance and product-related documentation, including Environmental Impact Assessments of N&amp;E Innovations products.
         </p>
 
         <h2>Liability Notice</h2>
         <p>
-            Information is provided "as is" for business purposes. N&amp;E Innovations Pte. Ltd. does not assume liability for completeness, accuracy, or applicability in every jurisdiction, unless mandatory under applicable law.
+            Information is provided &quot;as is&quot; for business evaluation purposes. N&amp;E Innovations Pte. Ltd. does not assume liability for the completeness, accuracy, or applicability of the content in every jurisdiction, unless mandatory under applicable law.
         </p>
     </div>
 
