@@ -222,18 +222,90 @@ $documents = $stmt->fetchAll();
             margin-right: var(--space-xs);
         }
 
-        .metadata-group {
-            border: 1px solid var(--gray-200);
-            padding: var(--space-md);
-            border-radius: var(--radius-md);
-            margin-bottom: var(--space-md);
+        .metadata-section {
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            background: var(--gray-50);
         }
-
-        .metadata-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr auto;
+        .metadata-section h3 {
+            margin: 0 0 var(--space-md) 0;
+            font-size: 1rem;
+            color: var(--gray-700);
+        }
+        .multi-select-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+        }
+        .multi-select-container label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: white;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .multi-select-container label:has(input:checked) {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+        }
+        .multi-select-container input[type="checkbox"] {
+            display: none;
+        }
+        .freetext-multi-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+            padding: var(--space-sm);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            background: white;
+            min-height: 42px;
+            cursor: text;
+        }
+        .freetext-multi-wrapper:focus-within {
+            border-color: var(--primary-green);
+        }
+        .freetext-tag {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--gray-100);
+            border-radius: var(--radius-md);
+            padding: 2px 8px;
+            font-size: 0.875rem;
+        }
+        .freetext-tag button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray-500);
+            font-size: 1rem;
+            padding: 0;
+            line-height: 1;
+        }
+        .freetext-multi-wrapper input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 120px;
+            font-size: 0.875rem;
+            padding: 4px;
+        }
+        .range-inputs {
+            display: flex;
+            align-items: center;
             gap: var(--space-sm);
-            margin-bottom: var(--space-sm);
+        }
+        .range-inputs input {
+            width: 100px;
         }
 
         .tag-badge {
@@ -384,7 +456,7 @@ $documents = $stmt->fetchAll();
 
                 <div class="form-group">
                     <label for="category_id" class="form-label">Category *</label>
-                    <select id="category_id" name="category_id" class="form-select" required>
+                    <select id="category_id" name="category_id" class="form-select" required onchange="loadMetadataFields()">
                         <option value="">Select a category</option>
                         <?php foreach ($categories as $cat): ?>
                             <option value="<?php echo $cat['id']; ?>"><?php echo esc($cat['name']); ?></option>
@@ -471,6 +543,12 @@ $documents = $stmt->fetchAll();
                     </label>
                 </div>
 
+                <!-- Dynamic category-specific metadata fields -->
+                <div id="metadata-section" class="metadata-section" style="display:none;">
+                    <h3>Category Metadata</h3>
+                    <div id="metadata-fields"></div>
+                </div>
+
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-full">
                         Save Document
@@ -482,20 +560,316 @@ $documents = $stmt->fetchAll();
 
     <script>
         let editMode = false;
+        let currentSchema = [];
+        let pendingMetaValues = null;
 
         function toggleDocumentTypeFields() {
             const type = document.getElementById('document_type').value;
             document.getElementById('field-link').style.display = (type === 'link') ? '' : 'none';
             document.getElementById('field-pdf').style.display = (type === 'pdf') ? '' : 'none';
             document.getElementById('field-html').style.display = (type === 'html') ? '' : 'none';
-
-            // Clear hidden fields to prevent stale values
             if (type !== 'link') document.getElementById('file_url').value = '';
             if (type !== 'html') document.getElementById('html_file_url').value = '';
         }
 
+        // ──────────────────────────────────────────────
+        // Dynamic metadata fields
+        // ──────────────────────────────────────────────
+
+        async function loadMetadataFields() {
+            const catId = document.getElementById('category_id').value;
+            const section = document.getElementById('metadata-section');
+            const container = document.getElementById('metadata-fields');
+            container.innerHTML = '';
+            currentSchema = [];
+
+            if (!catId) {
+                section.style.display = 'none';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/category-schema.php?category_id=' + catId);
+                const data = await res.json();
+                if (!data.success || !data.fields.length) {
+                    section.style.display = 'none';
+                    return;
+                }
+                currentSchema = data.fields;
+                section.style.display = '';
+
+                data.fields.forEach(f => {
+                    const saved = pendingMetaValues ? pendingMetaValues[f.field_key] : null;
+                    container.appendChild(buildField(f, saved));
+                });
+                pendingMetaValues = null;
+            } catch (e) {
+                console.error('Schema load error:', e);
+                section.style.display = 'none';
+            }
+        }
+
+        function buildField(field, savedValue) {
+            const wrap = document.createElement('div');
+            wrap.className = 'form-group';
+            wrap.dataset.fieldKey = field.field_key;
+
+            const label = document.createElement('label');
+            label.className = 'form-label';
+            label.textContent = field.field_label + (field.is_required ? ' *' : '');
+            wrap.appendChild(label);
+
+            switch (field.field_type) {
+                case 'text':
+                    wrap.appendChild(makeTextInput(field, savedValue));
+                    break;
+                case 'dropdown_single':
+                    wrap.appendChild(makeDropdownSingle(field, savedValue));
+                    break;
+                case 'dropdown_multi':
+                    wrap.appendChild(makeDropdownMulti(field, savedValue));
+                    break;
+                case 'freetext_multi':
+                    wrap.appendChild(makeFreetextMulti(field, savedValue));
+                    break;
+                case 'boolean':
+                    wrap.appendChild(makeBoolean(field, savedValue));
+                    break;
+                case 'number_unit':
+                    wrap.appendChild(makeNumberUnit(field, savedValue));
+                    break;
+                case 'range':
+                    wrap.appendChild(makeRange(field, savedValue));
+                    break;
+                case 'date_from_doc':
+                    const hint = document.createElement('small');
+                    hint.style.color = 'var(--gray-500)';
+                    hint.textContent = 'Automatically uses the document\'s "Date Published" field.';
+                    wrap.appendChild(hint);
+                    break;
+            }
+            return wrap;
+        }
+
+        function makeTextInput(field, saved) {
+            const inp = document.createElement('input');
+            inp.type = 'text';
+            inp.className = 'form-input';
+            inp.name = 'meta_' + field.field_key;
+            inp.value = saved || '';
+            return inp;
+        }
+
+        function makeDropdownSingle(field, saved) {
+            const sel = document.createElement('select');
+            sel.className = 'form-select';
+            sel.name = 'meta_' + field.field_key;
+            const blank = document.createElement('option');
+            blank.value = '';
+            blank.textContent = '— Select —';
+            sel.appendChild(blank);
+            (field.field_options || []).forEach(opt => {
+                const o = document.createElement('option');
+                o.value = opt;
+                o.textContent = opt;
+                if (saved === opt) o.selected = true;
+                sel.appendChild(o);
+            });
+            return sel;
+        }
+
+        function makeDropdownMulti(field, saved) {
+            const parsed = tryParseArray(saved);
+            const box = document.createElement('div');
+            box.className = 'multi-select-container';
+            (field.field_options || []).forEach(opt => {
+                const lbl = document.createElement('label');
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.name = 'meta_' + field.field_key + '[]';
+                cb.value = opt;
+                if (parsed.includes(opt)) cb.checked = true;
+                lbl.appendChild(cb);
+                lbl.appendChild(document.createTextNode(opt));
+                box.appendChild(lbl);
+            });
+            return box;
+        }
+
+        function makeFreetextMulti(field, saved) {
+            const parsed = tryParseArray(saved);
+            const wrapper = document.createElement('div');
+            wrapper.className = 'freetext-multi-wrapper';
+            wrapper.dataset.fieldKey = field.field_key;
+
+            parsed.forEach(v => addFreetextTag(wrapper, v));
+
+            const inp = document.createElement('input');
+            inp.type = 'text';
+            inp.placeholder = 'Type and press Enter…';
+            inp.addEventListener('keydown', function(e) {
+                if ((e.key === 'Enter' || e.key === ',') && this.value.trim()) {
+                    e.preventDefault();
+                    addFreetextTag(wrapper, this.value.trim());
+                    this.value = '';
+                }
+            });
+            wrapper.appendChild(inp);
+            wrapper.addEventListener('click', () => inp.focus());
+            return wrapper;
+        }
+
+        function addFreetextTag(wrapper, value) {
+            const tag = document.createElement('span');
+            tag.className = 'freetext-tag';
+            tag.dataset.value = value;
+            tag.innerHTML = escHtml(value) + ' <button type="button">&times;</button>';
+            tag.querySelector('button').onclick = () => tag.remove();
+            const inp = wrapper.querySelector('input');
+            if (inp) wrapper.insertBefore(tag, inp);
+            else wrapper.appendChild(tag);
+        }
+
+        function makeBoolean(field, saved) {
+            const lbl = document.createElement('label');
+            lbl.style.display = 'flex';
+            lbl.style.alignItems = 'center';
+            lbl.style.gap = '8px';
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.name = 'meta_' + field.field_key;
+            cb.className = 'form-checkbox';
+            cb.value = '1';
+            if (saved === '1') cb.checked = true;
+            lbl.appendChild(cb);
+            lbl.appendChild(document.createTextNode('Yes'));
+            return lbl;
+        }
+
+        function makeNumberUnit(field, saved) {
+            const unit = (field.field_options && field.field_options.unit) || '';
+            const box = document.createElement('div');
+            box.style.display = 'flex';
+            box.style.alignItems = 'center';
+            box.style.gap = '8px';
+            const inp = document.createElement('input');
+            inp.type = 'number';
+            inp.className = 'form-input';
+            inp.name = 'meta_' + field.field_key;
+            inp.value = saved || '';
+            inp.step = 'any';
+            inp.style.flex = '1';
+            box.appendChild(inp);
+            const span = document.createElement('span');
+            span.textContent = unit;
+            span.style.fontWeight = '600';
+            box.appendChild(span);
+            return box;
+        }
+
+        function makeRange(field, saved) {
+            const unit = (field.field_options && field.field_options.unit) || '';
+            const parts = saved ? saved.split('|') : ['', ''];
+            const box = document.createElement('div');
+            box.className = 'range-inputs';
+            const inpMin = document.createElement('input');
+            inpMin.type = 'number';
+            inpMin.className = 'form-input';
+            inpMin.name = 'meta_' + field.field_key + '_min';
+            inpMin.placeholder = 'Min';
+            inpMin.value = parts[0] || '';
+            inpMin.step = 'any';
+            const sep = document.createElement('span');
+            sep.textContent = '–';
+            const inpMax = document.createElement('input');
+            inpMax.type = 'number';
+            inpMax.className = 'form-input';
+            inpMax.name = 'meta_' + field.field_key + '_max';
+            inpMax.placeholder = 'Max';
+            inpMax.value = parts[1] || '';
+            inpMax.step = 'any';
+            const unitSpan = document.createElement('span');
+            unitSpan.textContent = unit;
+            unitSpan.style.fontWeight = '600';
+            box.append(inpMin, sep, inpMax, unitSpan);
+            return box;
+        }
+
+        function tryParseArray(val) {
+            if (!val) return [];
+            try { const a = JSON.parse(val); return Array.isArray(a) ? a : []; }
+            catch { return []; }
+        }
+
+        function escHtml(str) {
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+
+        // ──────────────────────────────────────────────
+        // Collect metadata values from the form
+        // ──────────────────────────────────────────────
+
+        function collectMetadata() {
+            const meta = [];
+            currentSchema.forEach((field, idx) => {
+                let value = null;
+
+                switch (field.field_type) {
+                    case 'date_from_doc':
+                        value = '__date_from_doc__';
+                        break;
+                    case 'text':
+                    case 'dropdown_single':
+                    case 'number_unit': {
+                        const el = document.querySelector(`[name="meta_${field.field_key}"]`);
+                        value = el ? el.value.trim() : '';
+                        break;
+                    }
+                    case 'boolean': {
+                        const el = document.querySelector(`[name="meta_${field.field_key}"]`);
+                        value = el && el.checked ? '1' : '0';
+                        break;
+                    }
+                    case 'dropdown_multi': {
+                        const checked = document.querySelectorAll(`[name="meta_${field.field_key}[]"]:checked`);
+                        const arr = Array.from(checked).map(c => c.value);
+                        value = arr.length ? JSON.stringify(arr) : '';
+                        break;
+                    }
+                    case 'freetext_multi': {
+                        const wrapper = document.querySelector(`.freetext-multi-wrapper[data-field-key="${field.field_key}"]`);
+                        if (wrapper) {
+                            const tags = Array.from(wrapper.querySelectorAll('.freetext-tag')).map(t => t.dataset.value);
+                            value = tags.length ? JSON.stringify(tags) : '';
+                        }
+                        break;
+                    }
+                    case 'range': {
+                        const minEl = document.querySelector(`[name="meta_${field.field_key}_min"]`);
+                        const maxEl = document.querySelector(`[name="meta_${field.field_key}_max"]`);
+                        const minV = minEl ? minEl.value.trim() : '';
+                        const maxV = maxEl ? maxEl.value.trim() : '';
+                        value = (minV || maxV) ? minV + '|' + maxV : '';
+                        break;
+                    }
+                }
+
+                if (value && value !== '' && value !== '0' && value !== '[]') {
+                    meta.push({ key: field.field_key, value: value });
+                }
+            });
+            return meta;
+        }
+
+        // ──────────────────────────────────────────────
+        // Modal open / edit / close
+        // ──────────────────────────────────────────────
+
         function openAddModal() {
             editMode = false;
+            pendingMetaValues = null;
             document.getElementById('modalTitle').textContent = 'Add New Document';
             document.getElementById('documentForm').reset();
             document.getElementById('documentId').value = '';
@@ -503,10 +877,11 @@ $documents = $stmt->fetchAll();
             document.getElementById('pdf-upload-status').textContent = '';
             document.getElementById('document_type').value = 'link';
             toggleDocumentTypeFields();
+            loadMetadataFields();
             document.getElementById('documentModal').classList.add('active');
         }
 
-        function editDocument(doc) {
+        async function editDocument(doc) {
             editMode = true;
             document.getElementById('modalTitle').textContent = 'Edit Document';
             document.getElementById('documentId').value = doc.id;
@@ -519,7 +894,6 @@ $documents = $stmt->fetchAll();
             document.getElementById('featured').checked = doc.featured == 1;
             document.getElementById('tag').value = doc.tag || '';
 
-            // Set document type and populate the correct field
             const docType = doc.document_type || 'link';
             document.getElementById('document_type').value = docType;
             document.getElementById('file_url').value = '';
@@ -530,7 +904,6 @@ $documents = $stmt->fetchAll();
             if (docType === 'link') {
                 document.getElementById('file_url').value = doc.file_url || '';
             } else if (docType === 'html') {
-                // Strip leading '/' for display in form
                 let htmlVal = doc.file_url || '';
                 if (htmlVal.startsWith('/')) htmlVal = htmlVal.substring(1);
                 document.getElementById('html_file_url').value = htmlVal;
@@ -540,6 +913,21 @@ $documents = $stmt->fetchAll();
             }
 
             toggleDocumentTypeFields();
+
+            // Fetch existing metadata for this document to pre-fill
+            try {
+                const res = await fetch('/api/documents.php?id=' + doc.id);
+                const result = await res.json();
+                if (result.success && result.document && result.document.metadata) {
+                    const map = {};
+                    result.document.metadata.forEach(m => { map[m.meta_key] = m.meta_value; });
+                    pendingMetaValues = map;
+                }
+            } catch (e) {
+                console.error('Metadata fetch error:', e);
+            }
+
+            await loadMetadataFields();
             document.getElementById('documentModal').classList.add('active');
         }
 
@@ -548,21 +936,15 @@ $documents = $stmt->fetchAll();
         }
 
         async function deleteDocument(id, title) {
-            if (!confirm(`Are you sure you want to delete "${title}"?`)) {
-                return;
-            }
+            if (!confirm(`Are you sure you want to delete "${title}"?`)) return;
 
             try {
                 const response = await fetch('/api/documents.php', {
                     method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id: id })
                 });
-
                 const data = await response.json();
-
                 if (data.success) {
                     alert('Document deleted successfully');
                     location.reload();
@@ -575,34 +957,30 @@ $documents = $stmt->fetchAll();
             }
         }
 
+        // ──────────────────────────────────────────────
+        // Form submission
+        // ──────────────────────────────────────────────
+
         document.getElementById('documentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const formData = new FormData(this);
             const docType = formData.get('document_type') || 'link';
 
-            // Step 1: If PDF type and a new file was selected, upload it first
             if (docType === 'pdf') {
                 const pdfFile = document.getElementById('pdf_file').files[0];
                 if (pdfFile) {
                     document.getElementById('pdf-upload-status').textContent = 'Uploading...';
-
                     const uploadData = new FormData();
                     uploadData.append('pdf_file', pdfFile);
-
                     try {
-                        const uploadRes = await fetch('/api/upload-document.php', {
-                            method: 'POST',
-                            body: uploadData
-                        });
+                        const uploadRes = await fetch('/api/upload-document.php', { method: 'POST', body: uploadData });
                         const uploadResult = await uploadRes.json();
-
                         if (!uploadResult.success) {
                             alert('Upload error: ' + (uploadResult.error || 'Failed to upload PDF'));
                             document.getElementById('pdf-upload-status').textContent = 'Upload failed.';
                             return;
                         }
-
                         document.getElementById('file_path').value = uploadResult.file_path;
                         document.getElementById('pdf-upload-status').textContent = 'Upload complete.';
                     } catch (error) {
@@ -612,15 +990,12 @@ $documents = $stmt->fetchAll();
                         return;
                     }
                 }
-
-                // Validate that we have a file_path (either from new upload or existing)
                 if (!document.getElementById('file_path').value) {
                     alert('Please select a PDF file to upload');
                     return;
                 }
             }
 
-            // Step 2: Build JSON data and send to documents API
             const data = {
                 category_id: formData.get('category_id'),
                 title: formData.get('title'),
@@ -630,10 +1005,10 @@ $documents = $stmt->fetchAll();
                 tag: formData.get('tag') || null,
                 version: formData.get('version') || null,
                 date_published: formData.get('date_published') || null,
-                featured: formData.get('featured') ? 1 : 0
+                featured: formData.get('featured') ? 1 : 0,
+                metadata: collectMetadata()
             };
 
-            // Set file_url or file_path based on type
             if (docType === 'link') {
                 data.file_url = formData.get('file_url') || null;
                 data.file_path = null;
@@ -642,9 +1017,7 @@ $documents = $stmt->fetchAll();
                 data.file_path = document.getElementById('file_path').value;
             } else if (docType === 'html') {
                 let htmlFile = formData.get('html_file_url') || null;
-                if (htmlFile && !htmlFile.startsWith('/')) {
-                    htmlFile = '/' + htmlFile;
-                }
+                if (htmlFile && !htmlFile.startsWith('/')) htmlFile = '/' + htmlFile;
                 data.file_url = htmlFile;
                 data.file_path = null;
             }
@@ -656,14 +1029,10 @@ $documents = $stmt->fetchAll();
             try {
                 const response = await fetch('/api/documents.php', {
                     method: editMode ? 'PUT' : 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-
                 const result = await response.json();
-
                 if (result.success) {
                     alert(editMode ? 'Document updated successfully' : 'Document created successfully');
                     location.reload();
@@ -676,11 +1045,8 @@ $documents = $stmt->fetchAll();
             }
         });
 
-        // Close modal when clicking outside
         document.getElementById('documentModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
+            if (e.target === this) closeModal();
         });
     </script>
 </body>

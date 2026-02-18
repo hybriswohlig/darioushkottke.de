@@ -71,13 +71,107 @@ function getDocumentsByCategory($categoryId, $filters = []) {
 }
 
 /**
- * Get document metadata
+ * Get document metadata (raw key-value pairs)
  */
 function getDocumentMetadata($documentId) {
     $db = getDB();
     $stmt = $db->prepare("SELECT meta_key, meta_value FROM document_metadata WHERE document_id = ? ORDER BY display_order ASC");
     $stmt->execute([$documentId]);
     return $stmt->fetchAll();
+}
+
+/**
+ * Get the metadata field schema for a category
+ */
+function getCategoryMetadataSchema($categoryId) {
+    $db = getDB();
+    $stmt = $db->prepare("SELECT * FROM category_metadata_fields WHERE category_id = ? ORDER BY display_order ASC");
+    $stmt->execute([$categoryId]);
+    return $stmt->fetchAll();
+}
+
+/**
+ * Format a single metadata value for display using its field definition.
+ * Returns null if the value is empty so the caller can skip it.
+ */
+function formatMetadataValue($fieldDef, $rawValue, $doc = null) {
+    if ($rawValue === null || $rawValue === '') {
+        return null;
+    }
+
+    $type = $fieldDef['field_type'];
+    $opts = $fieldDef['field_options'] ? json_decode($fieldDef['field_options'], true) : [];
+
+    switch ($type) {
+        case 'date_from_doc':
+            $date = $doc['date_published'] ?? null;
+            return $date ? formatDate($date) : null;
+
+        case 'number_unit':
+            $unit = $opts['unit'] ?? '';
+            return esc($rawValue) . ' ' . esc($unit);
+
+        case 'range':
+            $unit = $opts['unit'] ?? '';
+            $parts = explode('|', $rawValue);
+            if (count($parts) === 2) {
+                return esc($parts[0]) . ' – ' . esc($parts[1]) . ' ' . esc($unit);
+            }
+            return esc($rawValue) . ' ' . esc($unit);
+
+        case 'boolean':
+            return $rawValue === '1' ? 'Yes' : 'No';
+
+        case 'dropdown_multi':
+        case 'freetext_multi':
+            $arr = json_decode($rawValue, true);
+            if (!is_array($arr) || empty($arr)) {
+                return null;
+            }
+            return implode(', ', array_map('esc', $arr));
+
+        default:
+            return esc($rawValue);
+    }
+}
+
+/**
+ * Build a display-ready metadata array for a document.
+ * Only includes fields that have a value. Uses the category schema for labels and formatting.
+ */
+function getFormattedDocumentMetadata($doc) {
+    $schema = getCategoryMetadataSchema($doc['category_id']);
+    if (empty($schema)) {
+        return [];
+    }
+
+    $rawMeta = [];
+    if (!empty($doc['metadata'])) {
+        foreach ($doc['metadata'] as $m) {
+            $rawMeta[$m['meta_key']] = $m['meta_value'];
+        }
+    }
+
+    $result = [];
+    foreach ($schema as $field) {
+        $key = $field['field_key'];
+
+        if ($field['field_type'] === 'date_from_doc') {
+            $formatted = formatMetadataValue($field, 'auto', $doc);
+        } else {
+            $raw = $rawMeta[$key] ?? null;
+            $formatted = formatMetadataValue($field, $raw, $doc);
+        }
+
+        if ($formatted !== null) {
+            $result[] = [
+                'label' => $field['field_label'],
+                'value' => $formatted,
+            ];
+        }
+    }
+
+    return $result;
 }
 
 /**

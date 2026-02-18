@@ -124,7 +124,7 @@ function handleCreate($input) {
 
         $documentId = $db->lastInsertId();
 
-        // Insert metadata if provided
+        // Insert metadata if provided (skip date_from_doc sentinel — those are resolved at display time)
         if (!empty($input['metadata']) && is_array($input['metadata'])) {
             $metaStmt = $db->prepare("
                 INSERT INTO document_metadata (document_id, meta_key, meta_value, display_order)
@@ -132,6 +132,7 @@ function handleCreate($input) {
             ");
 
             foreach ($input['metadata'] as $index => $meta) {
+                if (($meta['value'] ?? '') === '__date_from_doc__') continue;
                 $metaStmt->execute([
                     $documentId,
                     $meta['key'],
@@ -197,18 +198,17 @@ function handleUpdate($input) {
         $stmt = $db->prepare($sql);
         $stmt->execute($params);
 
-        // Update metadata if provided
+        // Update metadata if provided (skip date_from_doc sentinel)
         if (isset($input['metadata']) && is_array($input['metadata'])) {
-            // Delete existing metadata
             $db->prepare("DELETE FROM document_metadata WHERE document_id = ?")->execute([$input['id']]);
 
-            // Insert new metadata
             $metaStmt = $db->prepare("
                 INSERT INTO document_metadata (document_id, meta_key, meta_value, display_order)
                 VALUES (?, ?, ?, ?)
             ");
 
             foreach ($input['metadata'] as $index => $meta) {
+                if (($meta['value'] ?? '') === '__date_from_doc__') continue;
                 $metaStmt->execute([
                     $input['id'],
                     $meta['key'],

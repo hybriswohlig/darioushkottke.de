@@ -277,12 +277,13 @@ try {
                             <h3 class="card-title"><?php echo esc($doc['title']); ?></h3>
                             <p class="card-description"><?php echo esc($doc['description']); ?></p>
 
-                            <?php if (!empty($doc['metadata'])): ?>
+                            <?php $displayMeta = getFormattedDocumentMetadata($doc); ?>
+                            <?php if (!empty($displayMeta)): ?>
                                 <div class="card-footer">
-                                    <?php foreach ($doc['metadata'] as $meta): ?>
+                                    <?php foreach ($displayMeta as $meta): ?>
                                         <div class="card-meta">
-                                            <div class="card-meta-label"><?php echo esc($meta['meta_key']); ?></div>
-                                            <div class="card-meta-value"><?php echo esc($meta['meta_value']); ?></div>
+                                            <div class="card-meta-label"><?php echo esc($meta['label']); ?></div>
+                                            <div class="card-meta-value"><?php echo $meta['value']; ?></div>
                                         </div>
                                     <?php endforeach; ?>
                                 </div>

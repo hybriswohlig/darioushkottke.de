@@ -153,12 +153,13 @@ if (!empty($query) && strlen($query) >= 2) {
                                 <p class="card-description"><?php echo esc($doc['description']); ?></p>
 
                                 <!-- Document Metadata -->
-                                <?php if (!empty($doc['metadata'])): ?>
+                                <?php $displayMeta = array_slice(getFormattedDocumentMetadata($doc), 0, 3); ?>
+                                <?php if (!empty($displayMeta)): ?>
                                     <div class="card-footer">
-                                        <?php foreach (array_slice($doc['metadata'], 0, 3) as $meta): ?>
+                                        <?php foreach ($displayMeta as $meta): ?>
                                             <div class="card-meta">
-                                                <div class="card-meta-label"><?php echo esc($meta['meta_key']); ?></div>
-                                                <div class="card-meta-value"><?php echo esc($meta['meta_value']); ?></div>
+                                                <div class="card-meta-label"><?php echo esc($meta['label']); ?></div>
+                                                <div class="card-meta-value"><?php echo $meta['value']; ?></div>
                                             </div>
                                         <?php endforeach; ?>
                                     </div>

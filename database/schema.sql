@@ -39,15 +39,39 @@ CREATE TABLE IF NOT EXISTS documents (
     INDEX idx_document_type (document_type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Create document metadata table (for flexible key-value metrics)
+-- Create document metadata table (stores key-value pairs; meta_key matches category_metadata_fields.field_key)
 CREATE TABLE IF NOT EXISTS document_metadata (
     id INT AUTO_INCREMENT PRIMARY KEY,
     document_id INT NOT NULL,
     meta_key VARCHAR(100) NOT NULL,
-    meta_value VARCHAR(255),
+    meta_value TEXT,
     display_order INT DEFAULT 0,
     FOREIGN KEY (document_id) REFERENCES documents(id) ON DELETE CASCADE,
     INDEX idx_document (document_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Category-specific metadata field definitions
+CREATE TABLE IF NOT EXISTS category_metadata_fields (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_id INT NOT NULL,
+    field_key VARCHAR(100) NOT NULL,
+    field_label VARCHAR(150) NOT NULL,
+    field_type ENUM(
+        'text',
+        'dropdown_single',
+        'dropdown_multi',
+        'boolean',
+        'number_unit',
+        'range',
+        'date_from_doc',
+        'freetext_multi'
+    ) NOT NULL DEFAULT 'text',
+    field_options JSON DEFAULT NULL,
+    display_order INT DEFAULT 0,
+    is_required TINYINT(1) DEFAULT 0,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+    UNIQUE KEY uk_category_field (category_id, field_key),
+    INDEX idx_category (category_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Create admin users table (simple authentication)

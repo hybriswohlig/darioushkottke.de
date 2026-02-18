@@ -100,12 +100,13 @@ logUserActivity('document_view', $_SERVER['REQUEST_URI'], 'document', $id, 'PDF 
                 <div style="flex: 1; min-width: 0;">
                     <h2 style="margin: 0 0 var(--space-sm) 0; font-size: 1.75rem;"><?php echo esc($doc['title']); ?></h2>
                     <p style="color: var(--gray-600); margin: 0;"><?php echo esc($doc['description']); ?></p>
-                    <?php if (!empty($doc['metadata'])): ?>
+                    <?php $displayMeta = getFormattedDocumentMetadata($doc); ?>
+                    <?php if (!empty($displayMeta)): ?>
                         <div style="display: flex; gap: var(--space-lg); margin-top: var(--space-md); flex-wrap: wrap;">
-                            <?php foreach ($doc['metadata'] as $meta): ?>
+                            <?php foreach ($displayMeta as $meta): ?>
                                 <div style="font-size: 0.875rem;">
-                                    <span style="color: var(--gray-500);"><?php echo esc($meta['meta_key']); ?>:</span>
-                                    <span style="font-weight: 600; color: var(--gray-700);"><?php echo esc($meta['meta_value']); ?></span>
+                                    <span style="color: var(--gray-500);"><?php echo esc($meta['label']); ?>:</span>
+                                    <span style="font-weight: 600; color: var(--gray-700);"><?php echo $meta['value']; ?></span>
                                 </div>
                             <?php endforeach; ?>
                         </div>
