@@ -262,6 +262,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             bottom: -200px;
             left: -200px;
         }
+
+        /* Top-left EU/UK region badges – glassmorphic pills */
+        .region-flag-badges {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.6rem;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: var(--radius-full);
+            z-index: 10;
+            pointer-events: none;
+        }
+        .region-flag-badges .flag-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.65rem;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .region-flag-badges .flag-pill svg {
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
@@ -269,6 +304,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- LEFT: Branding / Story Panel -->
         <div class="branding-panel">
+            <!-- EU & UK region badges (top-left) -->
+            <div class="region-flag-badges" aria-hidden="true">
+                <span class="flag-pill">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+                        <defs>
+                            <g id="eu-star">
+                                <path d="M0,-7 L0.85,-2.16 L7,-2.16 L2.16,1.16 L4.32,7 L0,4.32 L-4.32,7 L-2.16,1.16 L-7,-2.16 L-0.85,-2.16 Z" fill="rgba(255,255,255,0.8)"/>
+                            </g>
+                        </defs>
+                        <g transform="translate(12,12)">
+                            <use href="#eu-star" transform="rotate(0) translate(0,-9)"/>
+                            <use href="#eu-star" transform="rotate(30) translate(0,-9)"/>
+                            <use href="#eu-star" transform="rotate(60) translate(0,-9)"/>
+                            <use href="#eu-star" transform="rotate(90) translate(0,-9)"/>
+                            <use href="#eu-star" transform="rotate(120) translate(0,-9)"/>
+                            <use href="#eu-star" transform="rotate(150) translate(0,-9)"/>
+                            <use href="#eu-star" transform="rotate(180) translate(0,-9)"/>
+                            <use href="#eu-star" transform="rotate(210) translate(0,-9)"/>
+                            <use href="#eu-star" transform="rotate(240) translate(0,-9)"/>
+                            <use href="#eu-star" transform="rotate(270) translate(0,-9)"/>
+                            <use href="#eu-star" transform="rotate(300) translate(0,-9)"/>
+                            <use href="#eu-star" transform="rotate(330) translate(0,-9)"/>
+                        </g>
+                    </svg>
+                    <span>EU</span>
+                </span>
+                <span class="flag-pill">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="22" height="11" fill="none">
+                        <g stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round">
+                            <path d="M0,0 L60,30 M60,0 L0,30"/>
+                            <path d="M30,0 v30 M0,15 h60"/>
+                            <path d="M0,0 L60,30 M60,0 L0,30" stroke-width="2.5"/>
+                            <path d="M30,0 v30 M0,15 h60" stroke-width="2.5"/>
+                        </g>
+                    </svg>
+                    <span>UK</span>
+                </span>
+            </div>
             <div class="branding-overlay"></div>
             
             <div class="branding-content">
