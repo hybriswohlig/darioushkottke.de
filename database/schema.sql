@@ -125,14 +125,6 @@ CREATE TABLE IF NOT EXISTS user_activity_log (
     INDEX idx_user_action (user_id, action, created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Insert default categories
-INSERT INTO categories (name, slug, description, icon_svg, display_order) VALUES
-('LCA Reports', 'lca-reports', 'Comprehensive environmental impact analyses of our products', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>', 1),
-('Certifications', 'certifications', 'Third-party certifications and quality assurance', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>', 2),
-('Impact Studies', 'impact-studies', 'Environmental benefits and sustainability analyses', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>', 3),
-('Technical Documentation', 'technical-docs', 'Detailed specifications and performance data', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>', 4),
-('Compliance & Standards', 'compliance', 'Regulatory compliance and international standards', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>', 5);
-
 -- Insert default admin user (password: admin123 - CHANGE THIS IMMEDIATELY!)
 -- Password hash generated with: password_hash('admin123', PASSWORD_DEFAULT)
 INSERT INTO admin_users (username, password_hash, email) VALUES

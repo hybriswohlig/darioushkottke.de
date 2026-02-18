@@ -134,10 +134,6 @@ try {
                             <div class="card-meta-label">Documents</div>
                             <div class="card-meta-value"><?php echo $categoryCounts['lca-reports'] ?? 0; ?></div>
                         </div>
-                        <div class="card-meta">
-                            <div class="card-meta-label">Latest</div>
-                            <div class="card-meta-value">Oct 2025</div>
-                        </div>
                     </div>
                 </a>
 
@@ -159,10 +155,6 @@ try {
                             <div class="card-meta-label">Documents</div>
                             <div class="card-meta-value"><?php echo $categoryCounts['certifications'] ?? 0; ?></div>
                         </div>
-                        <div class="card-meta">
-                            <div class="card-meta-label">Status</div>
-                            <div class="card-meta-value">Active</div>
-                        </div>
                     </div>
                 </a>
 
@@ -183,10 +175,6 @@ try {
                         <div class="card-meta">
                             <div class="card-meta-label">Documents</div>
                             <div class="card-meta-value"><?php echo $categoryCounts['impact-studies'] ?? 0; ?></div>
-                        </div>
-                        <div class="card-meta">
-                            <div class="card-meta-label">Status</div>
-                            <div class="card-meta-value">Active</div>
                         </div>
                     </div>
                 </a>
@@ -211,10 +199,6 @@ try {
                             <div class="card-meta-label">Documents</div>
                             <div class="card-meta-value"><?php echo $categoryCounts['technical-docs'] ?? 0; ?></div>
                         </div>
-                        <div class="card-meta">
-                            <div class="card-meta-label">Type</div>
-                            <div class="card-meta-value">Specs & Tests</div>
-                        </div>
                     </div>
                 </a>
 
@@ -235,10 +219,6 @@ try {
                         <div class="card-meta">
                             <div class="card-meta-label">Documents</div>
                             <div class="card-meta-value"><?php echo $categoryCounts['compliance'] ?? 0; ?></div>
-                        </div>
-                        <div class="card-meta">
-                            <div class="card-meta-label">Standards</div>
-                            <div class="card-meta-value">FDA, REACH</div>
                         </div>
                     </div>
                 </a>
