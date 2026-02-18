@@ -263,39 +263,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             left: -200px;
         }
 
-        /* Top-left EU/UK region badges – glassmorphic pills */
-        .region-flag-badges {
+        /* Top-left Region Jurisdiction Indicator */
+        .region-badge-container {
             position: absolute;
-            top: 40px;
-            left: 40px;
+            top: 48px;
+            left: 48px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.4rem 0.6rem;
-            background: rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: var(--radius-full);
+            gap: 16px;
+            padding: 10px 16px;
+            background: rgba(0, 0, 0, 0.15); /* Slightly darker for contrast */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px; /* Full pill shape */
             z-index: 10;
             pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
-        .region-flag-badges .flag-pill {
-            display: inline-flex;
+
+        .region-flags-group {
+            display: flex;
+            align-items: center;
+            gap: -8px; /* Negative margin for the 'stacked' look, or 8px for separate */
+        }
+
+        .region-flag {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.35rem;
-            padding: 0.35rem 0.65rem;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            border-radius: var(--radius-full);
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.04em;
-            color: rgba(255, 255, 255, 0.9);
+            background: #003399; /* Fallback for EU */
+            position: relative;
         }
-        .region-flag-badges .flag-pill svg {
-            flex-shrink: 0;
+
+        /* Specific fix for UK flag to ensure circle crop looks good */
+        .region-flag.uk-flag {
+            background: #00247d;
+        }
+
+        .region-divider {
+            width: 1px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .region-text-group {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .region-label-small {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            margin-bottom: 2px;
+            line-height: 1;
+        }
+
+        .region-label-main {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #ffffff;
+            letter-spacing: 0.02em;
+            line-height: 1;
         }
     </style>
 </head>
@@ -304,43 +342,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- LEFT: Branding / Story Panel -->
         <div class="branding-panel">
-            <!-- EU & UK region badges (top-left) -->
-            <div class="region-flag-badges" aria-hidden="true">
-                <span class="flag-pill">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
-                        <defs>
-                            <g id="eu-star">
-                                <path d="M0,-7 L0.85,-2.16 L7,-2.16 L2.16,1.16 L4.32,7 L0,4.32 L-4.32,7 L-2.16,1.16 L-7,-2.16 L-0.85,-2.16 Z" fill="rgba(255,255,255,0.8)"/>
+            <div class="region-badge-container" aria-hidden="true">
+                <div class="region-flags-group">
+                    <div class="region-flag">
+                        <svg viewBox="0 0 512 512" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="512" height="512" fill="#003399"/>
+                            <g fill="#FFCC00" transform="translate(256, 256)">
+                                <g id="star">
+                                    <path d="M0,-170 L10.53,-137.6 L45.03,-137.6 L17.11,-117.3 L27.78,-84.4 L0,-104.6 L-27.78,-84.4 L-17.11,-117.3 L-45.03,-137.6 L-10.53,-137.6 Z"/>
+                                </g>
+                                <use href="#star" transform="rotate(30)"/>
+                                <use href="#star" transform="rotate(60)"/>
+                                <use href="#star" transform="rotate(90)"/>
+                                <use href="#star" transform="rotate(120)"/>
+                                <use href="#star" transform="rotate(150)"/>
+                                <use href="#star" transform="rotate(180)"/>
+                                <use href="#star" transform="rotate(210)"/>
+                                <use href="#star" transform="rotate(240)"/>
+                                <use href="#star" transform="rotate(270)"/>
+                                <use href="#star" transform="rotate(300)"/>
+                                <use href="#star" transform="rotate(330)"/>
                             </g>
-                        </defs>
-                        <g transform="translate(12,12)">
-                            <use href="#eu-star" transform="rotate(0) translate(0,-9)"/>
-                            <use href="#eu-star" transform="rotate(30) translate(0,-9)"/>
-                            <use href="#eu-star" transform="rotate(60) translate(0,-9)"/>
-                            <use href="#eu-star" transform="rotate(90) translate(0,-9)"/>
-                            <use href="#eu-star" transform="rotate(120) translate(0,-9)"/>
-                            <use href="#eu-star" transform="rotate(150) translate(0,-9)"/>
-                            <use href="#eu-star" transform="rotate(180) translate(0,-9)"/>
-                            <use href="#eu-star" transform="rotate(210) translate(0,-9)"/>
-                            <use href="#eu-star" transform="rotate(240) translate(0,-9)"/>
-                            <use href="#eu-star" transform="rotate(270) translate(0,-9)"/>
-                            <use href="#eu-star" transform="rotate(300) translate(0,-9)"/>
-                            <use href="#eu-star" transform="rotate(330) translate(0,-9)"/>
-                        </g>
-                    </svg>
-                    <span>EU</span>
-                </span>
-                <span class="flag-pill">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="22" height="11" fill="none">
-                        <g stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round">
-                            <path d="M0,0 L60,30 M60,0 L0,30"/>
-                            <path d="M30,0 v30 M0,15 h60"/>
-                            <path d="M0,0 L60,30 M60,0 L0,30" stroke-width="2.5"/>
-                            <path d="M30,0 v30 M0,15 h60" stroke-width="2.5"/>
-                        </g>
-                    </svg>
-                    <span>UK</span>
-                </span>
+                        </svg>
+                    </div>
+
+                    <div class="region-flag uk-flag">
+                        <svg viewBox="0 0 60 30" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                            <clipPath id="t">
+                                <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/>
+                            </clipPath>
+                            <path d="M0,0 v30 h60 v-30 z" fill="#00247d"/>
+                            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+                            <path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t)" stroke="#cf142b" stroke-width="4"/>
+                            <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+                            <path d="M30,0 v30 M0,15 h60" stroke="#cf142b" stroke-width="6"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="region-divider"></div>
+
+                <div class="region-text-group">
+                    <span class="region-label-small">Operating Region</span>
+                    <span class="region-label-main">Europe & United Kingdom</span>
+                </div>
             </div>
             <div class="branding-overlay"></div>
             
