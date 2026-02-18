@@ -165,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .form-input {
             width: 100%;
-            padding: var(--space-lg);
+            padding: var(--space-lg) 3rem var(--space-lg) 3.25rem; /* extra left for icon, right for password toggle */
             border: 2px solid var(--gray-200);
             border-radius: var(--radius-lg);
             font-size: 1rem;
