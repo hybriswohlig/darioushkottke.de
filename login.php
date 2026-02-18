@@ -71,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Sign In - N&E Innovations</title>
     <meta name="robots" content="noindex, nofollow">
     <link rel="stylesheet" href="/assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="/file.svg">
     <style>
         body {
@@ -335,6 +336,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             letter-spacing: 0.02em;
             line-height: 1;
         }
+
+        /* Hand-crafted seal (rotating) */
+        .hand-crafted-seal {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+        }
+        .rotating-seal {
+            animation: rotate-slow 20s linear infinite;
+        }
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Noise texture overlay on branding panel */
+        .branding-panel::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E");
+            opacity: 0.4;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
@@ -398,15 +428,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h1 class="branding-title">European<br>Compliance Portal</h1>
                 <p class="branding-subtitle">Secure access to regulatory, certification and sustainability documents</p>
                 
-                <div class="trust-badges">
-                    <div class="trust-item">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 8.944 11.922.42.095.858.143 1.295.143a3 3 0 01.296-.006"></path></svg>
-                        ISO 14001 Aligned
-                    </div>
-                    <div class="trust-item">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path></svg>
-                        Enterprise-Grade Security
-                    </div>
+                <div class="hand-crafted-seal">
+                    <svg viewBox="0 0 200 200" width="140" height="140" class="rotating-seal" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <path id="circlePath" d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0" />
+                        </defs>
+                        <g>
+                            <use href="#circlePath" fill="none"/>
+                            <text fill="rgba(255,255,255,0.8)" font-family="monospace" font-size="14" font-weight="bold" letter-spacing="4">
+                                <textPath href="#circlePath">
+                                    OFFICIAL COMPLIANCE PORTAL • SECURE •
+                                </textPath>
+                            </text>
+                        </g>
+                        <g transform="translate(65, 65) scale(2.2)">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                  fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="handwritten-promise" style="margin-top: 30px;">
+                    <p style="font-family: 'Caveat', cursive; font-size: 1.6rem; color: rgba(255,255,255,0.9); transform: rotate(-2deg);">
+                        "Engineered for a sustainable future."
+                    </p>
+                    <div style="width: 60px; height: 2px; background: rgba(255,255,255,0.5); margin-top: 10px; border-radius: 2px;"></div>
                 </div>
             </div>
 
