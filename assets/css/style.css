@@ -1022,3 +1022,156 @@ p {
 .legal-breadcrumb span {
     margin: 0 0.5rem;
 }
+
+/* ===================== SPLIT-SCREEN AUTH ===================== */
+.split-auth-page {
+    display: flex;
+    min-height: 100vh;
+}
+
+.branding-panel {
+    flex: 1;
+    background: linear-gradient(135deg, #14532d 0%, var(--primary-green-dark) 100%);
+    color: white;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4xl) var(--space-xl);
+    overflow: hidden;
+}
+
+.branding-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 40% 30%, rgba(255,255,255,0.12) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.branding-content {
+    max-width: 420px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.branding-logo-large {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto var(--space-2xl);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+.branding-title {
+    font-size: clamp(2.5rem, 5.5vw, 3.75rem);
+    line-height: 1.12;
+    font-weight: 800;
+    margin-bottom: var(--space-md);
+}
+
+.branding-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    opacity: 0.92;
+    margin-bottom: var(--space-3xl);
+}
+
+.trust-badges {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    align-items: center;
+}
+
+.trust-item {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-2xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.eco-illustration {
+    position: absolute;
+    bottom: -90px;
+    right: -70px;
+    opacity: 0.18;
+    pointer-events: none;
+}
+
+/* Right panel */
+.login-panel {
+    flex: 1;
+    max-width: 520px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2xl);
+}
+
+.login-container {
+    width: 100%;
+    max-width: 420px;
+}
+
+.login-card {
+    box-shadow: 0 30px 70px -20px rgba(22, 163, 74, 0.22),
+                0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--green-100);
+}
+
+/* Form polish (works with your existing styles) */
+.input-wrapper { position: relative; }
+.input-icon {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-400);
+}
+.form-input { padding-left: 3.25rem; }
+
+.password-toggle {
+    position: absolute;
+    right: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    padding: 4px;
+    font-size: 1.25rem;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+    font-size: 0.875rem;
+}
+.forgot-link {
+    color: var(--primary-green);
+    font-weight: 500;
+}
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+/* Mobile – stacks nicely */
+@media (max-width: 992px) {
+    .split-auth-page { flex-direction: column; }
+    .branding-panel { padding: var(--space-3xl) var(--space-xl); min-height: 420px; }
+    .login-panel { padding: var(--space-xl); }
+}

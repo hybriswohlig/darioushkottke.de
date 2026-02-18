@@ -265,94 +265,152 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-    <div class="auth-page-content">
-    <div class="bg-decoration bg-decoration-1"></div>
-    <div class="bg-decoration bg-decoration-2"></div>
+    <div class="split-auth-page">
 
-    <div class="login-container">
-        <div class="login-card">
-            <div class="login-header">
-                <div class="login-logo">
+        <!-- LEFT: Branding / Story Panel -->
+        <div class="branding-panel">
+            <div class="branding-overlay"></div>
+            
+            <div class="branding-content">
+                <div class="branding-logo-large">
                     <img src="/file.svg" alt="N&E Innovations" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <span class="login-logo-fallback" style="display:none;">N&E</span>
                 </div>
-                <h1 class="login-title">Welcome</h1>
-                <p class="login-subtitle">Compliance Documentation Portal</p>
+                
+                <h1 class="branding-title">Environmental<br>Compliance Portal</h1>
+                <p class="branding-subtitle">Secure access to your sustainability documentation and reports</p>
+                
+                <div class="trust-badges">
+                    <div class="trust-item">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 8.944 11.922.42.095.858.143 1.295.143a3 3 0 01.296-.006"></path></svg>
+                        ISO 14001 Aligned
+                    </div>
+                    <div class="trust-item">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path></svg>
+                        Enterprise-Grade Security
+                    </div>
+                </div>
             </div>
 
-            <?php if ($showTimeout): ?>
-                <div class="timeout-message">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    Your session has expired. Please sign in again.
-                </div>
-            <?php endif; ?>
-
-            <?php if ($error): ?>
-                <div class="error-message">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <?php echo htmlspecialchars($error); ?>
-                </div>
-            <?php endif; ?>
-
-            <form method="POST" action="/login.php">
-                <div class="form-group">
-                    <label for="email" class="form-label">Email Address</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        class="form-input"
-                        placeholder="Enter your email address"
-                        value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>"
-                        required
-                        autofocus
-                        autocomplete="email"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        class="form-input"
-                        placeholder="Enter your password"
-                        required
-                        autocomplete="current-password"
-                    >
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-full">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-                    </svg>
-                    Sign In
-                </button>
-            </form>
-
-            <div class="security-badge">
-                <svg class="lock-icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            <!-- Subtle eco leaf illustration -->
+            <div class="eco-illustration">
+                <svg width="320" height="320" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M70 60 Q90 30 120 55 Q150 40 170 75 Q150 120 110 130 Q70 110 70 60" fill="#4ade80" opacity="0.25"/>
+                    <circle cx="105" cy="85" r="18" fill="#16a34a" opacity="0.2"/>
                 </svg>
-                Individual Secure Access
             </div>
         </div>
 
-        <div class="login-footer">
-            <p>N&E Innovations Pte Ltd &bull; Environmental Impact Documentation</p>
-            <p style="margin-top: var(--space-sm); color: var(--gray-500);">
-                For account access, contact
-                <a href="mailto:business@vi-kang.com" style="color: var(--primary-green); font-weight: 600;">business@vi-kang.com</a>
-            </p>
+        <!-- RIGHT: Login Form -->
+        <div class="login-panel">
+            <div class="login-container">
+                <div class="login-card">
+                    <div class="login-header">
+                        <div class="login-logo">
+                            <img src="/file.svg" alt="N&E Innovations" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <span class="login-logo-fallback" style="display:none;">N&E</span>
+                        </div>
+                        <div class="eco-badge">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m-3-9h6m-6 6h6"></path>
+                            </svg>
+                            N&E Compliance
+                        </div>
+                        <h1 class="login-title">Welcome back</h1>
+                        <p class="login-subtitle">Sign in to your secure dashboard</p>
+                    </div>
+
+                    <?php if ($showTimeout): ?>
+                        <div class="timeout-message">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Your session has expired. Please sign in again.
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($error): ?>
+                        <div class="error-message">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <?php echo htmlspecialchars($error); ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <form method="POST" action="/login.php">
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address</label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2.01 2.01 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2"></path>
+                                    </svg>
+                                </div>
+                                <input type="email" id="email" name="email" class="form-input" placeholder="you@company.com" value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>" required autofocus autocomplete="email">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5 16.477 5 20.268 7.943 21.542 12 20.268 16.057 16.477 19 12 19 7.523 19 3.732 16.057 2.458 12z"></path>
+                                    </svg>
+                                </div>
+                                <input type="password" id="password" name="password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+                                <button type="button" id="toggle-password" class="password-toggle">
+                                    <svg id="eye" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5 16.477 5 20.268 7.943 21.542 12 20.268 16.057 16.477 19 12 19 7.523 19 3.732 16.057 2.458 12z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="remember-me">
+                                <input type="checkbox" name="remember"> Remember me
+                            </label>
+                            <a href="/forgot-password.php" class="forgot-link">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-full">
+                            Sign In
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </form>
+
+                    <div class="security-badge">
+                        <svg class="lock-icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                        Individual Secure Access • AES-256 Encrypted
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
     </div>
 
     <?php include __DIR__ . '/includes/legal-footer.php'; ?>
+
+    <script>
+    // Password visibility toggle
+    document.getElementById('toggle-password').addEventListener('click', function () {
+        const pw = document.getElementById('password');
+        const eye = document.getElementById('eye');
+        if (pw.type === 'password') {
+            pw.type = 'text';
+            eye.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908l3.42 3.42m-3.42-3.42l-3.42 3.42"></path>`;
+        } else {
+            pw.type = 'password';
+            eye.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5 16.477 5 20.268 7.943 21.542 12 20.268 16.057 16.477 19 12 19 7.523 19 3.732 16.057 2.458 12z"></path>`;
+        }
+    });
+    </script>
 </body>
 </html>
