@@ -342,6 +342,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-top: 40px;
             display: flex;
             justify-content: center;
+            flex-shrink: 0;
         }
         .rotating-seal {
             animation: rotate-slow 20s linear infinite;
@@ -349,6 +350,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         @keyframes rotate-slow {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
+        }
+        /* Compact seal and promise on smaller viewports so page fits without scroll */
+        @media (max-width: 1280px), (max-height: 900px) {
+            .hand-crafted-seal { margin-top: 24px; }
+            .hand-crafted-seal .rotating-seal { width: 100px; height: 100px; }
+            .handwritten-promise { margin-top: 20px !important; }
+            .handwritten-promise p { font-size: 1.35rem !important; }
+        }
+        @media (max-height: 800px) {
+            .hand-crafted-seal { margin-top: 16px; }
+            .hand-crafted-seal .rotating-seal { width: 80px; height: 80px; }
+            .handwritten-promise { margin-top: 12px !important; }
+            .handwritten-promise p { font-size: 1.2rem !important; }
         }
 
         /* Noise texture overlay on branding panel */

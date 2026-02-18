@@ -1027,10 +1027,12 @@ p {
 .split-auth-page {
     display: flex;
     min-height: 100vh;
+    overflow: hidden; /* keep landing in one viewport */
 }
 
 .branding-panel {
     flex: 1;
+    min-height: 0; /* allow flex shrink */
     background: linear-gradient(135deg, #14532d 0%, var(--primary-green-dark) 100%);
     color: white;
     position: relative;
@@ -1063,6 +1065,7 @@ p {
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0,0,0,0.25);
     background: white;
+    flex-shrink: 0;
 }
 
 .branding-logo-large .login-logo-fallback {
@@ -1081,8 +1084,46 @@ p {
     font-size: 1.25rem;
     line-height: 1.5;
     opacity: 0.92;
-    margin-bottom: var(--space-3xl);
+    margin-bottom: var(--space-2xl);
     color: white;
+}
+
+/* Compact branding on smaller / shorter viewports so page fits without scroll */
+@media (max-width: 1280px), (max-height: 900px) {
+    .branding-panel {
+        padding: var(--space-2xl) var(--space-lg);
+    }
+    .branding-logo-large {
+        width: 72px;
+        height: 72px;
+        margin-bottom: var(--space-lg);
+    }
+    .branding-title {
+        font-size: clamp(1.75rem, 4vw, 2.75rem);
+        margin-bottom: var(--space-sm);
+    }
+    .branding-subtitle {
+        font-size: 1rem;
+        margin-bottom: var(--space-lg);
+    }
+}
+
+@media (max-height: 800px) {
+    .branding-panel {
+        padding: var(--space-lg) var(--space-lg);
+    }
+    .branding-logo-large {
+        width: 56px;
+        height: 56px;
+        margin-bottom: var(--space-md);
+    }
+    .branding-title {
+        font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    }
+    .branding-subtitle {
+        font-size: 0.9375rem;
+        margin-bottom: var(--space-md);
+    }
 }
 
 .trust-badges {
@@ -1115,12 +1156,14 @@ p {
 /* Right panel */
 .login-panel {
     flex: 1;
+    min-height: 0;
     max-width: 520px;
     background: white;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: var(--space-2xl);
+    overflow: auto; /* allow form to scroll only if really needed */
 }
 
 .login-container {
