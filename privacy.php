@@ -49,7 +49,7 @@ require_once __DIR__ . '/includes/config.php';
         </p>
         <p>
             As a non-EU controller we have designated an <strong>EU Representative under GDPR Article 27</strong>:<br>
-            [Insert EU Representative Name/Company], [Full Address in an EU Member State, e.g. Germany], Email: [rep-email@example.com].
+            LizenzWerft GmbH, Theodorstraße 42-90 · Haus 7 (Poolhaus) · DE – 22761 Hamburg, Email: <a href="mailto:info@lizenzwerft.de">info@lizenzwerft.de</a>.
         </p>
 
         <h2>2. Purpose</h2>
