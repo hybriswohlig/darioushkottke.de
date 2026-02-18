@@ -277,8 +277,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <span class="login-logo-fallback" style="display:none;">N&E</span>
                 </div>
                 
-                <h1 class="branding-title">Environmental<br>Compliance Portal</h1>
-                <p class="branding-subtitle">Secure access to your sustainability documentation and reports</p>
+                <h1 class="branding-title">European<br>Compliance Portal</h1>
+                <p class="branding-subtitle">Secure access to regulatory, certification and sustainability documents</p>
                 
                 <div class="trust-badges">
                     <div class="trust-item">
@@ -374,7 +374,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label class="remember-me">
                                 <input type="checkbox" name="remember"> Remember me
                             </label>
-                            <a href="/forgot-password.php" class="forgot-link">Forgot password?</a>
+                            <a href="#" id="forgot-password-link" class="forgot-link">Forgot password?</a>
                         </div>
 
                         <button type="submit" class="btn btn-primary btn-full">
@@ -410,6 +410,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             pw.type = 'password';
             eye.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5 16.477 5 20.268 7.943 21.542 12 20.268 16.057 16.477 19 12 19 7.523 19 3.732 16.057 2.458 12z"></path>`;
         }
+    });
+
+    // Forgot password: open email to request reset
+    document.getElementById('forgot-password-link').addEventListener('click', function (e) {
+        e.preventDefault();
+        var subject = encodeURIComponent('Password forgotten - reset request');
+        var body = 'I have forgotten my password and request a password reset for my account.';
+        var email = document.getElementById('email').value.trim();
+        if (email) {
+            body += '\n\nMy account email: ' + email;
+        }
+        body = encodeURIComponent(body);
+        window.location.href = 'mailto:business@vi-kang.com?subject=' + subject + '&body=' + body;
     });
     </script>
 </body>
