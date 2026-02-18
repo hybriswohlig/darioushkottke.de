@@ -110,6 +110,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             width: 96px;
             height: 96px;
             margin: 0 auto var(--space-lg);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .login-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .login-logo-fallback {
+            width: 100%;
+            height: 100%;
             background: linear-gradient(135deg, var(--primary-green) 0%, var(--accent-green) 100%);
             border-radius: var(--radius-xl);
             display: flex;
@@ -118,7 +135,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: white;
             font-size: 2.5rem;
             font-weight: 800;
-            box-shadow: var(--shadow-lg);
         }
 
         .login-title {
@@ -256,7 +272,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-container">
         <div class="login-card">
             <div class="login-header">
-                <div class="login-logo">N&E</div>
+                <div class="login-logo">
+                    <img src="/file.svg" alt="N&E Innovations" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <span class="login-logo-fallback" style="display:none;">N&E</span>
+                </div>
                 <h1 class="login-title">Welcome</h1>
                 <p class="login-subtitle">Compliance Documentation Portal</p>
             </div>
