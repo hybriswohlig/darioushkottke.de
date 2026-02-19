@@ -153,21 +153,47 @@ if (!empty($query) && strlen($query) >= 2) {
                                 <p class="card-description"><?php echo esc($doc['description']); ?></p>
 
                                 <!-- Document Metadata -->
-                                <?php $displayMeta = array_slice(getFormattedDocumentMetadata($doc), 0, 3); ?>
+                                <?php
+                                $displayMeta = getFormattedDocumentMetadata($doc);
+                                $priorityKeys = ['done_by', 'issuer', 'issuing_body'];
+                                $priorityMeta = array_filter($displayMeta, fn($m) => in_array($m['field_key'] ?? '', $priorityKeys));
+                                $restMeta = array_filter($displayMeta, fn($m) => !in_array($m['field_key'] ?? '', $priorityKeys));
+                                $restMeta = array_slice($restMeta, 0, 3);
+                                ?>
                                 <?php if (!empty($displayMeta)): ?>
                                     <div class="card-footer">
-                                        <?php foreach ($displayMeta as $meta): ?>
-                                            <div class="card-meta">
-                                                <div class="card-meta-label"><?php echo esc($meta['label']); ?></div>
-                                                <div class="card-meta-value">
-                                                    <?php if (!empty($meta['logo_path'])): ?>
-                                                        <img src="<?php echo esc($meta['logo_path']); ?>" alt="<?php echo esc($meta['value']); ?>" class="issuer-logo">
-                                                    <?php else: ?>
-                                                        <?php echo $meta['value']; ?>
-                                                    <?php endif; ?>
-                                                </div>
+                                        <?php if (!empty($priorityMeta)): ?>
+                                            <div class="card-meta-row card-meta-row--priority">
+                                                <?php foreach ($priorityMeta as $meta): ?>
+                                                    <div class="card-meta">
+                                                        <div class="card-meta-label"><?php echo esc($meta['label']); ?></div>
+                                                        <div class="card-meta-value">
+                                                            <?php if (!empty($meta['logo_path'])): ?>
+                                                                <img src="<?php echo esc($meta['logo_path']); ?>" alt="<?php echo esc($meta['value']); ?>" class="issuer-logo">
+                                                            <?php else: ?>
+                                                                <?php echo $meta['value']; ?>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
                                             </div>
-                                        <?php endforeach; ?>
+                                        <?php endif; ?>
+                                        <?php if (!empty($restMeta)): ?>
+                                            <div class="card-meta-row">
+                                                <?php foreach ($restMeta as $meta): ?>
+                                                    <div class="card-meta">
+                                                        <div class="card-meta-label"><?php echo esc($meta['label']); ?></div>
+                                                        <div class="card-meta-value">
+                                                            <?php if (!empty($meta['logo_path'])): ?>
+                                                                <img src="<?php echo esc($meta['logo_path']); ?>" alt="<?php echo esc($meta['value']); ?>" class="issuer-logo">
+                                                            <?php else: ?>
+                                                                <?php echo $meta['value']; ?>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                 <?php endif; ?>
 

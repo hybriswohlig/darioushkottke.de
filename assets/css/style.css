@@ -407,8 +407,19 @@ p {
     padding-top: var(--space-lg);
     border-top: 1px solid var(--gray-100);
     display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.card-meta-row {
+    display: flex;
     gap: var(--space-lg);
     flex-wrap: wrap;
+}
+
+/* Done by / Issuer / Issuing Body on their own row – no other points beside them */
+.card-meta-row--priority {
+    width: 100%;
 }
 
 .card-meta {
@@ -431,17 +442,50 @@ p {
     color: var(--primary-green);
 }
 
-/* Issuer / Issuing Body logos (frontend document display only) */
+/* Issuer / Issuing Body / Done by logos – same size, no background, frontend only */
 .issuer-logo {
     display: inline-block;
-    max-height: 2rem;
+    height: 28px;
     width: auto;
+    max-width: 100px;
     object-fit: contain;
+    object-position: left center;
     vertical-align: middle;
+    background: transparent;
 }
 .issuer-logo--header {
-    max-height: 1.75rem;
+    height: 24px;
+    max-width: 90px;
     margin-left: 0.25rem;
+}
+
+/* View document page: meta blocks with priority row isolated */
+.document-meta-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+}
+.document-meta-row {
+    display: flex;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+    font-size: 0.875rem;
+}
+.document-meta-row--priority {
+    width: 100%;
+}
+.document-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+.document-meta-label {
+    color: var(--gray-500);
+}
+.document-meta-value {
+    font-weight: 600;
+    color: var(--gray-700);
 }
 
 /* ============================================
