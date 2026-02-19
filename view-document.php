@@ -100,42 +100,19 @@ logUserActivity('document_view', $_SERVER['REQUEST_URI'], 'document', $id, 'PDF 
                 <div style="flex: 1; min-width: 0;">
                     <h2 style="margin: 0 0 var(--space-sm) 0; font-size: 1.75rem;"><?php echo esc($doc['title']); ?></h2>
                     <p style="color: var(--gray-600); margin: 0;"><?php echo esc($doc['description']); ?></p>
-                    <?php
-                    $displayMeta = getFormattedDocumentMetadata($doc);
-                    $priorityKeys = ['done_by', 'issuer', 'issuing_body'];
-                    $priorityMeta = array_filter($displayMeta, fn($m) => in_array($m['field_key'] ?? '', $priorityKeys));
-                    $restMeta = array_filter($displayMeta, fn($m) => !in_array($m['field_key'] ?? '', $priorityKeys));
-                    ?>
+                    <?php $displayMeta = getFormattedDocumentMetadata($doc); ?>
                     <?php if (!empty($displayMeta)): ?>
-                        <div class="document-meta-blocks">
-                            <?php if (!empty($priorityMeta)): ?>
-                                <div class="document-meta-row document-meta-row--priority">
-                                    <?php foreach ($priorityMeta as $meta): ?>
-                                        <div class="document-meta-item">
-                                            <span class="document-meta-label"><?php echo esc($meta['label']); ?>:</span>
-                                            <?php if (!empty($meta['logo_path'])): ?>
-                                                <img src="<?php echo esc($meta['logo_path']); ?>" alt="<?php echo esc($meta['value']); ?>" class="issuer-logo issuer-logo--header">
-                                            <?php else: ?>
-                                                <span class="document-meta-value"><?php echo $meta['value']; ?></span>
-                                            <?php endif; ?>
-                                        </div>
-                                    <?php endforeach; ?>
+                        <div style="display: flex; gap: var(--space-lg); margin-top: var(--space-md); flex-wrap: wrap;">
+                            <?php foreach ($displayMeta as $meta): ?>
+                                <div style="font-size: 0.875rem;">
+                                    <span style="color: var(--gray-500);"><?php echo esc($meta['label']); ?>:</span>
+                                    <?php if (!empty($meta['logo_path'])): ?>
+                                        <img src="<?php echo esc($meta['logo_path']); ?>" alt="<?php echo esc($meta['value']); ?>" class="issuer-logo issuer-logo--header">
+                                    <?php else: ?>
+                                        <span style="font-weight: 600; color: var(--gray-700);"><?php echo $meta['value']; ?></span>
+                                    <?php endif; ?>
                                 </div>
-                            <?php endif; ?>
-                            <?php if (!empty($restMeta)): ?>
-                                <div class="document-meta-row">
-                                    <?php foreach ($restMeta as $meta): ?>
-                                        <div class="document-meta-item">
-                                            <span class="document-meta-label"><?php echo esc($meta['label']); ?>:</span>
-                                            <?php if (!empty($meta['logo_path'])): ?>
-                                                <img src="<?php echo esc($meta['logo_path']); ?>" alt="<?php echo esc($meta['value']); ?>" class="issuer-logo issuer-logo--header">
-                                            <?php else: ?>
-                                                <span class="document-meta-value"><?php echo $meta['value']; ?></span>
-                                            <?php endif; ?>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            <?php endif; ?>
+                            <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
                 </div>
