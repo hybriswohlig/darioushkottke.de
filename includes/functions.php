@@ -136,8 +136,41 @@ function formatMetadataValue($fieldDef, $rawValue, $doc = null) {
 }
 
 /**
+ * Logo filenames for Issuer / Issuing Body (frontend display only).
+ * Key = exact value as stored in document_metadata (issuer or issuing_body).
+ */
+function getIssuerBodyLogoMap() {
+    return [
+        'N&E Innovations' => 'N&E LOGO Colour.svg',
+        'SGS' => 'SGS_SA.svg',
+        'SGS Thailand' => 'SGS_SA.svg',
+        'SGS Singapore' => 'SGS_SA.svg',
+        'TÜV Austria' => 'tuev austria.svg',
+        'Intertek' => 'Logo_Intertek_01.svg',
+    ];
+}
+
+/**
+ * Get frontend logo path for an Issuer or Issuing Body value, or null if no logo.
+ * For use only when displaying documents on the compliance portal (not in admin).
+ */
+function getIssuerBodyLogoPath($rawValue) {
+    if ($rawValue === null || $rawValue === '') {
+        return null;
+    }
+    $map = getIssuerBodyLogoMap();
+    if (!isset($map[$rawValue])) {
+        return null;
+    }
+    $filename = $map[$rawValue];
+    $base = '/assets/images/logos/';
+    return $base . rawurlencode($filename);
+}
+
+/**
  * Build a display-ready metadata array for a document.
  * Only includes fields that have a value. Uses the category schema for labels and formatting.
+ * For issuer/issuing_body, adds logo_path when a logo exists (frontend use only).
  */
 function getFormattedDocumentMetadata($doc) {
     $schema = getCategoryMetadataSchema($doc['category_id']);
@@ -164,10 +197,18 @@ function getFormattedDocumentMetadata($doc) {
         }
 
         if ($formatted !== null) {
-            $result[] = [
+            $entry = [
                 'label' => $field['field_label'],
                 'value' => $formatted,
             ];
+            // Add logo path for Issuer / Issuing Body when we have a logo (frontend only)
+            if (($key === 'issuer' || $key === 'issuing_body') && $raw !== null) {
+                $logoPath = getIssuerBodyLogoPath($raw);
+                if ($logoPath !== null) {
+                    $entry['logo_path'] = $logoPath;
+                }
+            }
+            $result[] = $entry;
         }
     }
 

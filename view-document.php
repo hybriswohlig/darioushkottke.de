@@ -106,7 +106,11 @@ logUserActivity('document_view', $_SERVER['REQUEST_URI'], 'document', $id, 'PDF 
                             <?php foreach ($displayMeta as $meta): ?>
                                 <div style="font-size: 0.875rem;">
                                     <span style="color: var(--gray-500);"><?php echo esc($meta['label']); ?>:</span>
-                                    <span style="font-weight: 600; color: var(--gray-700);"><?php echo $meta['value']; ?></span>
+                                    <?php if (!empty($meta['logo_path'])): ?>
+                                        <img src="<?php echo esc($meta['logo_path']); ?>" alt="<?php echo esc($meta['value']); ?>" class="issuer-logo issuer-logo--header">
+                                    <?php else: ?>
+                                        <span style="font-weight: 600; color: var(--gray-700);"><?php echo $meta['value']; ?></span>
+                                    <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
                         </div>

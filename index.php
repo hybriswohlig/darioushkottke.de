@@ -283,7 +283,13 @@ try {
                                     <?php foreach ($displayMeta as $meta): ?>
                                         <div class="card-meta">
                                             <div class="card-meta-label"><?php echo esc($meta['label']); ?></div>
-                                            <div class="card-meta-value"><?php echo $meta['value']; ?></div>
+                                            <div class="card-meta-value">
+                                                <?php if (!empty($meta['logo_path'])): ?>
+                                                    <img src="<?php echo esc($meta['logo_path']); ?>" alt="<?php echo esc($meta['value']); ?>" class="issuer-logo">
+                                                <?php else: ?>
+                                                    <?php echo $meta['value']; ?>
+                                                <?php endif; ?>
+                                            </div>
                                         </div>
                                     <?php endforeach; ?>
                                 </div>

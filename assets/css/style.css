@@ -431,6 +431,19 @@ p {
     color: var(--primary-green);
 }
 
+/* Issuer / Issuing Body logos (frontend document display only) */
+.issuer-logo {
+    display: inline-block;
+    max-height: 2rem;
+    width: auto;
+    object-fit: contain;
+    vertical-align: middle;
+}
+.issuer-logo--header {
+    max-height: 1.75rem;
+    margin-left: 0.25rem;
+}
+
 /* ============================================
    Grid System
    ============================================ */
