@@ -136,8 +136,8 @@ function formatMetadataValue($fieldDef, $rawValue, $doc = null) {
 }
 
 /**
- * Logo filenames for Issuer / Issuing Body (frontend display only).
- * Key = exact value as stored in document_metadata (issuer or issuing_body).
+ * Logo filenames for Issuer / Issuing Body / Done by (frontend display only).
+ * Key = exact value as stored in document_metadata.
  */
 function getIssuerBodyLogoMap() {
     return [
@@ -151,7 +151,7 @@ function getIssuerBodyLogoMap() {
 }
 
 /**
- * Get frontend logo path for an Issuer or Issuing Body value, or null if no logo.
+ * Get frontend logo path for an Issuer, Issuing Body or Done by value, or null if no logo.
  * For use only when displaying documents on the compliance portal (not in admin).
  */
 function getIssuerBodyLogoPath($rawValue) {
@@ -168,9 +168,16 @@ function getIssuerBodyLogoPath($rawValue) {
 }
 
 /**
+ * Display order for card metadata: Done by, Issuer, Issuing Body first, then rest in schema order.
+ */
+function getMetadataDisplayOrder() {
+    return ['done_by' => 0, 'issuer' => 1, 'issuing_body' => 2];
+}
+
+/**
  * Build a display-ready metadata array for a document.
  * Only includes fields that have a value. Uses the category schema for labels and formatting.
- * For issuer/issuing_body, adds logo_path when a logo exists (frontend use only).
+ * Done by / Issuer / Issuing Body are always ordered first in the card; logo_path is set when a logo exists (frontend only).
  */
 function getFormattedDocumentMetadata($doc) {
     $schema = getCategoryMetadataSchema($doc['category_id']);
@@ -185,7 +192,9 @@ function getFormattedDocumentMetadata($doc) {
         }
     }
 
+    $order = getMetadataDisplayOrder();
     $result = [];
+    $idx = 0;
     foreach ($schema as $field) {
         $key = $field['field_key'];
 
@@ -198,11 +207,14 @@ function getFormattedDocumentMetadata($doc) {
 
         if ($formatted !== null) {
             $entry = [
+                'field_key' => $key,
                 'label' => $field['field_label'],
                 'value' => $formatted,
+                '_sort' => $order[$key] ?? 99,
+                '_idx' => $idx++,
             ];
-            // Add logo path for Issuer / Issuing Body when we have a logo (frontend only)
-            if (($key === 'issuer' || $key === 'issuing_body') && $raw !== null) {
+            // Add logo path for Done by / Issuer / Issuing Body when we have a logo (frontend only)
+            if (($key === 'done_by' || $key === 'issuer' || $key === 'issuing_body') && $raw !== null) {
                 $logoPath = getIssuerBodyLogoPath($raw);
                 if ($logoPath !== null) {
                     $entry['logo_path'] = $logoPath;
@@ -210,6 +222,18 @@ function getFormattedDocumentMetadata($doc) {
             }
             $result[] = $entry;
         }
+    }
+
+    usort($result, function ($a, $b) {
+        if ($a['_sort'] !== $b['_sort']) {
+            return $a['_sort'] - $b['_sort'];
+        }
+        return $a['_idx'] - $b['_idx'];
+    });
+
+    // Remove sort keys before returning
+    foreach ($result as &$e) {
+        unset($e['_sort'], $e['_idx']);
     }
 
     return $result;
