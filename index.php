@@ -239,6 +239,7 @@ try {
             <!-- Tag Filter Buttons -->
             <div class="tag-filters scroll-animate">
                 <button class="tag-filter-btn active" data-tag="all">All</button>
+                <button class="tag-filter-btn" data-tag="untagged">General</button>
                 <button class="tag-filter-btn" data-tag="vikang">VIKANG</button>
                 <button class="tag-filter-btn" data-tag="compostable">Compostable</button>
                 <button class="tag-filter-btn" data-tag="biodegradable">Biodegradable</button>

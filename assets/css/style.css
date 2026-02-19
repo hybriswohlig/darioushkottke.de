@@ -599,6 +599,11 @@ p {
     border-color: #0d9488;
 }
 
+.tag-filter-btn[data-tag="untagged"].active {
+    background: var(--gray-600);
+    border-color: var(--gray-600);
+}
+
 /* ============================================
    Search & Filters
    ============================================ */

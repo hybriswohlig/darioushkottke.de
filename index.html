@@ -429,6 +429,7 @@
         function getFilterBtnStyle(tag, isActive) {
             const colors = {
                 'all': '#16a34a',
+                'untagged': '#6b7280',
                 'vikang': '#16a34a',
                 'compostable': '#065f46',
                 'biodegradable': '#0d9488'
@@ -457,10 +458,12 @@
                 });
             });
 
-            // Filter items
+            // Filter items (General = untagged: no tag or empty)
             const filteredItems = currentTagFilter === 'all'
                 ? allItems
-                : allItems.filter(item => item.tag === currentTagFilter);
+                : currentTagFilter === 'untagged'
+                    ? allItems.filter(item => !item.tag || item.tag === 'untagged')
+                    : allItems.filter(item => item.tag === currentTagFilter);
 
             let html = `
                 <div class="bg-white rounded-2xl shadow-sm p-8 mb-6">
@@ -471,6 +474,7 @@
                 <!-- Tag Filters -->
                 <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;">
                     <button onclick="filterByTag('all')" style="${getFilterBtnStyle('all', currentTagFilter === 'all')}">All</button>
+                    <button onclick="filterByTag('untagged')" style="${getFilterBtnStyle('untagged', currentTagFilter === 'untagged')}">General</button>
                     <button onclick="filterByTag('vikang')" style="${getFilterBtnStyle('vikang', currentTagFilter === 'vikang')}">VIKANG</button>
                     <button onclick="filterByTag('compostable')" style="${getFilterBtnStyle('compostable', currentTagFilter === 'compostable')}">Compostable</button>
                     <button onclick="filterByTag('biodegradable')" style="${getFilterBtnStyle('biodegradable', currentTagFilter === 'biodegradable')}">Biodegradable</button>
