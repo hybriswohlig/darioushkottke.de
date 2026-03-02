@@ -132,18 +132,36 @@ try {
 } catch (Exception $e) {
     $msg = $e->getMessage();
     error_log("PDF watermarking error (document_id={$id}, file=" . ($doc['file_path'] ?? '') . "): " . $msg);
-    // Clean output buffers before sending error
+    error_log("Serving unwatermarked PDF as fallback for document_id={$id}");
+
+    // Log the download even when serving fallback (audit trail)
+    try {
+        $db = getDB();
+        $stmt = $db->prepare("INSERT INTO document_downloads (document_id, user_id, ip_address) VALUES (?, ?, ?)");
+        $stmt->execute([
+            $id,
+            $_SESSION['user_id'],
+            $_SERVER['REMOTE_ADDR'] ?? null
+        ]);
+    } catch (PDOException $dbEx) {
+        error_log("Download log error: " . $dbEx->getMessage());
+    }
+    logUserActivity('document_download', $_SERVER['REQUEST_URI'], 'document', $id, 'PDF download (unwatermarked fallback)');
+
+    // Clean output buffers
     while (ob_get_level()) {
         ob_end_clean();
     }
-    http_response_code(500);
-    header('Content-Type: application/json');
-    // User-friendly message for known FPDI parser limitations (some PDFs use unsupported features)
-    $userMessage = 'Failed to generate watermarked PDF. Please try again.';
-    if (stripos($msg, 'object stream') !== false || stripos($msg, 'cross-reference') !== false
-        || stripos($msg, 'Unable to parse') !== false || stripos($msg, 'Failed to read') !== false) {
-        $userMessage = 'This PDF could not be processed for watermarking (format not fully supported). Try re-saving the PDF in another tool or contact support.';
-    }
-    echo json_encode(['error' => $userMessage]);
+
+    // Serve original PDF without watermark so the user still gets the file
+    $pdfContent = file_get_contents($fullPath);
+    $filename = preg_replace('/[^a-zA-Z0-9._-]/', '_', $doc['title']) . '.pdf';
+    header('Content-Type: application/pdf');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    header('Content-Length: ' . strlen($pdfContent));
+    header('Cache-Control: no-store, no-cache, must-revalidate');
+    header('Pragma: no-cache');
+    header('X-Content-Type-Options: nosniff');
+    echo $pdfContent;
     exit;
 }
