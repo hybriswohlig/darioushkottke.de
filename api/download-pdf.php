@@ -130,13 +130,20 @@ try {
     exit;
 
 } catch (Exception $e) {
-    error_log("PDF watermarking error: " . $e->getMessage());
+    $msg = $e->getMessage();
+    error_log("PDF watermarking error (document_id={$id}, file=" . ($doc['file_path'] ?? '') . "): " . $msg);
     // Clean output buffers before sending error
     while (ob_get_level()) {
         ob_end_clean();
     }
     http_response_code(500);
     header('Content-Type: application/json');
-    echo json_encode(['error' => 'Failed to generate watermarked PDF. Please try again.']);
+    // User-friendly message for known FPDI parser limitations (some PDFs use unsupported features)
+    $userMessage = 'Failed to generate watermarked PDF. Please try again.';
+    if (stripos($msg, 'object stream') !== false || stripos($msg, 'cross-reference') !== false
+        || stripos($msg, 'Unable to parse') !== false || stripos($msg, 'Failed to read') !== false) {
+        $userMessage = 'This PDF could not be processed for watermarking (format not fully supported). Try re-saving the PDF in another tool or contact support.';
+    }
+    echo json_encode(['error' => $userMessage]);
     exit;
 }
