@@ -257,14 +257,19 @@ function getDocument($id) {
 
 /**
  * Search documents across all categories
+ * Uses same status filter as portal (published, planned, in_progress) so search results match what users see when browsing.
  */
 function searchDocuments($query, $categoryId = null) {
     $db = getDB();
+    $query = trim($query);
+    if ($query === '') {
+        return [];
+    }
 
     $sql = "SELECT d.*, c.name as category_name, c.slug as category_slug
             FROM documents d
             JOIN categories c ON d.category_id = c.id
-            WHERE (d.title LIKE ? OR d.description LIKE ?) AND d.status = 'published'";
+            WHERE (d.title LIKE ? OR d.description LIKE ?) AND d.status IN ('published', 'planned', 'in_progress')";
 
     $searchTerm = '%' . $query . '%';
     $params = [$searchTerm, $searchTerm];

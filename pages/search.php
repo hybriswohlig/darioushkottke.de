@@ -2,8 +2,8 @@
 // Protect this page - require user authentication
 require_once __DIR__ . '/../includes/user-auth.php';
 
-// Get search query
-$query = $_GET['q'] ?? '';
+// Get search query (trim so leading/trailing spaces don't break matching)
+$query = trim($_GET['q'] ?? '');
 $categoryFilter = $_GET['category'] ?? '';
 
 // Get all categories for filter
