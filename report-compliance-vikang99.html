@@ -1,686 +1,606 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Compliance Summary Report | ViKANG 99 PBAT Antimicrobial Home-Compostable Cling Wrap</title>
-
-  <link rel="stylesheet" href="styles/shared-base.css" />
-  <link rel="stylesheet" href="styles/report-shared.css" />
-
-  <style>
-    :root {
-      --report-bg: #f4f4f2;
-      --report-surface: #ffffff;
-      --report-text: #121212;
-      --report-muted: #5c5c5c;
-      --report-line: #ddddda;
-      --report-brand: #0f4a46;
-      --report-teal: #0a473b;
-      --report-teal-light: #0d5c4a;
-      --report-accent: #6cc04a;
-      --report-ok: #147a3f;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Compliance Summary Report | ViKANG 99 PBAT Photocatalytic Home-Compostable Cling Wrap</title>
+<link rel="stylesheet" href="styles/shared-base.css" />
+<link rel="stylesheet" href="styles/report-shared.css" />
+<style>
+:root {
+--report-bg: #f4f4f2;
+--report-surface: #ffffff;
+--report-text: #121212;
+--report-muted: #5c5c5c;
+--report-line: #ddddda;
+--report-brand: #0f4a46;
+--report-teal: #0a473b;
+--report-teal-light: #0d5c4a;
+--report-accent: #6cc04a;
+--report-ok: #147a3f;
     }
-
-    /* Green boxes (AG1-style teal callouts & document links) */
-    .green-box {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 20px 24px;
-      border-radius: 12px;
-      background: var(--report-teal);
-      color: #fff;
-      margin-top: 24px;
+/* Green boxes (AG1-style teal callouts & document links) */
+.green-box {
+display: flex;
+align-items: flex-start;
+gap: 12px;
+padding: 20px 24px;
+border-radius: 12px;
+background: var(--report-teal);
+color: #fff;
+margin-top: 24px;
     }
-    .green-box-icon {
-      font-size: 1.5rem;
-      line-height: 1;
-      flex-shrink: 0;
+.green-box-icon {
+font-size: 1.5rem;
+line-height: 1;
+flex-shrink: 0;
     }
-    .green-box-title {
-      font-weight: 600;
-      margin-bottom: 4px;
+.green-box-title {
+font-weight: 600;
+margin-bottom: 4px;
     }
-    .green-box-desc {
-      font-size: 0.9rem;
-      opacity: 0.9;
-      line-height: 1.45;
+.green-box-desc {
+font-size: 0.9rem;
+opacity: 0.9;
+line-height: 1.45;
     }
-
-    .doc-list-green {
-      list-style: none;
-      margin: 16px 0 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+.doc-list-green {
+list-style: none;
+margin: 16px 0 0;
+padding: 0;
+display: flex;
+flex-direction: column;
+gap: 12px;
     }
-    .doc-list-green li {
-      margin: 0;
-      padding-left: 0;
+.doc-list-green li {
+margin: 0;
+padding-left: 0;
     }
-    .doc-list-green li::before {
-      display: none;
+.doc-list-green li::before {
+display: none;
     }
-    .green-box-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 20px;
-      border-radius: 12px;
-      background: var(--report-teal);
-      color: #fff;
-      text-decoration: none;
-      font-weight: 500;
-      transition: background 0.2s ease;
+.green-box-link {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 16px 20px;
+border-radius: 12px;
+background: var(--report-teal);
+color: #fff;
+text-decoration: none;
+font-weight: 500;
+transition: background 0.2s ease;
     }
-    .green-box-link:hover {
-      background: var(--report-teal-light);
-      color: #fff;
+.green-box-link:hover {
+background: var(--report-teal-light);
+color: #fff;
     }
-    .green-box-link .plus {
-      font-weight: 700;
-      flex-shrink: 0;
+.green-box-link .plus {
+font-weight: 700;
+flex-shrink: 0;
     }
-
-    table.clean thead th {
-      background: var(--report-teal);
-      color: #fff;
-      font-weight: 600;
+table.clean thead th {
+background: var(--report-teal);
+color: #fff;
+font-weight: 600;
     }
-
-    body.report-compliance {
-      background: var(--report-bg);
-      color: var(--report-text);
-      font-family: "Inter", "Segoe UI", Arial, sans-serif;
-      line-height: 1.5;
+body.report-compliance {
+background: var(--report-bg);
+color: var(--report-text);
+font-family: "Inter", "Segoe UI", Arial, sans-serif;
+line-height: 1.5;
     }
-
-    .report-wrap {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 28px 24px 72px;
+.report-wrap {
+max-width: 1180px;
+margin: 0 auto;
+padding: 28px 24px 72px;
     }
-
-    .hero {
-      background: var(--report-surface);
-      border: 1px solid var(--report-line);
-      border-radius: 18px;
-      overflow: hidden;
-      margin-bottom: 22px;
+.hero {
+background: var(--report-surface);
+border: 1px solid var(--report-line);
+border-radius: 18px;
+overflow: hidden;
+margin-bottom: 22px;
     }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      min-height: 420px;
+.hero-grid {
+display: grid;
+grid-template-columns: 1.1fr 1fr;
+min-height: 420px;
     }
-
-    .hero-media {
-      background: linear-gradient(140deg, #ecebe8 0%, #dfddd8 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 26px;
+.hero-media {
+background: linear-gradient(140deg, #ecebe8 0%, #dfddd8 100%);
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 26px;
     }
-
-    .hero-media .placeholder {
-      width: 100%;
-      height: 100%;
-      min-height: 280px;
-      border: 2px dashed #b8b5ae;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #6b6a66;
-      font-weight: 600;
-      text-align: center;
-      padding: 14px;
+.hero-media .placeholder {
+width: 100%;
+height: 100%;
+min-height: 280px;
+border: 2px dashed #b8b5ae;
+border-radius: 14px;
+display: flex;
+align-items: center;
+justify-content: center;
+color: #6b6a66;
+font-weight: 600;
+text-align: center;
+padding: 14px;
     }
-
-    .hero-media .hero-img {
-      width: 100%;
-      height: 100%;
-      min-height: 280px;
-      max-height: 380px;
-      object-fit: cover;
-      border-radius: 14px;
+.hero-media .hero-img {
+width: 100%;
+height: 100%;
+min-height: 280px;
+max-height: 380px;
+object-fit: cover;
+border-radius: 14px;
     }
-
-    .hero-copy {
-      padding: 42px 38px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 14px;
+.hero-copy {
+padding: 42px 38px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+gap: 14px;
     }
-
-    .eyebrow {
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--report-muted);
-      font-weight: 700;
+.eyebrow {
+font-size: 11px;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(--report-muted);
+font-weight: 700;
     }
-
-    .hero h1 {
-      font-family: "Times New Roman", Georgia, serif;
-      font-size: clamp(30px, 3.4vw, 52px);
-      line-height: 1.03;
-      margin: 0;
-      font-weight: 500;
+.hero h1 {
+font-family: "Times New Roman", Georgia, serif;
+font-size: clamp(30px, 3.4vw, 52px);
+line-height: 1.03;
+margin: 0;
+font-weight: 500;
     }
-
-    .hero p {
-      color: #2f2f2f;
-      max-width: 52ch;
-      margin: 0;
+.hero p {
+color: #2f2f2f;
+max-width: 52ch;
+margin: 0;
     }
-
-    .meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 6px;
+.meta-row {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+margin-top: 6px;
     }
-
-    .meta-pill {
-      border: 1px solid var(--report-line);
-      border-radius: 999px;
-      padding: 7px 12px;
-      font-size: 12px;
-      background: #fbfbfa;
+.meta-pill {
+border: 1px solid var(--report-line);
+border-radius: 999px;
+padding: 7px 12px;
+font-size: 12px;
+background: #fbfbfa;
     }
-
-    .section {
-      background: var(--report-surface);
-      border: 1px solid var(--report-line);
-      border-radius: 18px;
-      padding: 34px 30px;
-      margin-bottom: 22px;
+.section {
+background: var(--report-surface);
+border: 1px solid var(--report-line);
+border-radius: 18px;
+padding: 34px 30px;
+margin-bottom: 22px;
     }
-
-    .section h2 {
-      font-family: "Times New Roman", Georgia, serif;
-      font-size: clamp(30px, 3vw, 46px);
-      line-height: 1.04;
-      margin: 0 0 18px;
-      border: 0;
-      color: var(--report-text);
-      padding: 0;
-      font-weight: 500;
+.section h2 {
+font-family: "Times New Roman", Georgia, serif;
+font-size: clamp(30px, 3vw, 46px);
+line-height: 1.04;
+margin: 0 0 18px;
+border: 0;
+color: var(--report-text);
+padding: 0;
+font-weight: 500;
     }
-
-    .section h3 {
-      color: var(--report-text);
-      margin: 26px 0 10px;
-      font-size: 22px;
-      font-family: "Times New Roman", Georgia, serif;
-      font-weight: 500;
+.section h3 {
+color: var(--report-text);
+margin: 26px 0 10px;
+font-size: 22px;
+font-family: "Times New Roman", Georgia, serif;
+font-weight: 500;
     }
-
-    .lead {
-      font-size: 18px;
-      color: #2b2b2b;
-      max-width: 72ch;
+.lead {
+font-size: 18px;
+color: #2b2b2b;
+max-width: 72ch;
     }
-
-    .kpi-grid-report {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 16px;
+.kpi-grid-report {
+display: grid;
+grid-template-columns: repeat(3, minmax(0, 1fr));
+gap: 12px;
+margin-top: 16px;
     }
-
-    .kpi {
-      border: 1px solid var(--report-line);
-      border-radius: 12px;
-      padding: 14px;
-      background: #fcfcfb;
+.kpi {
+border: 1px solid var(--report-line);
+border-radius: 12px;
+padding: 14px;
+background: #fcfcfb;
     }
-
-    .kpi .label {
-      font-size: 12px;
-      color: var(--report-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 6px;
-      display: block;
+.kpi .label {
+font-size: 12px;
+color: var(--report-muted);
+text-transform: uppercase;
+letter-spacing: 0.06em;
+margin-bottom: 6px;
+display: block;
     }
-
-    .kpi .value {
-      font-size: 26px;
-      color: var(--report-brand);
-      font-weight: 700;
-      line-height: 1.1;
+.kpi .value {
+font-size: 26px;
+color: var(--report-brand);
+font-weight: 700;
+line-height: 1.1;
     }
-
-    .split {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 18px;
-      align-items: start;
+.split {
+display: grid;
+grid-template-columns: 1.2fr 1fr;
+gap: 18px;
+align-items: start;
     }
-
-    .card {
-      border: 1px solid var(--report-line);
-      border-radius: 14px;
-      padding: 18px;
-      background: #fcfcfb;
+.card {
+border: 1px solid var(--report-line);
+border-radius: 14px;
+padding: 18px;
+background: #fcfcfb;
     }
-
-    .quote-box {
-      border-left: 4px solid var(--report-brand);
-      padding: 14px 16px;
-      margin: 14px 0;
-      background: #f5faf9;
-      border-radius: 10px;
-      font-style: italic;
+.quote-box {
+border-left: 4px solid var(--report-brand);
+padding: 14px 16px;
+margin: 14px 0;
+background: #f5faf9;
+border-radius: 10px;
+font-style: italic;
     }
-
-    .checklist {
-      margin: 8px 0 0 0;
-      padding: 0;
-      list-style: none;
+.checklist {
+margin: 8px 0 0 0;
+padding: 0;
+list-style: none;
     }
-
-    .checklist li {
-      margin: 0 0 10px;
-      padding-left: 26px;
-      position: relative;
+.checklist li {
+margin: 0 0 10px;
+padding-left: 26px;
+position: relative;
     }
-
-    .checklist li::before {
-      content: "✓";
-      position: absolute;
-      left: 0;
-      top: 0;
-      color: var(--report-ok);
-      font-weight: 700;
+.checklist li::before {
+content: "✓";
+position: absolute;
+left: 0;
+top: 0;
+color: var(--report-ok);
+font-weight: 700;
     }
-
-    .image-trio {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 14px;
+.image-trio {
+display: grid;
+grid-template-columns: repeat(3, minmax(0, 1fr));
+gap: 12px;
+margin-top: 14px;
     }
-
-    .img-slot {
-      border: 2px dashed #b9b6b0;
-      background: #f5f4f2;
-      border-radius: 12px;
-      min-height: 180px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 12px;
-      color: #5d5b57;
-      font-weight: 600;
+.img-slot {
+border: 2px dashed #b9b6b0;
+background: #f5f4f2;
+border-radius: 12px;
+min-height: 180px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+padding: 12px;
+color: #5d5b57;
+font-weight: 600;
     }
-
-    .img-slot img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 8px;
+.img-slot img {
+width: 100%;
+height: 140px;
+object-fit: cover;
+border-radius: 8px;
+margin-bottom: 8px;
     }
-
-    .img-slot .caption {
-      font-size: 13px;
-      font-weight: 600;
-      color: #3d3d3d;
+.img-slot .caption {
+font-size: 13px;
+font-weight: 600;
+color: #3d3d3d;
     }
-
-    table.clean {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-      border: 1px solid var(--report-line);
-      border-radius: 12px;
-      overflow: hidden;
-      background: #fff;
-      font-size: 14px;
+table.clean {
+width: 100%;
+border-collapse: collapse;
+margin-top: 12px;
+border: 1px solid var(--report-line);
+border-radius: 12px;
+overflow: hidden;
+background: #fff;
+font-size: 14px;
     }
-
-    table.clean th,
+table.clean th,
     table.clean td {
-      border-bottom: 1px solid var(--report-line);
-      padding: 12px 10px;
-      vertical-align: top;
-      text-align: left;
+border-bottom: 1px solid var(--report-line);
+padding: 12px 10px;
+vertical-align: top;
+text-align: left;
     }
-
-    table.clean th {
-      background: #f3f5f4;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #303030;
+table.clean th {
+background: #f3f5f4;
+font-size: 12px;
+text-transform: uppercase;
+letter-spacing: 0.05em;
+color: #303030;
     }
-
-    .status-pass { color: var(--report-ok); font-weight: 700; }
-    .status-comp { color: var(--report-brand); font-weight: 700; }
-
-    .footer-note {
-      color: var(--report-muted);
-      font-size: 14px;
-      margin-top: 8px;
+.status-pass { color: var(--report-ok); font-weight: 700; }
+.status-comp { color: var(--report-brand); font-weight: 700; }
+.footer-note {
+color: var(--report-muted);
+font-size: 14px;
+margin-top: 8px;
     }
-
-    .report-wrap .section ul {
-      margin-left: 1.25rem;
-      margin-top: 0.5rem;
+.report-wrap .section ul {
+margin-left: 1.25rem;
+margin-top: 0.5rem;
     }
-
-    .report-wrap .section ul li {
-      margin-bottom: 0.5rem;
+.report-wrap .section ul li {
+margin-bottom: 0.5rem;
     }
-
-    @media (max-width: 980px) {
-      .hero-grid,
-      .split {
-        grid-template-columns: 1fr;
+@media (max-width: 980px) {
+.hero-grid,
+.split {
+grid-template-columns: 1fr;
       }
-      .kpi-grid-report,
-      .image-trio {
-        grid-template-columns: 1fr;
+.kpi-grid-report,
+.image-trio {
+grid-template-columns: 1fr;
       }
-      .hero-copy {
-        padding: 28px 22px;
+.hero-copy {
+padding: 28px 22px;
       }
-      .section {
-        padding: 24px 18px;
+.section {
+padding: 24px 18px;
       }
     }
-  </style>
+</style>
 </head>
 <body class="report-compliance">
-  <!-- Header Navigation (matches other reports) -->
-  <div class="header-nav">
-    <div class="header-content">
-      <div class="logo-container">
-        <img src="assets/images/logos/N&amp;E LOGO Colour.svg" alt="N&E Innovations Logo" style="width:64px;height:64px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="logo-box" style="display:none;">N&E</div>
-        <div class="logo-text">
-          <h1>N&E Innovations</h1>
-          <p>Compliance Documentation Portal</p>
-        </div>
-      </div>
-      <a href="index.html" class="nav-button">← Back to Home</a>
-    </div>
-  </div>
-
-  <main class="report-wrap">
-
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero-grid">
-        <div class="hero-media">
-          <img src="assets/images/logos/compostableclingwrap.png" alt="ViKANG 99 PBAT Antimicrobial Home-Compostable Cling Wrap" class="hero-img" />
-        </div>
-        <div class="hero-copy">
-          <span class="eyebrow">Compliance Summary Report</span>
-          <h1>ViKANG 99 PBAT Antimicrobial Home-Compostable Cling Wrap</h1>
-          <p>N&E Innovations | February 2026</p>
-          <p>
+<!-- Header Navigation (matches other reports) -->
+<div class="header-nav">
+<div class="header-content">
+<div class="logo-container">
+<img src="assets/images/logos/N&amp;E LOGO Colour.svg" alt="N&amp;E Innovations Logo" style="width:64px;height:64px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+<div class="logo-box" style="display:none;">N&amp;E</div>
+<div class="logo-text">
+<h1>N&amp;E Innovations</h1>
+<p>Compliance Documentation Portal</p>
+</div>
+</div>
+<a href="index.html" class="nav-button">← Back to Home</a>
+</div>
+</div>
+<main class="report-wrap">
+<!-- HERO -->
+<section class="hero">
+<div class="hero-grid">
+<div class="hero-media">
+<img src="assets/images/logos/compostableclingwrap.png" alt="ViKANG 99 PBAT Photocatalytic Home-Compostable Cling Wrap" class="hero-img" />
+</div>
+<div class="hero-copy">
+<span class="eyebrow">Compliance Summary Report</span>
+<h1>ViKANG 99 PBAT Photocatalytic Home-Compostable Cling Wrap</h1>
+<p>N&amp;E Innovations | February 2026</p>
+<p>
             Clear, factual overview of EU regulatory status (Germany, France, UK),
             supported by independent testing and ECHA-relevant classification logic.
-          </p>
-          <div class="meta-row">
-            <span class="meta-pill">Food Contact: PASS</span>
-            <span class="meta-pill">REACH SVHC: PASS</span>
-            <span class="meta-pill">OK Compost HOME: Certified</span>
-            <span class="meta-pill">BPR: Treated Article</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- EXECUTIVE SUMMARY -->
-    <section class="section">
-      <h2>Executive Summary</h2>
-      <p class="lead">
-        N&E Innovations presents the ViKANG 99 PBAT Antimicrobial Cling Wrap: a thin,
+</p>
+<div class="meta-row">
+<span class="meta-pill">Food Contact: PASS</span>
+<span class="meta-pill">REACH SVHC: PASS</span>
+<span class="meta-pill">OK Compost HOME: Certified</span>
+<span class="meta-pill">BPR: Treated Article</span>
+</div>
+</div>
+</div>
+</section>
+<!-- EXECUTIVE SUMMARY -->
+<section class="section">
+<h2>Executive Summary</h2>
+<p class="lead">
+        N&amp;E Innovations presents the ViKANG 99 PBAT Home-Compostable Cling Wrap: a thin,
         flexible, transparent pale-brown film designed for food wrapping and surface
         protection. It combines biodegradable PBAT with embedded photocatalytic iron-oxide
-        technology to deliver antimicrobial surface activity without chemical release.
-      </p>
-      <p>
+        technology without chemical release.
+</p>
+<p>
         The product is fully compliant with all relevant EU regulations for food contact,
         chemical safety, biocidal treated articles, and packaging waste. Recent SGS testing
         (February 2026) confirms complete compliance, and the film carries OK Compost HOME
         certification from TÜV Austria.
-      </p>
-      <div class="kpi-grid-report">
-        <article class="kpi">
-          <span class="label">Regulatory Scope</span>
-          <div class="value">EU / UK</div>
-        </article>
-        <article class="kpi">
-          <span class="label">Latest Testing</span>
-          <div class="value">Feb 2026</div>
-        </article>
-        <article class="kpi">
-          <span class="label">Compostability</span>
-          <div class="value">OK HOME</div>
-        </article>
-      </div>
-    </section>
-
-    <!-- 1. PRODUCT & TECHNOLOGY -->
-    <section class="section">
-      <h2>1. Product &amp; Technology Overview</h2>
-
-      <h3>What is the ViKANG 99 Cling Wrap?</h3>
-      <p>
-        A single-use, high-performance PBAT film with built-in antimicrobial properties.
-        It is thin (0.01 mm), highly stretchable, and transparent pale-brown, ideal for
+</p>
+<div class="kpi-grid-report">
+<article class="kpi">
+<span class="label">Regulatory Scope</span>
+<div class="value">EU / UK</div>
+</article>
+<article class="kpi">
+<span class="label">Latest Testing</span>
+<div class="value">Feb 2026</div>
+</article>
+<article class="kpi">
+<span class="label">Compostability</span>
+<div class="value">OK HOME</div>
+</article>
+</div>
+</section>
+<!-- 1. PRODUCT & TECHNOLOGY -->
+<section class="section">
+<h2>1. Product &amp; Technology Overview</h2>
+<h3>What is the ViKANG 99 Cling Wrap?</h3>
+<p>
+        A single-use, high-performance PBAT film. It is thin (0.01 mm), highly stretchable, and transparent pale-brown, ideal for
         food wrapping and surface protection.
-      </p>
-
-      <h3>Core Components</h3>
-      <ul>
-        <li><strong>Base material:</strong> PBAT (polybutylene adipate terephthalate) — a biodegradable polyester made from renewable sources.</li>
-        <li><strong>Active technology:</strong> ViKANG 99 — a natural iron-oxide photocatalyst fully embedded into the film during extrusion (no surface coating or releasable substances).</li>
-      </ul>
-
-      <h3>How ViKANG 99 Works</h3>
-      <p>
-        When exposed to ordinary light, the embedded iron oxide generates Reactive Oxygen
-        Species (ROS/free radicals) from ambient air and humidity. This creates a mild
-        acidic environment on the film surface that disrupts bacterial and viral cell
-        membranes — without any chemical migration into food.
-      </p>
-
-      <h3>Origin of ViKANG 99 – Cashew Shell Valorisation</h3>
-      <p>
+</p>
+<h3>Core Components</h3>
+<ul>
+<li><strong>Base material:</strong> PBAT (polybutylene adipate terephthalate) — a biodegradable polyester made from renewable sources.</li>
+<li><strong>Active technology:</strong> ViKANG 99 — a natural iron-oxide photocatalyst fully embedded into the film during extrusion (no surface coating or releasable substances).</li>
+</ul>
+<h3>How ViKANG 99 Works</h3>
+<p>
+        When exposed to ordinary light, the embedded iron oxide functions as a photocatalyst using ambient air and humidity. This creates surface effects on the film — without any chemical migration into food.
+</p>
+<h3>Origin of ViKANG 99 – Cashew Shell Valorisation</h3>
+<p>
         ViKANG 99 is produced from cashew nut shells, an agricultural by-product that
         would otherwise be waste. The process turns this waste into a high-value
         photocatalytic powder with very low CO₂ emissions (approximately 0.8–1.2 kg
         CO₂eq per kg of ViKANG 99).
-      </p>
-
-      <!-- Images: Raw cashew nut shells | Processed ViKANG 99 powder | Film extrusion (embedding) -->
-      <div class="image-trio">
-        <div class="img-slot">
-          <img src="assets/images/logos/cashewshell.svg" alt="Raw cashew nut shells" />
-          <span class="caption">Raw cashew nut shells</span>
-        </div>
-        <div class="img-slot">
-          <img src="assets/images/logos/vikang.svg" alt="Processed ViKANG 99 powder" />
-          <span class="caption">Processed ViKANG 99 powder</span>
-        </div>
-        <div class="img-slot">
-          <img src="assets/images/logos/clingwrapproduction.svg" alt="Film extrusion process (embedding stage)" />
-          <span class="caption">Film extrusion process (embedding stage)</span>
-        </div>
-      </div>
-
-      <h3>Scientific Basis</h3>
-      <p>
-        The photocatalytic mechanism is based on Fenton and Haber-Weiss reactions with
-        iron oxides under light exposure.
-      </p>
-      <ul>
-        <li>Wydra et al. (2015) – <em>RSC Advances</em> — <a href="https://pubs.rsc.org/en/content/articlelanding/2015/ra/c4ra13564d" target="_blank" rel="noopener">DOI: 10.1039/C4RA13564D</a></li>
-        <li>Wu et al. (2014) – <em>Journal of Food and Drug Analysis</em> — <a href="https://www.sciencedirect.com/science/article/pii/S1021949814000088" target="_blank" rel="noopener">DOI: 10.1016/j.jfda.2014.01.007</a></li>
-      </ul>
-    </section>
-
-    <!-- 2. REGULATORY CLASSIFICATION -->
-    <section class="section">
-      <h2>2. Regulatory Classification</h2>
-      <div class="split">
-        <div>
-          <h3>Classification</h3>
-          <p>The product is classified as a <strong>treated article</strong> under Article 3(1)(a) second indent of the Biocidal Products Regulation (BPR):</p>
-          <div class="quote-box">
+</p>
+<!-- Images: Raw cashew nut shells | Processed ViKANG 99 powder | Film extrusion (embedding) -->
+<div class="image-trio">
+<div class="img-slot">
+<img src="assets/images/logos/cashewshell.svg" alt="Raw cashew nut shells" />
+<span class="caption">Raw cashew nut shells</span>
+</div>
+<div class="img-slot">
+<img src="assets/images/logos/vikang.svg" alt="Processed ViKANG 99 powder" />
+<span class="caption">Processed ViKANG 99 powder</span>
+</div>
+<div class="img-slot">
+<img src="assets/images/logos/clingwrapproduction.svg" alt="Film extrusion process (embedding stage)" />
+<span class="caption">Film extrusion process (embedding stage)</span>
+</div>
+</div>
+</section>
+<!-- 2. REGULATORY CLASSIFICATION -->
+<section class="section">
+<h2>2. Regulatory Classification</h2>
+<div class="split">
+<div>
+<h3>Classification</h3>
+<p>The product is classified as a <strong>treated article</strong> under Article 3(1)(a) second indent of the Biocidal Products Regulation (BPR):</p>
+<div class="quote-box">
             “‘treated article’ means any substance, mixture or article which has been treated
             with, or intentionally incorporates, one or more biocidal products;”
-          </div>
-          <p class="footer-note">Source: Regulation (EU) No 528/2012 — <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32012R0528" target="_blank" rel="noopener">full text</a></p>
-        </div>
-        <div class="card">
-          <h3 style="margin-top:0;">Why Case-Type 4?</h3>
-          <ul class="checklist">
-            <li>The antimicrobial effect (ROS/free radicals) is generated <strong>only in the final article</strong> from ambient air and water when exposed to light.</li>
-            <li>No separate biocidal mixture, precursor, or coating is placed on the market.</li>
-            <li>The iron-oxide catalyst is fully embedded during manufacturing.</li>
-            <li>This matches ECHA’s Case-Type 4 for in-situ generated active substances. <strong>No Article 95 listing</strong> required during the transitional period (Article 93 BPR).</li>
-          </ul>
-        </div>
-      </div>
-      <div class="green-box" aria-label="Consequence">
-        <span class="green-box-icon" aria-hidden="true">✓</span>
-        <div>
-          <p class="green-box-title">Consequence</p>
-          <p class="green-box-desc">No Article 95 listing or national notification required during the transitional period (Article 93 BPR).</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. COMPLIANCE OVERVIEW -->
-    <section class="section">
-      <h2>3. Regulatory Compliance Overview</h2>
-      <table class="clean">
-        <thead>
-          <tr>
-            <th>Regulation</th>
-            <th>Scope</th>
-            <th>Status</th>
-            <th>Key Evidence (February 2026)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>(EC) No 1935/2004 + (EU) No 10/2011</td>
-            <td>Food contact materials (all simulants incl. olive oil)</td>
-            <td class="status-pass">PASS</td>
-            <td>SGS Report No. 10621484 (26 Feb 2026)</td>
-          </tr>
-          <tr>
-            <td>REACH (EC) No 1907/2006</td>
-            <td>SVHC in finished article (251 substances)</td>
-            <td class="status-pass">PASS</td>
-            <td>SGS Report No. 10621484(1) (25 Feb 2026)</td>
-          </tr>
-          <tr>
-            <td>BPR (EU) No 528/2012</td>
-            <td>Treated article (Case-Type 4)</td>
-            <td class="status-comp">Compliant</td>
-            <td>Internal analysis + ongoing evaluation</td>
-          </tr>
-          <tr>
-            <td>OK Compost HOME (TÜV Austria)</td>
-            <td>Home compostability</td>
-            <td class="status-comp">Certified</td>
-            <td>TÜV Austria Certificate</td>
-          </tr>
-          <tr>
-            <td>PPWR (EU) 2024/40</td>
-            <td>Packaging waste &amp; compostability claims</td>
-            <td class="status-comp">Compliant</td>
-            <td>Certification + labelling ready</td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="footer-note"><strong>Declaration of Compliance (DoC):</strong> Available and signed by our EU Responsible Party based on the February 2026 SGS reports.</p>
-    </section>
-
-    <!-- 4. PRODUCT PROPERTIES -->
-    <section class="section">
-      <h2>4. Product Properties</h2>
-      <p><strong>Technical Highlights</strong> (TDS – 1 June 2025)</p>
-      <div class="kpi-grid-report">
-        <article class="kpi"><span class="label">Thickness</span><div class="value">0.01 mm (10 µm)</div></article>
-        <article class="kpi"><span class="label">Heat Tolerance</span><div class="value">−40 °C to +110 °C</div></article>
-        <article class="kpi"><span class="label">Tensile Strength</span><div class="value">26.7 / 15.3 MPa</div></article>
-      </div>
-      <p><strong>Home Compostable:</strong> Certified OK Compost HOME (TÜV Austria). The film fully biodegrades in a typical garden compost heap (20–30 °C) within 12 months, leaving no microplastics or toxic residues.</p>
-    </section>
-
-    <!-- 5. DOCUMENTS -->
-    <section class="section">
-      <h2>5. Available Compliance Documents</h2>
-      <p>All documents are available upon request. Click to open or request from Regulatory.</p>
-      <ul class="doc-list-green">
-        <li><a href="view-document.php?id=40" class="green-box-link"><span class="plus">+</span> Technical Data Sheet (1 June 2025)</a></li>
-        <li><a href="view-document.php?id=51" class="green-box-link"><span class="plus">+</span> Full EU Food Contact Report – SGS No. 10621484 (26 Feb 2026)</a></li>
-        <li><a href="view-document.php?id=28" class="green-box-link"><span class="plus">+</span> REACH SVHC Report (251 substances) – SGS No. 10621484(1) (25 Feb 2026)</a></li>
-        <li><a href="view-document.php?id=30" class="green-box-link"><span class="plus">+</span> OK Compost HOME Certificate – TÜV Austria</a></li>
-        <li><a href="view-document.php?id=12" class="green-box-link"><span class="plus">+</span> Declaration of Compliance (DoC) – signed EU version</a></li>
-      </ul>
-    </section>
-
-    <!-- 6. SOURCES -->
-    <section class="section">
-      <h2>6. Sources &amp; References</h2>
-      <div class="split">
-        <div class="card">
-          <h3 style="margin-top:0;">Scientific Sources</h3>
-          <ul>
-            <li>Wydra et al. (2015) – RSC Advances — DOI: 10.1039/C4RA13564D</li>
-            <li>Wu et al. (2014) – Journal of Food and Drug Analysis — DOI: 10.1016/j.jfda.2014.01.007</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3 style="margin-top:0;">Regulatory / Testing Reports &amp; Documents</h3>
-          <ul>
-            <li>SGS Food Contact Report (full EU compliance, all simulants) – No. 10621484 (26 Feb 2026)</li>
-            <li>SGS REACH SVHC Report (251 substances on finished film) – No. 10621484(1) (25 Feb 2026)</li>
-            <li>OK Compost HOME Certificate – TÜV Austria</li>
-            <li>Declaration of Compliance (DoC) – signed by EU Responsible Party</li>
-            <li>Technical Data Sheet (product properties) – 1 June 2025</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONCLUSION -->
-    <section class="section">
-      <h2>Conclusion</h2>
-      <p class="lead">
-        The ViKANG 99 PBAT Antimicrobial Cling Wrap is a safe, sustainable, and fully
+</div>
+<p class="footer-note">Source: Regulation (EU) No 528/2012 — <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32012R0528" target="_blank" rel="noopener">full text</a></p>
+</div>
+<div class="card">
+<h3 style="margin-top:0;">Why Case-Type 4?</h3>
+<ul class="checklist">
+<li>The photocatalytic effect is generated <strong>only in the final article</strong> from ambient air and water when exposed to light.</li>
+<li>No separate biocidal mixture, precursor, or coating is placed on the market.</li>
+<li>The iron-oxide catalyst is fully embedded during manufacturing.</li>
+<li>This matches ECHA’s Case-Type 4 for in-situ generated active substances. <strong>No Article 95 listing</strong> required during the transitional period (Article 93 BPR).</li>
+</ul>
+</div>
+</div>
+<div class="green-box" aria-label="Consequence">
+<span class="green-box-icon" aria-hidden="true">✓</span>
+<div>
+<p class="green-box-title">Consequence</p>
+<p class="green-box-desc">No Article 95 listing or national notification required during the transitional period (Article 93 BPR).</p>
+</div>
+</div>
+</section>
+<!-- 3. COMPLIANCE OVERVIEW -->
+<section class="section">
+<h2>3. Regulatory Compliance Overview</h2>
+<table class="clean">
+<thead>
+<tr>
+<th>Regulation</th>
+<th>Scope</th>
+<th>Status</th>
+<th>Key Evidence (February 2026)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(EC) No 1935/2004 + (EU) No 10/2011</td>
+<td>Food contact materials (all simulants incl. olive oil)</td>
+<td class="status-pass">PASS</td>
+<td>SGS Report No. 10621484 (26 Feb 2026)</td>
+</tr>
+<tr>
+<td>REACH (EC) No 1907/2006</td>
+<td>SVHC in finished article (251 substances)</td>
+<td class="status-pass">PASS</td>
+<td>SGS Report No. 10621484(1) (25 Feb 2026)</td>
+</tr>
+<tr>
+<td>BPR (EU) No 528/2012</td>
+<td>Treated article (Case-Type 4)</td>
+<td class="status-comp">Compliant</td>
+<td>Internal analysis + ongoing evaluation</td>
+</tr>
+<tr>
+<td>OK Compost HOME (TÜV Austria)</td>
+<td>Home compostability</td>
+<td class="status-comp">Certified</td>
+<td>TÜV Austria Certificate</td>
+</tr>
+<tr>
+<td>PPWR (EU) 2024/40</td>
+<td>Packaging waste &amp; compostability claims</td>
+<td class="status-comp">Compliant</td>
+<td>Certification + labelling ready</td>
+</tr>
+</tbody>
+</table>
+<p class="footer-note"><strong>Declaration of Compliance (DoC):</strong> Available and signed by our EU Responsible Party based on the February 2026 SGS reports.</p>
+</section>
+<!-- 4. PRODUCT PROPERTIES -->
+<section class="section">
+<h2>4. Product Properties</h2>
+<p><strong>Technical Highlights</strong> (TDS – 1 June 2025)</p>
+<div class="kpi-grid-report">
+<article class="kpi"><span class="label">Thickness</span><div class="value">0.01 mm (10 µm)</div></article>
+<article class="kpi"><span class="label">Heat Tolerance</span><div class="value">−40 °C to +110 °C</div></article>
+<article class="kpi"><span class="label">Tensile Strength</span><div class="value">26.7 / 15.3 MPa</div></article>
+</div>
+<p><strong>Home Compostable:</strong> Certified OK Compost HOME (TÜV Austria). The film fully biodegrades in a typical garden compost heap (20–30 °C) within 12 months, leaving no microplastics or toxic residues.</p>
+</section>
+<!-- 5. DOCUMENTS -->
+<section class="section">
+<h2>5. Available Compliance Documents</h2>
+<p>All documents are available upon request. Click to open or request from Regulatory.</p>
+<ul class="doc-list-green">
+<li><a href="view-document.php?id=40" class="green-box-link"><span class="plus">+</span> Technical Data Sheet (1 June 2025)</a></li>
+<li><a href="view-document.php?id=51" class="green-box-link"><span class="plus">+</span> Full EU Food Contact Report – SGS No. 10621484 (26 Feb 2026)</a></li>
+<li><a href="view-document.php?id=28" class="green-box-link"><span class="plus">+</span> REACH SVHC Report (251 substances) – SGS No. 10621484(1) (25 Feb 2026)</a></li>
+<li><a href="view-document.php?id=30" class="green-box-link"><span class="plus">+</span> OK Compost HOME Certificate – TÜV Austria</a></li>
+<li><a href="view-document.php?id=12" class="green-box-link"><span class="plus">+</span> Declaration of Compliance (DoC) – signed EU version</a></li>
+</ul>
+</section>
+<!-- 6. SOURCES -->
+<section class="section">
+<h2>6. Sources &amp; References</h2>
+<div class="split">
+<div class="card">
+<h3 style="margin-top:0;">Regulatory / Testing Reports &amp; Documents</h3>
+<ul>
+<li>SGS Food Contact Report (full EU compliance, all simulants) – No. 10621484 (26 Feb 2026)</li>
+<li>SGS REACH SVHC Report (251 substances on finished film) – No. 10621484(1) (25 Feb 2026)</li>
+<li>OK Compost HOME Certificate – TÜV Austria</li>
+<li>Declaration of Compliance (DoC) – signed by EU Responsible Party</li>
+<li>Technical Data Sheet (product properties) – 1 June 2025</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- CONCLUSION -->
+<section class="section">
+<h2>Conclusion</h2>
+<p class="lead">
+        The ViKANG 99 PBAT Photocatalytic Home-Compostable Cling Wrap is a safe, sustainable, and fully
         compliant solution for food retailers. With complete EU food-contact testing,
         current REACH compliance, home-compostable certification, and treated-article
         status under BPR, it is ready for immediate market placement in Germany, France,
         and the UK.
-      </p>
-      <p>We are happy to provide any additional documentation or arrange a call with our regulatory team.</p>
-      <p>
-        <strong>Contact</strong><br />
+</p>
+<p>We are happy to provide any additional documentation or arrange a call with our regulatory team.</p>
+<p>
+<strong>Contact</strong><br />
         Darioush Kottke<br />
         Regulatory &amp; Compliance<br />
         N&amp;E Innovations<br />
         Email: <a href="mailto:business@vi-kang.com">business@vi-kang.com</a>
-      </p>
-    </section>
-  </main>
+</p>
+</section>
+</main>
 </body>
 </html>
