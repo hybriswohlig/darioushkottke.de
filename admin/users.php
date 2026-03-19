@@ -359,6 +359,7 @@ $users = getAllUsers();
                             <th>Name</th>
                             <th>Email</th>
                             <th>Company</th>
+                            <th>Role</th>
                             <th>Status</th>
                             <th>Expiry</th>
                             <th>Last Login</th>
@@ -368,7 +369,7 @@ $users = getAllUsers();
                     <tbody>
                         <?php if (empty($users)): ?>
                             <tr>
-                                <td colspan="7" style="text-align: center; padding: 2rem; color: var(--gray-500);">
+                                <td colspan="8" style="text-align: center; padding: 2rem; color: var(--gray-500);">
                                     No users yet. Click "Add New User" to create the first account.
                                 </td>
                             </tr>
@@ -383,6 +384,7 @@ $users = getAllUsers();
                                     </td>
                                     <td><?php echo esc($user['email']); ?></td>
                                     <td><?php echo esc($user['company'] ?? '-'); ?></td>
+                                    <td><?php echo getUserAccessRoleBadge($user['access_role'] ?? 'normal'); ?></td>
                                     <td>
                                         <span class="status-<?php echo $user['status']; ?>">
                                             <?php echo ucfirst($user['status']); ?>
@@ -454,6 +456,14 @@ $users = getAllUsers();
                 </div>
 
                 <div class="form-group">
+                    <label for="access_role" class="form-label">Access Role</label>
+                    <select id="access_role" name="access_role" class="form-select">
+                        <option value="normal">Normal user (sees everything)</option>
+                        <option value="simplified">Simplified user (sees only simplified documents)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label for="status" class="form-label">Status</label>
                     <select id="status" name="status" class="form-select">
                         <option value="active">Active</option>
@@ -521,6 +531,7 @@ $users = getAllUsers();
             document.getElementById('full_name').value = user.full_name;
             document.getElementById('email').value = user.email;
             document.getElementById('company').value = user.company || '';
+            document.getElementById('access_role').value = user.access_role || 'normal';
             document.getElementById('status').value = user.status;
             document.getElementById('expiry_date').value = user.expiry_date || '';
             document.getElementById('userModal').classList.add('active');
@@ -613,6 +624,7 @@ $users = getAllUsers();
                 full_name: formData.get('full_name'),
                 email: formData.get('email'),
                 company: formData.get('company') || null,
+                access_role: formData.get('access_role') || 'normal',
                 status: formData.get('status'),
                 expiry_date: formData.get('expiry_date') || ''
             };

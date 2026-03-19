@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS documents (
     version VARCHAR(50),
     date_published DATE,
     featured BOOLEAN DEFAULT FALSE,
+    visible_in_simplified TINYINT(1) NOT NULL DEFAULT 0,
     tag VARCHAR(50) DEFAULT NULL,
     view_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -35,6 +36,7 @@ CREATE TABLE IF NOT EXISTS documents (
     INDEX idx_category (category_id),
     INDEX idx_status (status),
     INDEX idx_featured (featured),
+    INDEX idx_visible_in_simplified (visible_in_simplified),
     INDEX idx_tag (tag),
     INDEX idx_document_type (document_type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -109,6 +111,7 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash VARCHAR(255) NOT NULL,
     must_change_password TINYINT(1) DEFAULT 1,
     status ENUM('active', 'inactive') DEFAULT 'active',
+    access_role ENUM('normal', 'simplified') NOT NULL DEFAULT 'normal',
     expiry_date DATE DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

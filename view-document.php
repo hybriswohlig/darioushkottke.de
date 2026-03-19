@@ -14,7 +14,7 @@ if ($id <= 0) {
 }
 
 // Fetch document
-$doc = getDocument($id);
+$doc = getAccessibleDocument($id);
 if (!$doc || ($doc['document_type'] ?? '') !== 'pdf' || $doc['status'] !== 'published') {
     header('Location: /');
     exit;

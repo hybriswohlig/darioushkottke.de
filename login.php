@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Please enter both email and password.';
     } else {
         $db = getDB();
-        $stmt = $db->prepare("SELECT id, full_name, email, password_hash, must_change_password, status, expiry_date FROM users WHERE email = ? LIMIT 1");
+        $stmt = $db->prepare("SELECT id, full_name, email, password_hash, must_change_password, status, access_role, expiry_date FROM users WHERE email = ? LIMIT 1");
         $stmt->execute([$email]);
         $user = $stmt->fetch();
 
@@ -39,6 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_name'] = $user['full_name'];
+            $_SESSION['user_access_role'] = in_array(($user['access_role'] ?? 'normal'), ['normal', 'simplified'], true)
+                ? $user['access_role']
+                : 'normal';
             $_SESSION['user_must_change_password'] = (bool)$user['must_change_password'];
             $_SESSION['user_last_activity'] = time();
 

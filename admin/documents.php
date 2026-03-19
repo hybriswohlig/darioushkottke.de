@@ -396,6 +396,7 @@ $documents = $stmt->fetchAll();
                             <th>Category</th>
                             <th>Type</th>
                             <th>Status</th>
+                            <th>Simplified</th>
                             <th>Tag</th>
                             <th>Views</th>
                             <th>Date</th>
@@ -422,6 +423,7 @@ $documents = $stmt->fetchAll();
                                     ?>
                                 </td>
                                 <td><?php echo getStatusBadge($doc['status']); ?></td>
+                                <td><?php echo getSimplifiedVisibilityBadge($doc['visible_in_simplified'] ?? 0); ?></td>
                                 <td><?php echo getTagBadge($doc['tag']); ?></td>
                                 <td><?php echo $doc['view_count']; ?></td>
                                 <td><?php echo formatDate($doc['created_at']); ?></td>
@@ -541,6 +543,16 @@ $documents = $stmt->fetchAll();
                         <input type="checkbox" id="featured" name="featured" class="form-checkbox">
                         <span class="form-label" style="display: inline;">Featured Document</span>
                     </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="visible_in_simplified" name="visible_in_simplified" class="form-checkbox">
+                        <span class="form-label" style="display: inline;">Visible for simplified users</span>
+                    </label>
+                    <small style="color: var(--gray-500); display: block; margin-top: var(--space-xs);">
+                        Leave unchecked to hide this document from simplified users. Normal users still see everything.
+                    </small>
                 </div>
 
                 <!-- Dynamic category-specific metadata fields -->
@@ -892,6 +904,7 @@ $documents = $stmt->fetchAll();
             document.getElementById('version').value = doc.version || '';
             document.getElementById('date_published').value = doc.date_published || '';
             document.getElementById('featured').checked = doc.featured == 1;
+            document.getElementById('visible_in_simplified').checked = doc.visible_in_simplified == 1;
             document.getElementById('tag').value = doc.tag || '';
 
             const docType = doc.document_type || 'link';
@@ -1006,6 +1019,7 @@ $documents = $stmt->fetchAll();
                 version: formData.get('version') || null,
                 date_published: formData.get('date_published') || null,
                 featured: formData.get('featured') ? 1 : 0,
+                visible_in_simplified: formData.get('visible_in_simplified') ? 1 : 0,
                 metadata: collectMetadata()
             };
 

@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash VARCHAR(255) NOT NULL,
     must_change_password TINYINT(1) DEFAULT 1,
     status ENUM('active', 'inactive') DEFAULT 'active',
+    access_role ENUM('normal', 'simplified') NOT NULL DEFAULT 'normal',
     expiry_date DATE DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

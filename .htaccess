@@ -46,6 +46,16 @@ ErrorDocument 500 /500.php
     Deny from all
 </FilesMatch>
 
+# Block direct access to local HTML reports; they must be served through PHP so auth and role checks apply.
+<FilesMatch "\.html$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+<Files "index.html">
+    Order allow,deny
+    Allow from all
+</Files>
+
 # Disable directory browsing
 Options -Indexes
 

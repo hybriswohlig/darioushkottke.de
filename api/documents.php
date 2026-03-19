@@ -91,8 +91,8 @@ function handleCreate($input) {
         // Insert document
         $stmt = $db->prepare("
             INSERT INTO documents (category_id, title, description, file_url, document_type, file_path,
-                                   thumbnail_url, status, version, date_published, featured, tag)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                   thumbnail_url, status, version, date_published, featured, visible_in_simplified, tag)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
 
         $documentType = $input['document_type'] ?? 'link';
@@ -119,6 +119,7 @@ function handleCreate($input) {
             $input['version'] ?? null,
             $input['date_published'] ?? null,
             isset($input['featured']) ? (int)$input['featured'] : 0,
+            isset($input['visible_in_simplified']) ? (int)$input['visible_in_simplified'] : 0,
             $input['tag'] ?? null
         ]);
 
@@ -179,7 +180,7 @@ function handleUpdate($input) {
 
         $allowedFields = ['category_id', 'title', 'description', 'file_url', 'document_type',
                           'file_path', 'thumbnail_url', 'status', 'version', 'date_published',
-                          'featured', 'tag'];
+                          'featured', 'visible_in_simplified', 'tag'];
 
         foreach ($allowedFields as $field) {
             if (array_key_exists($field, $input)) {

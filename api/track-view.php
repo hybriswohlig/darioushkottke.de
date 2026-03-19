@@ -5,6 +5,7 @@
  */
 
 require_once __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/user-auth.php';
 
 header('Content-Type: application/json');
 
@@ -23,8 +24,8 @@ if (empty($input['document_id']) || !is_numeric($input['document_id'])) {
 
 $documentId = (int)$input['document_id'];
 
-// Verify document exists
-$document = getDocument($documentId);
+// Verify document exists and is visible to the current user
+$document = getAccessibleDocument($documentId);
 if (!$document) {
     jsonResponse(['error' => 'Document not found'], 404);
 }

@@ -192,9 +192,8 @@ $documents = getDocumentsByCategory($category['id'], $filters);
                                         </svg>
                                     </a>
                                 <?php elseif (($doc['document_type'] ?? '') === 'html' && !empty($doc['file_url'])): ?>
-                                    <?php $htmlUrl = (strpos($doc['file_url'], '/') === 0) ? $doc['file_url'] : '/' . $doc['file_url']; ?>
                                     <a
-                                        href="<?php echo esc($htmlUrl); ?>"
+                                        href="/view-html-document.php?id=<?php echo $doc['id']; ?>"
                                         class="btn btn-ghost"
                                         style="padding: 0.5rem 1rem;"
                                         onclick="trackDocumentView(<?php echo $doc['id']; ?>)"

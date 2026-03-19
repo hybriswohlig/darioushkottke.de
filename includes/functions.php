@@ -33,6 +33,67 @@ function getCategoryBySlug($slug) {
 }
 
 /**
+ * Supported portal access roles.
+ */
+function getSupportedUserAccessRoles() {
+    return ['normal', 'simplified'];
+}
+
+/**
+ * Check whether a user access role is supported.
+ */
+function isSupportedUserAccessRole($role) {
+    return in_array($role, getSupportedUserAccessRoles(), true);
+}
+
+/**
+ * Normalize a user access role to a safe default.
+ */
+function normalizeUserAccessRole($role) {
+    return isSupportedUserAccessRole($role) ? $role : 'normal';
+}
+
+/**
+ * Get the current authenticated user's access role.
+ */
+function getCurrentUserAccessRole() {
+    return normalizeUserAccessRole($_SESSION['user_access_role'] ?? 'normal');
+}
+
+/**
+ * Whether the current role is the simplified document view.
+ */
+function isSimplifiedUserRole($role = null) {
+    return normalizeUserAccessRole($role ?? getCurrentUserAccessRole()) === 'simplified';
+}
+
+/**
+ * SQL clause to hide non-simplified documents for simplified users.
+ */
+function getDocumentVisibilitySqlClause($tableAlias = 'd', $role = null) {
+    if (!isSimplifiedUserRole($role)) {
+        return '';
+    }
+
+    return " AND COALESCE({$tableAlias}.visible_in_simplified, 0) = 1";
+}
+
+/**
+ * Check whether a document is visible to a given user role.
+ */
+function canUserAccessDocument($doc, $role = null) {
+    if (!$doc) {
+        return false;
+    }
+
+    if (!isSimplifiedUserRole($role)) {
+        return true;
+    }
+
+    return !empty($doc['visible_in_simplified']);
+}
+
+/**
  * Get documents by category with metadata
  */
 function getDocumentsByCategory($categoryId, $filters = []) {
@@ -48,6 +109,8 @@ function getDocumentsByCategory($categoryId, $filters = []) {
     } else {
         $sql .= " AND d.status IN ('published', 'planned', 'in_progress')";
     }
+
+    $sql .= getDocumentVisibilitySqlClause('d');
 
     if (!empty($filters['search'])) {
         $sql .= " AND (d.title LIKE ? OR d.description LIKE ?)";
@@ -256,6 +319,18 @@ function getDocument($id) {
 }
 
 /**
+ * Get a single document only if the current user role can access it.
+ */
+function getAccessibleDocument($id, $role = null) {
+    $doc = getDocument($id);
+    if (!$doc || !canUserAccessDocument($doc, $role)) {
+        return null;
+    }
+
+    return $doc;
+}
+
+/**
  * Search documents across all categories
  * Uses same status filter as portal (published, planned, in_progress) so search results match what users see when browsing.
  */
@@ -270,6 +345,7 @@ function searchDocuments($query, $categoryId = null) {
             FROM documents d
             JOIN categories c ON d.category_id = c.id
             WHERE (d.title LIKE ? OR d.description LIKE ?) AND d.status IN ('published', 'planned', 'in_progress')";
+    $sql .= getDocumentVisibilitySqlClause('d');
 
     $searchTerm = '%' . $query . '%';
     $params = [$searchTerm, $searchTerm];
@@ -304,6 +380,7 @@ function getAllDocuments($tagFilter = null) {
             FROM documents d
             JOIN categories c ON d.category_id = c.id
             WHERE d.status IN ('published', 'planned', 'in_progress')";
+    $sql .= getDocumentVisibilitySqlClause('d');
     $params = [];
 
     if ($tagFilter !== null && $tagFilter !== '') {
@@ -329,10 +406,15 @@ function getAllDocuments($tagFilter = null) {
  */
 function getCategoryDocumentCounts() {
     $db = getDB();
-    $stmt = $db->query("SELECT c.slug, COUNT(d.id) as doc_count
-                         FROM categories c
-                         LEFT JOIN documents d ON d.category_id = c.id AND d.status IN ('published', 'planned', 'in_progress')
-                         GROUP BY c.id, c.slug");
+    $sql = "SELECT c.slug, COUNT(d.id) as doc_count
+            FROM categories c
+            LEFT JOIN documents d ON d.category_id = c.id
+                AND d.status IN ('published', 'planned', 'in_progress')";
+    if (isSimplifiedUserRole()) {
+        $sql .= " AND COALESCE(d.visible_in_simplified, 0) = 1";
+    }
+    $sql .= " GROUP BY c.id, c.slug";
+    $stmt = $db->query($sql);
     $rows = $stmt->fetchAll();
     $counts = [];
     foreach ($rows as $row) {
@@ -448,6 +530,30 @@ function getStatusBadge($status) {
 }
 
 /**
+ * Get user access role badge HTML for admin screens.
+ */
+function getUserAccessRoleBadge($role) {
+    $role = normalizeUserAccessRole($role);
+    $badges = [
+        'normal' => '<span class="status-badge" style="background: #dcfce7; color: #166534;">Normal</span>',
+        'simplified' => '<span class="status-badge" style="background: #dbeafe; color: #1d4ed8;">Simplified</span>',
+    ];
+
+    return $badges[$role];
+}
+
+/**
+ * Get simplified visibility badge HTML for admin screens.
+ */
+function getSimplifiedVisibilityBadge($visible) {
+    if ((int) $visible === 1) {
+        return '<span class="status-badge" style="background: #dcfce7; color: #166534;">Yes</span>';
+    }
+
+    return '<span class="status-badge" style="background: #f3f4f6; color: #4b5563;">No</span>';
+}
+
+/**
  * Generate JSON response
  */
 function jsonResponse($data, $statusCode = 200) {
@@ -490,7 +596,7 @@ function validatePassword($password) {
  */
 function getUserById($id) {
     $db = getDB();
-    $stmt = $db->prepare("SELECT id, full_name, email, company, status, expiry_date, must_change_password, last_login, created_at, updated_at FROM users WHERE id = ? LIMIT 1");
+    $stmt = $db->prepare("SELECT id, full_name, email, company, status, access_role, expiry_date, must_change_password, last_login, created_at, updated_at FROM users WHERE id = ? LIMIT 1");
     $stmt->execute([$id]);
     $user = $stmt->fetch();
     return $user ?: null;
@@ -501,7 +607,7 @@ function getUserById($id) {
  */
 function getAllUsers() {
     $db = getDB();
-    $stmt = $db->query("SELECT id, full_name, email, company, status, expiry_date, must_change_password, last_login, created_at FROM users ORDER BY created_at DESC");
+    $stmt = $db->query("SELECT id, full_name, email, company, status, access_role, expiry_date, must_change_password, last_login, created_at FROM users ORDER BY created_at DESC");
     return $stmt->fetchAll();
 }
 

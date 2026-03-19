@@ -54,7 +54,7 @@ if (!$isPublicPage) {
     // Check account status and expiry from database (real-time enforcement)
     try {
         $db = getDB();
-        $stmt = $db->prepare("SELECT status, expiry_date FROM users WHERE id = ? LIMIT 1");
+        $stmt = $db->prepare("SELECT full_name, status, access_role, expiry_date FROM users WHERE id = ? LIMIT 1");
         $stmt->execute([$_SESSION['user_id']]);
         $userRow = $stmt->fetch();
 
@@ -71,6 +71,9 @@ if (!$isPublicPage) {
             header('Location: /account-expired.php?reason=expired');
             exit;
         }
+
+        $_SESSION['user_name'] = $userRow['full_name'] ?? ($_SESSION['user_name'] ?? '');
+        $_SESSION['user_access_role'] = normalizeUserAccessRole($userRow['access_role'] ?? 'normal');
 
         // Calculate expiry warning (7 days)
         if ($userRow['expiry_date'] !== null) {

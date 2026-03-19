@@ -75,6 +75,11 @@ function handleCreate($input) {
         jsonResponse(['error' => 'Invalid email address'], 400);
     }
 
+    $accessRole = $input['access_role'] ?? 'normal';
+    if (!isSupportedUserAccessRole($accessRole)) {
+        jsonResponse(['error' => 'Invalid access role'], 400);
+    }
+
     $db = getDB();
 
     // Check email uniqueness
@@ -90,8 +95,8 @@ function handleCreate($input) {
 
     try {
         $stmt = $db->prepare("
-            INSERT INTO users (full_name, email, company, password_hash, must_change_password, status, expiry_date)
-            VALUES (?, ?, ?, ?, 1, ?, ?)
+            INSERT INTO users (full_name, email, company, password_hash, must_change_password, status, access_role, expiry_date)
+            VALUES (?, ?, ?, ?, 1, ?, ?, ?)
         ");
         $stmt->execute([
             $input['full_name'],
@@ -99,6 +104,7 @@ function handleCreate($input) {
             $input['company'] ?? null,
             $hash,
             $input['status'] ?? 'active',
+            $accessRole,
             !empty($input['expiry_date']) ? $input['expiry_date'] : null
         ]);
 
@@ -147,11 +153,15 @@ function handleUpdate($input) {
         }
     }
 
+    if (isset($input['access_role']) && !isSupportedUserAccessRole($input['access_role'])) {
+        jsonResponse(['error' => 'Invalid access role'], 400);
+    }
+
     try {
         $updateFields = [];
         $params = [];
 
-        $allowedFields = ['full_name', 'email', 'company', 'status', 'expiry_date'];
+        $allowedFields = ['full_name', 'email', 'company', 'status', 'access_role', 'expiry_date'];
 
         foreach ($allowedFields as $field) {
             if (isset($input[$field])) {

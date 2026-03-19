@@ -15,7 +15,7 @@ if ($id <= 0) {
 }
 
 // Fetch document
-$doc = getDocument($id);
+$doc = getAccessibleDocument($id);
 if (!$doc) {
     http_response_code(404);
     exit('Document not found');
