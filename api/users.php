@@ -16,7 +16,12 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 switch ($method) {
     case 'GET':
-        handleGet();
+        $action = $_GET['action'] ?? '';
+        if ($action === 'document_access') {
+            handleGetDocumentAccess();
+        } else {
+            handleGet();
+        }
         break;
 
     case 'POST':
@@ -33,6 +38,8 @@ switch ($method) {
             handleResetPassword($input);
         } elseif ($action === 'toggle_status') {
             handleToggleStatus($input);
+        } elseif ($action === 'document_access') {
+            handleUpdateDocumentAccess($input);
         } else {
             jsonResponse(['error' => 'Invalid action'], 400);
         }
@@ -256,5 +263,147 @@ function handleToggleStatus($input) {
     } catch (PDOException $e) {
         error_log("Status toggle error: " . $e->getMessage());
         jsonResponse(['error' => 'Failed to toggle status'], 500);
+    }
+}
+
+/**
+ * Get effective document access list for a user.
+ */
+function handleGetDocumentAccess() {
+    if (!hasUserDocumentAccessTable()) {
+        jsonResponse(['error' => 'Document access overrides are not available. Run migration_user_document_overrides.sql first.'], 400);
+    }
+
+    $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
+    if ($userId <= 0) {
+        jsonResponse(['error' => 'Missing user ID'], 400);
+    }
+
+    $user = getUserById($userId);
+    if (!$user) {
+        jsonResponse(['error' => 'User not found'], 404);
+    }
+
+    $db = getDB();
+    $stmt = $db->prepare("
+        SELECT d.id, d.title, d.status, c.name AS category_name,
+               COALESCE(d.visible_in_simplified, 0) AS visible_in_simplified,
+               uda.access_state
+        FROM documents d
+        JOIN categories c ON c.id = d.category_id
+        LEFT JOIN user_document_access uda
+            ON uda.user_id = ? AND uda.document_id = d.id
+        WHERE d.status IN ('published', 'planned', 'in_progress')
+        ORDER BY c.name ASC, d.title ASC
+    ");
+    $stmt->execute([$userId]);
+    $rows = $stmt->fetchAll();
+
+    $role = normalizeUserAccessRole($user['access_role'] ?? 'normal');
+    $documents = [];
+    foreach ($rows as $row) {
+        $override = $row['access_state'] ?: null;
+        $defaultAllowed = $role === 'normal' ? true : ((int)$row['visible_in_simplified'] === 1);
+        $effective = $defaultAllowed;
+        if ($override === 'allow') {
+            $effective = true;
+        } elseif ($override === 'deny') {
+            $effective = false;
+        }
+
+        $documents[] = [
+            'id' => (int) $row['id'],
+            'title' => $row['title'],
+            'category_name' => $row['category_name'],
+            'status' => $row['status'],
+            'visible_in_simplified' => (int) $row['visible_in_simplified'],
+            'default_allowed' => $defaultAllowed,
+            'override_state' => $override,
+            'effective_allowed' => $effective,
+        ];
+    }
+
+    jsonResponse([
+        'success' => true,
+        'user' => [
+            'id' => (int) $user['id'],
+            'full_name' => $user['full_name'],
+            'access_role' => $role,
+        ],
+        'documents' => $documents,
+    ]);
+}
+
+/**
+ * Replace user-specific document access overrides.
+ */
+function handleUpdateDocumentAccess($input) {
+    if (!hasUserDocumentAccessTable()) {
+        jsonResponse(['error' => 'Document access overrides are not available. Run migration_user_document_overrides.sql first.'], 400);
+    }
+
+    $userId = isset($input['user_id']) ? (int) $input['user_id'] : 0;
+    if ($userId <= 0) {
+        jsonResponse(['error' => 'Missing user ID'], 400);
+    }
+    if (!isset($input['enabled_document_ids']) || !is_array($input['enabled_document_ids'])) {
+        jsonResponse(['error' => 'enabled_document_ids must be an array'], 400);
+    }
+
+    $user = getUserById($userId);
+    if (!$user) {
+        jsonResponse(['error' => 'User not found'], 404);
+    }
+
+    $enabled = [];
+    foreach ($input['enabled_document_ids'] as $id) {
+        $id = (int) $id;
+        if ($id > 0) {
+            $enabled[$id] = true;
+        }
+    }
+    $enabledIds = array_keys($enabled);
+
+    $db = getDB();
+    try {
+        $db->beginTransaction();
+
+        $stmt = $db->prepare("
+            SELECT id, COALESCE(visible_in_simplified, 0) AS visible_in_simplified
+            FROM documents
+            WHERE status IN ('published', 'planned', 'in_progress')
+        ");
+        $stmt->execute();
+        $docs = $stmt->fetchAll();
+
+        $role = normalizeUserAccessRole($user['access_role'] ?? 'normal');
+        $upsert = $db->prepare("
+            INSERT INTO user_document_access (user_id, document_id, access_state)
+            VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE access_state = VALUES(access_state), updated_at = CURRENT_TIMESTAMP
+        ");
+        $delete = $db->prepare("DELETE FROM user_document_access WHERE user_id = ? AND document_id = ?");
+
+        foreach ($docs as $doc) {
+            $docId = (int) $doc['id'];
+            $defaultAllowed = $role === 'normal' ? true : ((int) $doc['visible_in_simplified'] === 1);
+            $shouldAllow = isset($enabled[$docId]);
+
+            if ($shouldAllow === $defaultAllowed) {
+                $delete->execute([$userId, $docId]);
+                continue;
+            }
+
+            $state = $shouldAllow ? 'allow' : 'deny';
+            $upsert->execute([$userId, $docId, $state]);
+        }
+
+        $db->commit();
+        logActivity('update_user_document_access', 'user', $userId, "Updated document access overrides");
+        jsonResponse(['success' => true, 'message' => 'Document access updated']);
+    } catch (PDOException $e) {
+        $db->rollBack();
+        error_log("Document access update error: " . $e->getMessage());
+        jsonResponse(['error' => 'Failed to update document access'], 500);
     }
 }

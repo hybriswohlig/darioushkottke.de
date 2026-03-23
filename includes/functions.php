@@ -71,11 +71,45 @@ function isSimplifiedUserRole($role = null) {
  * SQL clause to hide non-simplified documents for simplified users.
  */
 function getDocumentVisibilitySqlClause($tableAlias = 'd', $role = null) {
-    if (!isSimplifiedUserRole($role)) {
-        return '';
+    if (!hasUserDocumentAccessTable()) {
+        if (!isSimplifiedUserRole($role)) {
+            return '';
+        }
+        return " AND COALESCE({$tableAlias}.visible_in_simplified, 0) = 1";
     }
 
-    return " AND COALESCE({$tableAlias}.visible_in_simplified, 0) = 1";
+    $userId = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : 0;
+    if ($userId <= 0) {
+        if (!isSimplifiedUserRole($role)) {
+            return '';
+        }
+        return " AND COALESCE({$tableAlias}.visible_in_simplified, 0) = 1";
+    }
+
+    if (!isSimplifiedUserRole($role)) {
+        return " AND NOT EXISTS (
+            SELECT 1 FROM user_document_access uda_deny
+            WHERE uda_deny.user_id = {$userId}
+              AND uda_deny.document_id = {$tableAlias}.id
+              AND uda_deny.access_state = 'deny'
+        )";
+    }
+
+    return " AND (
+            COALESCE({$tableAlias}.visible_in_simplified, 0) = 1
+            OR EXISTS (
+                SELECT 1 FROM user_document_access uda_allow
+                WHERE uda_allow.user_id = {$userId}
+                  AND uda_allow.document_id = {$tableAlias}.id
+                  AND uda_allow.access_state = 'allow'
+            )
+        )
+        AND NOT EXISTS (
+            SELECT 1 FROM user_document_access uda_deny
+            WHERE uda_deny.user_id = {$userId}
+              AND uda_deny.document_id = {$tableAlias}.id
+              AND uda_deny.access_state = 'deny'
+        )";
 }
 
 /**
@@ -86,11 +120,63 @@ function canUserAccessDocument($doc, $role = null) {
         return false;
     }
 
+    $userId = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : 0;
+    if ($userId > 0) {
+        if (hasExplicitUserDocumentAccess($userId, (int) $doc['id'], 'deny')) {
+            return false;
+        }
+        if (hasExplicitUserDocumentAccess($userId, (int) $doc['id'], 'allow')) {
+            return true;
+        }
+    }
+
     if (!isSimplifiedUserRole($role)) {
         return true;
     }
 
     return !empty($doc['visible_in_simplified']);
+}
+
+/**
+ * Check whether a user has an explicit allow/deny override for a document.
+ */
+function hasExplicitUserDocumentAccess($userId, $documentId, $state) {
+    if (!hasUserDocumentAccessTable() || $userId <= 0 || $documentId <= 0 || !in_array($state, ['allow', 'deny'], true)) {
+        return false;
+    }
+
+    $db = getDB();
+    $stmt = $db->prepare("
+        SELECT 1
+        FROM user_document_access
+        WHERE user_id = ? AND document_id = ? AND access_state = ?
+        LIMIT 1
+    ");
+    $stmt->execute([$userId, $documentId, $state]);
+    return (bool) $stmt->fetchColumn();
+}
+
+/**
+ * Check whether the user_document_access table exists.
+ */
+function hasUserDocumentAccessTable() {
+    static $exists = null;
+    if ($exists !== null) {
+        return $exists;
+    }
+
+    try {
+        $db = getDB();
+        $stmt = $db->query("
+            SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'user_document_access'
+        ");
+        $exists = ((int) $stmt->fetchColumn()) > 0;
+    } catch (PDOException $e) {
+        $exists = false;
+    }
+
+    return $exists;
 }
 
 /**
@@ -410,9 +496,7 @@ function getCategoryDocumentCounts() {
             FROM categories c
             LEFT JOIN documents d ON d.category_id = c.id
                 AND d.status IN ('published', 'planned', 'in_progress')";
-    if (isSimplifiedUserRole()) {
-        $sql .= " AND COALESCE(d.visible_in_simplified, 0) = 1";
-    }
+    $sql .= getDocumentVisibilitySqlClause('d');
     $sql .= " GROUP BY c.id, c.slug";
     $stmt = $db->query($sql);
     $rows = $stmt->fetchAll();

@@ -286,6 +286,68 @@ $users = getAllUsers();
             color: #92400e;
             margin-left: 0.5rem;
         }
+
+        .access-layout {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: var(--space-md);
+            align-items: start;
+        }
+
+        .access-column {
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            background: var(--gray-50);
+            min-height: 420px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .access-column h4 {
+            margin: 0;
+            padding: var(--space-md);
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 0.95rem;
+        }
+
+        .access-list {
+            list-style: none;
+            margin: 0;
+            padding: var(--space-sm);
+            overflow: auto;
+            flex: 1;
+        }
+
+        .access-item {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            padding: 0.5rem 0.75rem;
+            margin-bottom: 0.5rem;
+            cursor: grab;
+        }
+
+        .access-item:active {
+            cursor: grabbing;
+        }
+
+        .access-item small {
+            display: block;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+
+        .drop-zone-active {
+            border-color: var(--primary-green);
+            background: #ecfdf5;
+        }
+
+        .access-arrow {
+            align-self: center;
+            color: var(--gray-500);
+            font-size: 1.25rem;
+            padding-top: 2rem;
+        }
     </style>
 </head>
 <body>
@@ -413,6 +475,7 @@ $users = getAllUsers();
                                     <td>
                                         <div class="action-buttons">
                                             <button class="btn btn-secondary btn-sm" onclick='editUser(<?php echo json_encode($user); ?>)'>Edit</button>
+                                            <button class="btn btn-primary btn-sm" onclick='openAccessModal(<?php echo (int)$user['id']; ?>, <?php echo json_encode($user['full_name']); ?>)'>Document Access</button>
                                             <button class="btn btn-warning btn-sm" onclick="resetPassword(<?php echo $user['id']; ?>, '<?php echo esc($user['full_name']); ?>')">Reset PW</button>
                                             <button class="btn btn-sm <?php echo $user['status'] === 'active' ? 'btn-danger' : 'btn-primary'; ?>" onclick="toggleStatus(<?php echo $user['id']; ?>, '<?php echo $user['status']; ?>', '<?php echo esc($user['full_name']); ?>')">
                                                 <?php echo $user['status'] === 'active' ? 'Deactivate' : 'Activate'; ?>
@@ -512,8 +575,43 @@ $users = getAllUsers();
         </div>
     </div>
 
+    <!-- Document Access Modal -->
+    <div id="accessModal" class="modal">
+        <div class="modal-content" style="max-width: 1000px;">
+            <div class="modal-header">
+                <h2 class="modal-title" id="accessModalTitle">Manage Document Access</h2>
+                <button class="modal-close" onclick="closeAccessModal()">&times;</button>
+            </div>
+            <p id="accessModalHint" style="color: var(--gray-600); margin-top: 0; margin-bottom: var(--space-md);"></p>
+            <div style="margin-bottom: var(--space-md);">
+                <input id="accessSearch" type="text" class="form-input" placeholder="Search document title or category..." oninput="renderAccessLists()">
+            </div>
+            <div class="access-layout">
+                <div id="noAccessColumn" class="access-column">
+                    <h4>No Access</h4>
+                    <ul id="noAccessList" class="access-list"></ul>
+                </div>
+                <div class="access-arrow">&#x2194;</div>
+                <div id="hasAccessColumn" class="access-column">
+                    <h4>Has Access</h4>
+                    <ul id="hasAccessList" class="access-list"></ul>
+                </div>
+            </div>
+            <p style="color: var(--gray-500); margin-top: var(--space-md); margin-bottom: var(--space-md); font-size: 0.875rem;">
+                Drag and drop documents between columns. "Has Access" overrides role defaults, so simplified users can be granted additional documents.
+            </p>
+            <button class="btn btn-primary" style="width: 100%;" onclick="saveAccessOverrides()">Save Document Access</button>
+        </div>
+    </div>
+
     <script>
         let editMode = false;
+        let accessContext = {
+            userId: null,
+            userName: '',
+            role: 'normal',
+            documents: []
+        };
 
         function openAddModal() {
             editMode = false;
@@ -616,6 +714,142 @@ $users = getAllUsers();
             }
         }
 
+        async function openAccessModal(userId, userName) {
+            accessContext.userId = userId;
+            accessContext.userName = userName;
+            accessContext.documents = [];
+            document.getElementById('accessModalTitle').textContent = `Manage Document Access - ${userName}`;
+            document.getElementById('accessModalHint').textContent = 'Loading document list...';
+            document.getElementById('accessSearch').value = '';
+            document.getElementById('noAccessList').innerHTML = '';
+            document.getElementById('hasAccessList').innerHTML = '';
+            document.getElementById('accessModal').classList.add('active');
+
+            try {
+                const response = await fetch('/api/users.php?action=document_access&user_id=' + userId);
+                const result = await response.json();
+                if (!result.success) {
+                    alert('Error: ' + (result.error || 'Failed to load document access'));
+                    closeAccessModal();
+                    return;
+                }
+
+                accessContext.role = result.user.access_role || 'normal';
+                accessContext.documents = result.documents || [];
+                const roleLabel = accessContext.role === 'simplified' ? 'Simplified' : 'Normal';
+                document.getElementById('accessModalHint').textContent =
+                    `Role: ${roleLabel}. Drag documents between columns to control this user's effective access.`;
+                renderAccessLists();
+            } catch (error) {
+                console.error('Error loading access:', error);
+                alert('Failed to load document access');
+                closeAccessModal();
+            }
+        }
+
+        function closeAccessModal() {
+            document.getElementById('accessModal').classList.remove('active');
+        }
+
+        function renderAccessLists() {
+            const noAccessList = document.getElementById('noAccessList');
+            const hasAccessList = document.getElementById('hasAccessList');
+            const searchTerm = (document.getElementById('accessSearch').value || '').trim().toLowerCase();
+
+            noAccessList.innerHTML = '';
+            hasAccessList.innerHTML = '';
+
+            accessContext.documents.forEach((doc) => {
+                const haystack = `${doc.title} ${doc.category_name}`.toLowerCase();
+                if (searchTerm && !haystack.includes(searchTerm)) {
+                    return;
+                }
+                const li = buildAccessItem(doc);
+                if (doc.effective_allowed) {
+                    hasAccessList.appendChild(li);
+                } else {
+                    noAccessList.appendChild(li);
+                }
+            });
+        }
+
+        function buildAccessItem(doc) {
+            const li = document.createElement('li');
+            li.className = 'access-item';
+            li.draggable = true;
+            li.dataset.id = doc.id;
+            li.innerHTML = `<strong>${escapeHtml(doc.title)}</strong><small>${escapeHtml(doc.category_name)}</small>`;
+            li.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', String(doc.id));
+            });
+            return li;
+        }
+
+        function setupAccessDnD() {
+            const zones = [
+                { column: 'noAccessColumn', list: 'noAccessList', allow: false },
+                { column: 'hasAccessColumn', list: 'hasAccessList', allow: true }
+            ];
+
+            zones.forEach((zone) => {
+                const column = document.getElementById(zone.column);
+                const list = document.getElementById(zone.list);
+
+                column.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    column.classList.add('drop-zone-active');
+                });
+                column.addEventListener('dragleave', () => {
+                    column.classList.remove('drop-zone-active');
+                });
+                column.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    column.classList.remove('drop-zone-active');
+                    const docId = parseInt(e.dataTransfer.getData('text/plain'), 10);
+                    if (!docId) return;
+                    const doc = accessContext.documents.find((d) => d.id === docId);
+                    if (!doc) return;
+                    doc.effective_allowed = zone.allow;
+                    renderAccessLists();
+                });
+
+                list.addEventListener('dragover', (e) => e.preventDefault());
+            });
+        }
+
+        async function saveAccessOverrides() {
+            const enabledIds = accessContext.documents
+                .filter((d) => d.effective_allowed)
+                .map((d) => d.id);
+
+            try {
+                const response = await fetch('/api/users.php?action=document_access', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: accessContext.userId,
+                        enabled_document_ids: enabledIds
+                    })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('Document access updated');
+                    closeAccessModal();
+                } else {
+                    alert('Error: ' + (result.error || 'Failed to update document access'));
+                }
+            } catch (error) {
+                console.error('Error saving access:', error);
+                alert('Failed to update document access');
+            }
+        }
+
+        function escapeHtml(value) {
+            const div = document.createElement('div');
+            div.textContent = value || '';
+            return div.innerHTML;
+        }
+
         document.getElementById('userForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -677,6 +911,10 @@ $users = getAllUsers();
         document.getElementById('passwordModal').addEventListener('click', function(e) {
             if (e.target === this) closePasswordModal();
         });
+        document.getElementById('accessModal').addEventListener('click', function(e) {
+            if (e.target === this) closeAccessModal();
+        });
+        setupAccessDnD();
     </script>
 </body>
 </html>
