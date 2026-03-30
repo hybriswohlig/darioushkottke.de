@@ -225,7 +225,7 @@ onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'
 <!-- COVER -->
 <div class="page-section bg-gradient-to-br from-green-600 to-green-500 text-white text-center py-20">
 <h1 class="text-4xl md:text-5xl font-bold mb-6">Environmental Impact Assessment</h1>
-<div class="text-2xl mb-4 opacity-95">CO2e Emissions Analysis: Compostable Cling Wrap vs. Traditional PE Cling Wrap</div>
+<div class="text-2xl mb-4 opacity-95">CO2e Emissions Analysis: Proprietary Vikang-PBAT blend vs. Traditional PE Cling Wrap</div>
 <div class="text-base opacity-90 leading-relaxed">
 <strong>Prepared by:</strong> Darioush Kottke, N&E Innovations<br>
 <strong>Date:</strong> March 30, 2026<br>
@@ -236,7 +236,7 @@ onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'
 <!-- METADATA SECTION -->
 <div class="page-section">
 <div class="callout">
-<strong>Report Overview:</strong> This assessment analyzes the carbon footprint comparison between traditional PE cling wrap and compostable cling wrap, demonstrating significant environmental benefits through bio-based materials, reduced production emissions, and biodegradation at end-of-life.
+<strong>Report Overview:</strong> This assessment analyzes the carbon footprint comparison between traditional PE cling wrap and Proprietary Vikang-PBAT blend, demonstrating significant environmental benefits through bio-based materials, reduced production emissions, and biodegradation at end-of-life.
 </div>
 </div>
 <!-- EXECUTIVE SUMMARY -->
@@ -265,7 +265,7 @@ onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'
 </div>
 </div>
 <div class="callout">
-<strong>Key Finding:</strong> Compostable cling wrap reduces CO2e emissions by approximately 59% compared to traditional PE cling wrap, primarily through bio-based production and biodegradation at end-of-life.
+<strong>Key Finding:</strong> Proprietary Vikang-PBAT blend reduces CO2e emissions by approximately 59% compared to traditional PE cling wrap, primarily through bio-based production and biodegradation at end-of-life.
 </div>
 </div>
 <!-- EMISSIONS COMPARISON -->
@@ -294,7 +294,7 @@ onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'
 <td>10.09</td>
 </tr>
 <tr>
-<td><strong>Compostable Cling Wrap</strong></td>
+<td><strong>Proprietary Vikang-PBAT blend</strong></td>
 <td>2.67 (net)</td>
 <td>1.42</td>
 <td>4.09</td>
@@ -344,7 +344,7 @@ onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'
 </div>
 </div>
 <div class="callout">
-<strong>Environmental Benefit:</strong> Compostable cling wrap utilizes renewable bio-based materials and is designed for industrial composting, reducing fossil resource use and enabling carbon cycling at end-of-life.
+<strong>Environmental Benefit:</strong> Proprietary Vikang-PBAT blend utilizes renewable bio-based materials and is designed for industrial composting, reducing fossil resource use and enabling carbon cycling at end-of-life.
 </div>
 <div class="chart-container">
 <h3 style="color: #16a34a; text-align: center; margin-bottom: 20px;">Production Emissions Comparison</h3>
@@ -363,7 +363,7 @@ onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'
 </div>
 </div>
 <div class="callout">
-<strong>Test Result:</strong> Compostable cling wrap achieved 90.5% biodegradation in composting conditions over 180 days, compared to 91.6% for reference cellulose material. This high biodegradation rate significantly reduces end-of-life emissions.
+<strong>Test Result:</strong> Proprietary Vikang-PBAT blend achieved 90.5% biodegradation in composting conditions over 180 days, compared to 91.6% for reference cellulose material. This high biodegradation rate significantly reduces end-of-life emissions.
 </div>
 </div>
 <!-- KEY DEFINITIONS -->
@@ -391,10 +391,10 @@ onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'
 <p style="margin-left: 20px;">Total: 2.58 kg per roll</p>
 <p style="margin-top: 15px;"><strong class="highlight">Step 2: Production Emissions</strong></p>
 <p style="margin-left: 20px;">Traditional PE: 6.45 kg CO2e</p>
-<p style="margin-left: 20px;">Compostable Cling Wrap (net): 2.67 kg CO2e</p>
+<p style="margin-left: 20px;">Proprietary Vikang-PBAT blend (net): 2.67 kg CO2e</p>
 <p style="margin-top: 15px;"><strong class="highlight">Step 3: End-of-Life Emissions</strong></p>
 <p style="margin-left: 20px;">Traditional PE (incinerated/landfilled): 3.64 kg CO2</p>
-<p style="margin-left: 20px;">Compostable Cling Wrap (composted): 1.42 kg CO2</p>
+<p style="margin-left: 20px;">Proprietary Vikang-PBAT blend (composted): 1.42 kg CO2</p>
 <p style="margin-top: 15px;"><strong class="highlight">Step 4: Total Savings</strong></p>
 <p style="margin-left: 20px; color: #16a34a; font-weight: bold; font-size: 1.2em;">6.00 kg CO2e avoided per roll (~59% reduction)</p>
 </div>
@@ -425,7 +425,7 @@ const ctx1 = document.getElementById('emissionsChart').getContext('2d');
 new Chart(ctx1, {
 type: 'bar',
 data: {
-labels: ['Traditional PE Cling Wrap', 'Compostable Cling Wrap'],
+labels: ['Traditional PE Cling Wrap', 'Proprietary Vikang-PBAT blend'],
 datasets: [{
 label: 'Total CO2e Emissions (kg)',
 data: [10.09, 4.09],
@@ -465,7 +465,7 @@ const ctx2 = document.getElementById('breakdownChart').getContext('2d');
 new Chart(ctx2, {
 type: 'bar',
 data: {
-labels: ['Traditional PE Cling Wrap', 'Compostable Cling Wrap'],
+labels: ['Traditional PE Cling Wrap', 'Proprietary Vikang-PBAT blend'],
 datasets: [
                     {
 label: 'Production Emissions',
@@ -555,7 +555,7 @@ borderColor: colors.conventional,
 borderWidth: 2
                     },
                     {
-label: 'Compostable Cling Wrap',
+label: 'Proprietary Vikang-PBAT blend',
 data: [5.93, 2.67],
 backgroundColor: colors.primary,
 borderColor: colors.primary,
@@ -587,7 +587,7 @@ const ctx5 = document.getElementById('biodegradationChart').getContext('2d');
 new Chart(ctx5, {
 type: 'bar',
 data: {
-labels: ['Compostable Cling Wrap', 'Reference Cellulose', 'Traditional PE Cling Wrap'],
+labels: ['Proprietary Vikang-PBAT blend', 'Reference Cellulose', 'Traditional PE Cling Wrap'],
 datasets: [{
 label: 'Biodegradation Rate (%)',
 data: [90.5, 91.6, 0],
